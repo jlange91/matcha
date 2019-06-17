@@ -6,7 +6,7 @@ import tags from '../store/modules/tags'
 
 // create a new axios instance
 const instance = axios.create({
-  baseURL: 'http://localhost:5000/api/v1'
+  baseURL: 'http://localhost/api/v1'
 })
 
 // before a request is made start the nprogress

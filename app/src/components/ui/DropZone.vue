@@ -1,10 +1,10 @@
 <template>
     <div>
-    <vue-dropzone 
+    <vue-dropzone
     @vdropzone-complete="afterComplete"
      @vdropzone-error="removeFile"
-    ref="myVueDropzone" 
-    id="dropzone" 
+    ref="myVueDropzone"
+    id="dropzone"
     :options="dropzoneOptions"></vue-dropzone>
 </div>
 </template>
@@ -28,7 +28,7 @@ export default {
   data () {
     return {
       dropzoneOptions: {
-          url: 'http://localhost:5000/api/v1/images/create',
+          url: 'http://localhost/api/v1/images/create',
           thumbnailWidth: 150,
           thumbnailHeight: 150,
           maxFilesize: 2,

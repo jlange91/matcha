@@ -89,7 +89,7 @@ class User {
 
     static async sendEmail(email, hash) {
         try {
-            const url = `http://localhost:8080/user/${email}/confirmation/${hash}`
+            const url = `http://localhost/user/${email}/confirmation/${hash}`
             const subject = "Confirm your account before you log in 👉👌"
             const message = `Thank you for creating an account before you can log in
                                 please confirm your email by clicking the link below <br>
@@ -129,8 +129,8 @@ class User {
 
             const geo = JSON.stringify(location)
 
-            const sql = `INSERT INTO location_users (user_id, geo)  
-                            VALUES (?, ?) 
+            const sql = `INSERT INTO location_users (user_id, geo)
+                            VALUES (?, ?)
                         ON DUPLICATE KEY UPDATE geo = ?`
 
             const result = await connection.query({
@@ -159,7 +159,7 @@ class User {
                 timeout: 40000,
                 values: [hash, email]
             })
-           
+
             if (!result)
                  return false
             return true
@@ -267,7 +267,7 @@ class User {
 
     static async sendPasswordResetEmail(email, hash) {
         try {
-            const url = `http://localhost:8080/password-reset/${email}/${hash}`
+            const url = `http://localhost/password-reset/${email}/${hash}`
             const subject = "Please reset your password 👉👌"
             const message = `You can reset your password by clicking the link below <br>
                                 <a href="${url}">reset password</a>`
