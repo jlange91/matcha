@@ -28,20 +28,6 @@ const version = 'v1'
 const setup = require('./database/setup')
 setup.database()
 
-const router = express.Router()
-
-
-app.use(`${version}`, () => {
-  router.get('/', (req, res) => {
-    return res.json({
-        'success': true,
-        'message': 'ca marche ptain'
-    })
-  })
-})
-
-
-
 app.use(`/${version}/user/login`, require('./routes/api/auth/login'))
 
 app.use(`/${version}/user/create`, require('./routes/api/auth/register'))
