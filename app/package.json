@@ -1,0 +1,30 @@
+{
+  "name": "client",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve --port 3000",
+    "build": "vue-cli-service build"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "b64-to-blob": "^1.2.19",
+    "core-js": "^2.6.5",
+    "moment": "^2.24.0",
+    "moment-range": "^4.0.2",
+    "nprogress": "^0.2.0",
+    "socket.io-client": "^2.2.0",
+    "vue": "^2.6.10",
+    "vue-router": "^3.0.3",
+    "vue-select": "^3.1.0",
+    "vue-socket.io-extended": "^3.2.1",
+    "vue2-dropzone": "^3.5.9",
+    "vuex": "^3.0.1"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.6.0",
+    "@vue/cli-service": "^3.6.0",
+    "tailwindcss": "^1.0.0-beta.8",
+    "vue-template-compiler": "^2.5.21"
+  }
+}
