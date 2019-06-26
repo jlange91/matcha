@@ -33,7 +33,7 @@ router.post('/', checkJWT, async (req, res) => {
 
         form.parse(req)
 
-        form.uploadDir = "../../../../client/public/uploads/" + check.id;
+        form.uploadDir = "/usr/src/api/assets/";
        
         form.maxFileSize = 1500 * 1024 *1024;
         
@@ -41,27 +41,27 @@ router.post('/', checkJWT, async (req, res) => {
 
 
         form.on("fileBegin", function(err, file){
-            console.log(file.type)
-            // const extension = file.extname(file.name);
-            // const index = (file.name).lastIndexOf(extension);
-            // const onlyName = (file.name).substr(0, index);
-            // const newfileName = onlyName + Date.now() + extension;
+            const extension = file.name.split('.')[1];
+            const index = (file.name).lastIndexOf(extension);
+            const onlyName = (file.name).substr(0, index);
+            const newfileName = onlyName + Date.now() + "." + extension;
 
-            // const fileName = path.join(__dirname, "../../../../client/public/uploads/" + newfileName);
-            // file.path = fileName;
+            const fileName = form.uploadDir + newfileName;
+            file.path = fileName;
         });
 
-        // form.on('file', function(field, file){
-        //     var fileField = {};
-        //     fileField[field]= file;
-        //     uploads.push(fileField);
 
+        form.on('file', function(field, file){
+            var fileField = {};
+            fileField[field]= file;
+            uploads.push(fileField);
+            console.log("uploads > ", uploads)
+        });
+
+       
+        // form.on("error", function(error){
+        //     console.log(error)
         // });
-
-        console.log("uploads > ", uploads)
-        form.on("error", function(error){
-            console.log(error)
-        });
 
         // form.on('end', function(){
         //     app.httpMsgs.sendJSON(req, res, uploads);
