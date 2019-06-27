@@ -16,10 +16,7 @@ Vue.component('v-select', vSelect)
 //    autoConnect: false
 //  }));
 
-import VueSocketio from 'vue-socket.io-extended';
 import $socket from './middleware/socket-instance';
-
-Vue.use(VueSocketio, $socket);
 
 
 const files = require.context('./components', true, /\.vue$/i);
@@ -57,7 +54,7 @@ new Vue({
   //   this.$socket.emit('is_user', Object.entries(this.$store.state.session.user))
   //   // if (this.$store.state.session.user.id) {
   //   //   this.$socket.open()
-  //   //   this.$socket.emit('login', this.$store.state.user)      
+  //   //   this.$socket.emit('login', this.$store.state.user)
   //   // }
   // }
 }).$mount('#app')

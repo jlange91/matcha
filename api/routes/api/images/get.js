@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-const connection = require('../../../middleware/database')
 const formidable = require('formidable')
 const fs = require('fs')
 

@@ -68,7 +68,7 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   mounted() {
    setTimeout(() => {
-     this.connected = this.$socket.connected
+     // this.connected = this.$socket.connected
    }, 1000)
   },
   data() {
@@ -82,7 +82,7 @@ export default {
       this.open = !this.open;
     },
     logoutEvent() {
-      this.$socket.emit("logout", this.getUser);
+      // this.$socket.emit("logout", this.getUser);
     },
     //  loginEvent() {
     //     this.$socket.open()

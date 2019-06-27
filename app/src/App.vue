@@ -15,16 +15,16 @@ export default {
     setTimeout(() => {
   let user = this.getUserId
       if (user) {
-        this.$socket.open()
+        // this.$socket.open()
       }
     }, 1000)
-    
+
 },
 updated() {
   setTimeout(() => {
   let user = this.getUserId
       if (user) {
-        this.$socket.open()
+        // this.$socket.open()
       }
     }, 1000)
 },
@@ -37,7 +37,7 @@ updated() {
       getUserName: "session/getUserName",
       getUserEmail: "session/getUserEmail"
     }),
- 
+
   }
 }
 </script>

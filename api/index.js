@@ -10,7 +10,7 @@ const app = express()
 
 const server = require('http').createServer(app)
 
-const io = require('socket.io').listen(server, { origins: 'http://localhost/api/*'})
+// const io = require('socket.io').listen(server, { origins: 'http://localhost/api/*'})
 const jwt = require('jsonwebtoken')
 
 app.use(express.json())
@@ -53,35 +53,35 @@ app.use(`/${version}/images/upload`, require('./routes/api/images/create'))
 
 app.use(`/${version}/images/get`, require('./routes/api/images/get'))
 
-io.use(function(socket, next){
-  if (socket.handshake.query && socket.handshake.query.token){
-    jwt.verify(socket.handshake.query.token, process.env.APP_KEY, function(err, decoded) {
-      if(err) return next(new Error('Authentication error'));
-      socket.decoded = decoded;
-      next();
-    });
-  } else {
-      next(new Error('Authentication error'));
-  }
-})
-.on('connection', function(socket) {
-  console.log('client connection >', socket.id, socket.decoded)
-  // Connection now authenticated to receive further events
-   socket.on('logout', function () {
-    console.log('client logout >', socket.id, socket.decoded)
-    socket.disconnect()
-  })
-
-  socket.on('message', function(message) {
-      io.emit('message', message);
-  });
-
-
-  socket.on('disconnect', function () {
-    console.log('client disconnectt >', socket.id, socket.decoded)
-  })
-
-});
+// io.use(function(socket, next){
+//   if (socket.handshake.query && socket.handshake.query.token){
+//     jwt.verify(socket.handshake.query.token, process.env.APP_KEY, function(err, decoded) {
+//       if(err) return next(new Error('Authentication error'));
+//       socket.decoded = decoded;
+//       next();
+//     });
+//   } else {
+//       next(new Error('Authentication error'));
+//   }
+// })
+// .on('connection', function(socket) {
+//   console.log('client connection >', socket.id, socket.decoded)
+//   // Connection now authenticated to receive further events
+//    socket.on('logout', function () {
+//     console.log('client logout >', socket.id, socket.decoded)
+//     socket.disconnect()
+//   })
+//
+//   socket.on('message', function(message) {
+//       io.emit('message', message);
+//   });
+//
+//
+//   socket.on('disconnect', function () {
+//     console.log('client disconnectt >', socket.id, socket.decoded)
+//   })
+//
+// });
 
 const port = process.env.PORT || 8080
 

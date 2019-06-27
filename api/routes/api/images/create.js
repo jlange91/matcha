@@ -29,9 +29,9 @@ router.post('/', checkJWT, async (req, res) => {
             })
         }
 
-        const form = new formidable.IncomingForm();
+        const form = new formidable.IncomingForm()
 
-        form.multiples = true;
+        form.multiples = true
 
         form.parse(req)
 
@@ -44,10 +44,11 @@ router.post('/', checkJWT, async (req, res) => {
 
 
         form.on("fileBegin", function(err, file){
-            const extension = path.extname(file.name);
-            const newfileName = uuidv4().replace(/-/g, '') + extension;
+            const extension = path.extname(file.name)
+            const newfileName = uuidv4().replace(/-/g, '') + extension
 
-            file.path = form.uploadDir + newfileName;
+            file.path = form.uploadDir + newfileName
+            file.name = newfileName;
         });
 
 
@@ -58,15 +59,41 @@ router.post('/', checkJWT, async (req, res) => {
             console.log("uploads > ", uploads)
         });
 
+        console.log("suce")
+
+        // uploads.forEach((image) => {
+        //
+        //     let sql = 'INSERT INTO images (user_id, name) \
+        //                          VALUES (?, ?)'
+        //
+        //     let result = await connection.query({
+        //         sql,
+        //         timeout: 40000,
+        //         values: [check.id, image.name]
+        //     })
+        //
+        //     if(!result)
+        //       res.json({success: false, message: "upload failed"})
+        //
+        //   })
+
 
         // form.on("error", function(error){
         //     console.log(error)
         // });
-
+        // let result
+        //
         // form.on('end', function(){
-        //     app.httpMsgs.sendJSON(req, res, uploads);
+        //
+        //
+        //
+        //     })
+        //
+        //
+        //
         // })
 
+        // res.json(result)
 
     } catch (err) {
         throw new Error('Error on post image create' + err)
