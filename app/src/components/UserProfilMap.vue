@@ -25,8 +25,8 @@ props: {
          disableDefaultUI: true,
         scrollwheel: false
       });
-      const marker = new google.maps.Marker({ 
-        position: location, 
+      const marker = new google.maps.Marker({
+        position: location,
         map: map })
   }
 }

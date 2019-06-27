@@ -51,6 +51,8 @@ app.use(`/${version}/tags`, require('./routes/api/tags/tags'))
 
 app.use(`/${version}/images/upload`, require('./routes/api/images/create'))
 
+app.use(`/${version}/images/get`, require('./routes/api/images/get'))
+
 io.use(function(socket, next){
   if (socket.handshake.query && socket.handshake.query.token){
     jwt.verify(socket.handshake.query.token, process.env.APP_KEY, function(err, decoded) {

@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router()
 const connection = require('../../../middleware/database')
 const formidable = require('formidable')
+const path = require('path')
+const uuidv4 = require('uuid/v4');
 
 const {
     checkJWT
@@ -10,7 +12,7 @@ const jwt = require('jsonwebtoken')
 
 // @route POST api/version/tags
 // @desc  Register a new user
-// @access Public 
+// @access Public
 router.post('/', checkJWT, async (req, res) => {
 
     try {
@@ -19,7 +21,7 @@ router.post('/', checkJWT, async (req, res) => {
             if (err) return false
             return authData
         })
-    
+
         if (!check) {
             res.json({
                 'success': false,
@@ -28,26 +30,24 @@ router.post('/', checkJWT, async (req, res) => {
         }
 
         const form = new formidable.IncomingForm();
-        
+
         form.multiples = true;
 
         form.parse(req)
 
         form.uploadDir = "/usr/src/api/assets/";
-       
-        form.maxFileSize = 1500 * 1024 *1024;
-        
+
+        form.maxFileSize = 1500 * 1024 * 1024;
+
+
         const uploads = [];
 
 
         form.on("fileBegin", function(err, file){
-            const extension = file.name.split('.')[1];
-            const index = (file.name).lastIndexOf(extension);
-            const onlyName = (file.name).substr(0, index);
-            const newfileName = onlyName + Date.now() + "." + extension;
+            const extension = path.extname(file.name);
+            const newfileName = uuidv4().replace(/-/g, '') + extension;
 
-            const fileName = form.uploadDir + newfileName;
-            file.path = fileName;
+            file.path = form.uploadDir + newfileName;
         });
 
 
@@ -58,7 +58,7 @@ router.post('/', checkJWT, async (req, res) => {
             console.log("uploads > ", uploads)
         });
 
-       
+
         // form.on("error", function(error){
         //     console.log(error)
         // });
