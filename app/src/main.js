@@ -7,17 +7,6 @@ import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css';
 
 Vue.component('v-select', vSelect)
-//import axios from "../../../middleware/axios";
-//  import VueSocketio from 'vue-socket.io-extended';
-//  import io from 'socket.io-client';
-//  // https://alligator.io/vuejs/vue-socketio/
-//  Vue.use(VueSocketio, io('http://localhost:5000', {
-//    store,
-//    autoConnect: false
-//  }));
-
-import $socket from './middleware/socket-instance';
-
 
 const files = require.context('./components', true, /\.vue$/i);
 files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
