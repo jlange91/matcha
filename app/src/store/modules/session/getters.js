@@ -25,3 +25,7 @@ export const getUserName = (state) => {
 export const getUserEmail = (state) => {
     return state.user.email
 }
+
+export const getSocket = (state) => {
+  return state.socket
+}

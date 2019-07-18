@@ -58,9 +58,33 @@ const router = new Router({
       name: 'profil',
       component: () => import('./views/User/Profil.vue'),
       beforeEnter: requireAuth
+    },
+    {
+      path: '/messages',
+      name: 'messages',
+      component: () => import('./views/User/Messages.vue'),
+      beforeEnter: requireAuth
     }
   ]
 })
+
+
+const logout = async () => {
+  const token = localStorage.getItem("token");
+  if (token) localStorage.removeItem("token");
+  const token_exp = localStorage.getItem("token_exp");
+  if (token_exp) localStorage.removeItem("token_exp");
+  socket.disconnect();
+  socket.close();
+  this.unsetSocket();
+  this.clearAuth();
+  this.clearUser();
+  this.clearProfil();
+  this.setMessage("You are logged out");
+  this.setSuccess(true);
+  this.setVisibility(true);
+  this.$router.push("/");
+}
 
 async function requirePasswordReset(to, from, next) {
   try {
@@ -128,26 +152,11 @@ async function requireUserHash(to, from, next) {
   }
 }
 
-function requireGuest(to, from, next) {
-  const exp = localStorage.getItem("token_exp")
-  const token = localStorage.getItem("token")
-  const now = new Date()
-  const expDate = new Date(exp)
-  if (token && expDate > now) {
-    session.state.token = token
-    session.state.logged = true
-    session.state.exp = exp
-    return next('/profil')
-  }
-  return next()
-}
-
-async function requireAuth(to, from, next) {
+async function requireGuest(to, from, next) {
   try {
-
     const res = await axios.post(`user/profil`)
-    if (!res.data.success)
-      return next('/')
+    if (res.data.success)
+      return next('/profil')
     return next()
   } catch (e) {
     message.state.visible = true
@@ -155,7 +164,20 @@ async function requireAuth(to, from, next) {
     message.state.message = e
     return next()
   }
+}
 
+async function requireAuth(to, from, next) {
+  try {
+    const res = await axios.post(`user/profil`)
+    if (!res.data.success)
+      return next('/login')
+    return next()
+  } catch (e) {
+    message.state.visible = true
+    message.state.success = false
+    message.state.message = e
+    return next()
+  }
 }
 
 router.beforeResolve((to, from, next) => {

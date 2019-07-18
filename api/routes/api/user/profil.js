@@ -18,8 +18,8 @@ router.post('/', checkJWT, async (req, res) => {
             'success': false,
             'message': 'Forbidden'
         })
+        return (false);
     }
-
     let sql = 'SELECT DISTINCT * FROM profils \
                         WHERE profils.user_id = ?'
 
@@ -42,6 +42,7 @@ router.post('/', checkJWT, async (req, res) => {
         timeout: 40000,
         values: [check.id]
     })
+    console.log(check);
     if (user && !user.length) {
         res.json({
             'success': false
@@ -70,7 +71,7 @@ router.post('/', checkJWT, async (req, res) => {
         timeout: 40000,
         values: [check.id]
     })
-    
+
     res.json({
         success: true,
         authData: check,

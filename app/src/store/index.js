@@ -22,10 +22,10 @@ const store = () => {
         modules: {
             messages,
             session,
-            profil, 
+            profil,
             tags
         }
     })
-} 
+}
 
 export default store

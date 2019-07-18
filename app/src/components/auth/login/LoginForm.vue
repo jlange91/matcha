@@ -48,10 +48,6 @@
 import axios from "../../../middleware/axios";
 import { mapActions, mapGetters } from "vuex";
 
-import io from 'socket.io-client';
-
-import socket from '../../../middleware/socket-instance';
-
 export default {
   created() {
     this.getIp();
@@ -105,11 +101,7 @@ export default {
         .then(res => {
 
           if (res.data.success && res.data.token) {
-            const loggedUser = {
-              'id': this.$store.getters['session/getUserId'],
-              'name': this.$store.getters['session/getUserName'],
-              'email': this.$store.getters['session/getUserEmail']
-            };
+
 
             this.setSession(res.data.token);
             this.setExp(res.data.exp)
@@ -118,12 +110,7 @@ export default {
             this.setVisibility(true);
             localStorage.setItem("token", res.data.token);
             localStorage.setItem("token_exp", res.data.exp);
-            setTimeout(() => {
-              socket.open();
-              socket.emit('connection', loggedUser)
-                this.$router.push("/");
-            }, 200)
-
+            this.$router.push("/");
           } else {
             this.setMessage(res.data.message);
             this.setSuccess(false);

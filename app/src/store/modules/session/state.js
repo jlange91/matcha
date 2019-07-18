@@ -1,5 +1,6 @@
 export default {
     logged: false,
+    socket: false,
     token: '',
     exp: '',
     user: {

@@ -3,6 +3,14 @@ export const SET_SESSION = (state, token) => {
     state.token = token
 }
 
+export const SET_SOCKET = (state) => {
+  state.socket = true;
+}
+
+export const UNSET_SOCKET = (state) => {
+  state.socket = false;
+}
+
 export const CLEAR_SESSION = (state) => {
     state.logged = false
     state.token = ""

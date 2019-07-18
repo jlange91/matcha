@@ -17,3 +17,11 @@ export const setUser = ({ commit }, user) => {
 export const clearUser = ({ commit }) => {
     commit('CLEAR_USER')
 }
+
+export const setSocket = ({ commit }) => {
+    commit('SET_SOCKET')
+}
+
+export const unsetSocket = ({ commit }) => {
+    commit('UNSET_SOCKET')
+}

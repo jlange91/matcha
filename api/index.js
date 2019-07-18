@@ -30,29 +30,23 @@ const setup = require('./database/setup')
 setup.database()
 
 app.use(`/${version}/user/login`, require('./routes/api/auth/login'))
-
 app.use(`/${version}/user/create`, require('./routes/api/auth/register'))
-
 app.use(`/${version}/user/confirmation`, require('./routes/api/auth/confirmation'))
-
 app.use(`/${version}/user/password-forgot`, require('./routes/api/auth/password-forgot'))
-
 app.use(`/${version}/user/password-reset`, require('./routes/api/auth/password-reset'))
-
 app.use(`/${version}/user/update`, require('./routes/api/user/update'))
 app.use(`/${version}/user/delete`, require('./routes/api/user/delete'))
 app.use(`/${version}/user/update-password`, require('./routes/api/user/update-password'))
 app.use(`/${version}/user/update-location`, require('./routes/api/user/update-location'))
-
 app.use(`/${version}/user/profil`, require('./routes/api/user/profil'))
-
 app.use(`/${version}/user/profil/edit`, require('./routes/api/user/profil-edit'))
 
 app.use(`/${version}/tags`, require('./routes/api/tags/tags'))
 
 app.use(`/${version}/images/upload`, require('./routes/api/images/create'))
-
 app.use(`/${version}/images/get`, require('./routes/api/images/get'))
+
+app.use(`/${version}/match/get`, require('./routes/api/match/get'))
 
 
 io.use(function(socket, next){
@@ -74,14 +68,18 @@ io.use(function(socket, next){
     socket.disconnect()
   })
 
-  socket.on('message', function(message) {
-      io.emit('message', message);
+  socket.on('message', function(message1, message2) {
+      io.emit('message', message1, message2);
   });
 
 
   socket.on('disconnect', function () {
-    console.log('client disconnectt >', socket.id, socket.decoded)
-  })
+    console.log('client disconnect >', socket.id, socket.decoded)
+  });
+
+  socket.on('end', function (){
+    socket.disconnect(0);
+  });
 
 });
 
