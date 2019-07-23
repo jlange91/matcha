@@ -7,6 +7,7 @@ const UserLocationSchema = require('./migrations/UserLocationSchema')
 const PasswordResetschema = require('./migrations/PasswordResetsSchema')
 const ImagesSchema = require('./migrations/ImagesSchema')
 const MatchSchema = require('./migrations/MatchSchema')
+const MessagesSchema = require('./migrations/MessagesSchema')
 
 class Setup {
     static database () {
@@ -21,6 +22,7 @@ class Setup {
                 UserTagSchema.createTable()
                 ImagesSchema.createTable()
                 MatchSchema.createTable()
+                MessagesSchema.createTable()
             }, 1000)
         }, 3000)
     }

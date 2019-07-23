@@ -41,12 +41,18 @@ app.use(`/${version}/user/update-location`, require('./routes/api/user/update-lo
 app.use(`/${version}/user/profil`, require('./routes/api/user/profil'))
 app.use(`/${version}/user/profil/edit`, require('./routes/api/user/profil-edit'))
 
-app.use(`/${version}/tags`, require('./routes/api/tags/tags'))
+app.use(`/${version}/tags`, require('./routes/api/tags/'))
 
 app.use(`/${version}/images/upload`, require('./routes/api/images/create'))
 app.use(`/${version}/images/get`, require('./routes/api/images/get'))
 
-app.use(`/${version}/match/get`, require('./routes/api/match/get'))
+app.use(`/${version}/relations/`, require('./routes/api/relations/'))
+
+// app.use(`/${version}/messages/`, require('./routes/api/messages/'))
+// app.use(`/${version}/messages/create`, require('./routes/api/messages/create'))
+// app.use(`/${version}/messages/delete`, require('./routes/api/messages/delete'))
+// app.use(`/${version}/messages/update`, require('./routes/api/messages/update'))
+
 
 
 io.use(function(socket, next){

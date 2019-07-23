@@ -10,6 +10,7 @@ class UserSchema {
              first_name VARCHAR(30), \
              last_name VARCHAR(30), \
              password VARCHAR(255), \
+             avatar VARCHAR(255), \
              confirmed TINYINT DEFAULT 0 NOT NULL, \
              created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, \
              updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL, \
