@@ -17,67 +17,29 @@
       <ul class="flex flex-col w-full select-none">
 
 
-        <li
+        <li v-for="relation in relations"
           class="flex flex-no-wrap items-center hover:bg-grey-300 text-black cursor-pointer p-3"
         >
           <div
             class="flex-shrink-0 w-12 h-12 bg-no-repeat bg-center bg-contain rounded-full mr-3"
-            style="background-image: url(https://randomuser.me/api/portraits/women/33.jpg)"
+            v-bind:style="{ backgroundImage: 'url(' + relation.avatar + ')' }"
           ></div>
           <div class="flex-1 min-w-0">
             <div class="flex justify-between mb-1">
-              <h2 class="font-semibold text-sm">Madame Dacruz</h2>
+              <h2 class="font-semibold text-sm">{{ relation.username }}</h2>
               <span class="text-sm text-grey-dark">
                 <i class="fas fa-check text-green"></i>
                 <i class="fas fa-check text-green -ml-3"></i>
-                Tue
+                 {{ relation.lastDateMessage }}
               </span>
             </div>
             <div class="text-sm text-grey-dark truncate">
-              <span>
-                <span class="text-blue">You:</span> Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ab quam perferendis nihil beatae, et accusamus voluptate quod sed necessitatibus ea provident! Ducimus consequuntur
-                exercitationem cupiditate possimus consequatur sunt dignissimos voluptas?
-              </span>
+              <span> {{ relation.lastMessage }} </span>
             </div>
           </div>
         </li>
 
 
-
-        <li
-          class="flex flex-no-wrap items-center hover:bg-grey-300 text-black cursor-pointer p-3"
-        >
-          <div
-            class="flex-shrink-0 w-12 h-12 bg-no-repeat bg-center bg-contain rounded-full mr-3"
-            style="background-image: url(https://randomuser.me/api/portraits/women/35.jpg)"
-          ></div>
-          <div class="flex-1 min-w-0">
-            <div class="flex justify-between mb-1">
-              <h2 class="font-semibold text-sm">Yuan Xii</h2>
-              <span class="text-sm text-grey-dark">18.04.18</span>
-            </div>
-            <div class="text-sm text-grey-dark truncate">
-              <span>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ab quam perferendis nihil beatae, et accusamus voluptate quod sed necessitatibus ea provident! Ducimus consequuntur exercitationem cupiditate possimus consequatur sunt dignissimos voluptas?</span>
-            </div>
-          </div>
-        </li>
-        <li
-          class="flex flex-no-wrap items-center hover:bg-grey-300 text-black cursor-pointer p-3"
-        >
-          <div
-            class="flex-shrink-0 w-12 h-12 bg-no-repeat bg-center bg-contain rounded-full mr-3"
-            style="background-image: url(https://randomuser.me/api/portraits/men/46.jpg)"
-          ></div>
-          <div class="flex-1 min-w-0">
-            <div class="flex justify-between mb-1">
-              <h2 class="font-semibold text-sm">Martin Lawrence</h2>
-              <span class="text-sm text-grey-dark">16.04.18</span>
-            </div>
-            <div class="text-sm text-grey-dark truncate">
-              <span>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ab quam perferendis nihil beatae, et accusamus voluptate quod sed necessitatibus ea provident! Ducimus consequuntur exercitationem cupiditate possimus consequatur sunt dignissimos voluptas?</span>
-            </div>
-          </div>
-        </li>
       </ul>
     </div>
     <div
@@ -148,14 +110,6 @@
         </div>
       </div>
     </div>
-  <ul>
-    <li v-for="match in matchs" class="px-6 py-4">
-      {{ match.user_id }} || {{ match.match_id}}
-    </li>
-  </ul>
-    <button @click="getMatchs" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
-      test
-    </button>
   </div>
 </template>
 <script>
@@ -166,26 +120,18 @@
   export default {
     data () {
       return {
-        matchs: {}
+        relations: {}
       }
     },
     mounted() {
-      // this.getMatchs();
+      axios
+        .get("relations")
+        .then(res => {
+          this.relations = res.data.relations;
+        })
+        .catch(e => console.log("e ", e));
     },
     methods: {
-      getMatchs() {
-        axios
-          .get("relations")
-          .then(res => {
-            this.matchs = res.data.matchs;
-            axios
-              .post('/user/profil')
-              .then (res => {
-                console.log(res);
-              })
-          })
-          .catch(e => console.log("e ", e));
-      }
     },
     computed: {
     },

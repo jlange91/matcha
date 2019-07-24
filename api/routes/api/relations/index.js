@@ -10,11 +10,6 @@ const {
 } = require('../../../middleware/check_token')
 const util = require('util')
 
-
-
-// @route POST api/version/tags
-// @desc  Register a new user
-// @access Public
 router.get('/', checkJWT, async (req, res) => {
 
   try {
@@ -23,6 +18,13 @@ router.get('/', checkJWT, async (req, res) => {
         return authData
     })
 
+    if (!check) {
+        res.json({
+            'success': false,
+            'message': 'Forbidden'
+        })
+        return (false);
+    }
     sql = 'SELECT * FROM matchs WHERE user_id = ? OR match_id = ?'
     const matchs = await connection.query({
         sql,
@@ -30,129 +32,87 @@ router.get('/', checkJWT, async (req, res) => {
         values: [e(check.id), e(check.id)]
     })
     if (matchs && !matchs.length) {
+      console.log("pute");
         res.json({
             'success': false
         })
+        return (false);
     }
 
     const profils = await Promise.all(
-        matchs.map(async (m) => {
-              const match_id = (check.id == m.user_id) ? m.match_id : m.user_id;
+      matchs.map(async (m) => {
+        const match_id = (check.id == m.user_id) ? m.match_id : m.user_id;
+        var avatar,
+            lastMessage,
+            lastDateMessage;
 
-              sql = 'SELECT DISTINCT username, avatar FROM users \
-                                  WHERE users.id = ?'
-              const user = await connection.query({
-                  sql,
-                  timeout: 40000,
-                  values: [match_id]
-              })
-              if (user && !user.length) {
-                  res.json({
-                      'success': false
-                  })
-              }
-              return {
-                username : user[0].username,
-                avatar: user[0].avatar,
-                lastMessage: "",
-                lastDateMessage: ""
-              };
-            })
-        )
-        profils.reduce((acc, m) => (acc + m))
-        console.log(profils);
-    // matchs.forEach(
-    //   (element) => {
-    //     const match_id = (check.id == element.user_id) ? element.match_id : element.user_id;
-    //
-    //
-    //
-    //     sql = 'SELECT DISTINCT * FROM users \
-    //                         WHERE users.id = ?'
-    //
-    //     const user = await connection.query({
-    //         sql,
-    //         timeout: 40000,
-    //         values: [match_id]
-    //     })
-    //     console.log(check);
-    //     if (user && !user.length) {
-    //         res.json({
-    //             'success': false
-    //         })
-    //     }
-    //     console.log(user);
-    //   }
-    // );
+        sql = 'SELECT DISTINCT username, avatar FROM users \
+                            WHERE users.id = ?'
+        const user = await connection.query({
+            sql,
+            timeout: 40000,
+            values: [match_id]
+        })
+        if (user && !user.length) {
+            return {};
+        }
 
-
-    // const profil = await connection.query({
-    //     sql,
-    //     timeout: 40000,
-    //     values: [check.id]
-    // })
-    // if (profil && !profil.length) {
-    //     res.json({
-    //         'success': false
-    //     })
-    // }
-    //
-    // sql = 'SELECT DISTINCT * FROM users \
-    //                     WHERE users.id = ?'
-    //
-    // const user = await connection.query({
-    //     sql,
-    //     timeout: 40000,
-    //     values: [check.id]
-    // })
-    // console.log(check);
-    // if (user && !user.length) {
-    //     res.json({
-    //         'success': false
-    //     })
-    // }
-    //
-    // sql = 'SELECT DISTINCT * FROM location_users \
-    // WHERE location_users.user_id = ?'
-    // const location = await connection.query({
-    //     sql,
-    //     timeout: 40000,
-    //     values: [check.id]
-    // })
-    // if (location && !location.length) {
-    //     res.json({
-    //         'success': false
-    //     })
-    // }
-    //
-    // sql = 'SELECT tags.id, tags.name FROM tags \
-    //        JOIN user_tag WHERE user_tag.user_id = ? \
-    //        AND user_tag.tag_id = tags.id'
-    //
-    // const user_tags = await connection.query({
-    //     sql,
-    //     timeout: 40000,
-    //     values: [check.id]
-    // })
-    //
-    // res.json({
-    //     success: true,
-    //     authData: check,
-    //     user: user[0],
-    //     profil: profil[0],
-    //     location: location[0],
-    //     tags: user_tags
-    // })
+        sql = 'SELECT body, DATE_FORMAT(created_at, "%d/%m/%Y %H:%i:%s") AS date \
+                FROM messages \
+                WHERE (from_id = ? AND to_id = ?) OR (from_id = ? AND to_id = ?) \
+                ORDER BY created_at DESC \
+                LIMIT 1;'
+        const message = await connection.query({
+            sql,
+            timeout: 40000,
+            values: [e(check.id), e(match_id), e(match_id), e(check.id)]
+        })
+        lastMessage = (message && !message.length) ? '' : message[0].body;
+        lastDateMessage = (message && !message.length) ? '' : message[0].date;
 
 
 
 
+        // sql =  'SELECT * \
+        //         (SELECT username, avatar\
+        //           FROM users \
+        //           WHERE users.id = ?) \
+        //         (SELECT body, DATE_FORMAT(created_at, "%d/%m/%Y %H:%i:%s") AS date \
+        //           FROM messages \
+        //           WHERE (from_id = ? AND to_id = ?) OR (from_id = ? AND to_id = ?) \
+        //           ORDER BY created_at DESC \
+        //           LIMIT 1);'
+        // const test = await connection.query({
+        //     sql,
+        //     timeout: 40000,
+        //     values: [match_id, e(check.id), e(match_id), e(match_id), e(check.id)]
+        // })
+        // console.log(test);
 
 
 
+        avatar = "/api/v1/images/get/";
+        avatar += (!user[0].avatar) ? 'no-profil.png': user[0].avatar;
+        console.log(avatar);
+        return {
+          username : user[0].username,
+          avatar: avatar,
+          lastMessage: lastMessage,
+          lastDateMessage: e(lastDateMessage)
+        };
+      })
+    )
+    if (profils && !profils.length) {
+        res.json({
+            'success': false
+        })
+        return (false);
+    }
+    profils.reduce((acc, m) => (acc + m))
     res.json({
-        matchs: matchs,
-    })
+      success: true,
+      relations: profils
+    });
   } catch (error) {
     throw new Error('Profil update ' + error)
   }
