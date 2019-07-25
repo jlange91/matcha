@@ -27,7 +27,6 @@ export default {
     };
   },
   created() {
-    console.log(this.$children)
     this.tabs = this.$children;
   },
   methods: {

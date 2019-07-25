@@ -32,6 +32,7 @@ router.post('/', checkJWT, async (req, res) => {
         res.json({
             'success': false
         })
+        return (false);
     }
 
     sql = 'SELECT DISTINCT * FROM users \
@@ -42,11 +43,11 @@ router.post('/', checkJWT, async (req, res) => {
         timeout: 40000,
         values: [check.id]
     })
-    console.log(check);
     if (user && !user.length) {
         res.json({
             'success': false
         })
+        return (false);
     }
 
     sql = 'SELECT DISTINCT * FROM location_users \
@@ -56,11 +57,6 @@ router.post('/', checkJWT, async (req, res) => {
         timeout: 40000,
         values: [check.id]
     })
-    if (location && !location.length) {
-        res.json({
-            'success': false
-        })
-    }
 
     sql = 'SELECT tags.id, tags.name FROM tags \
            JOIN user_tag WHERE user_tag.user_id = ? \

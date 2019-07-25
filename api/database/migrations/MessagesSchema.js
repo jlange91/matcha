@@ -8,6 +8,7 @@ class MessagesSchema {
             from_id INT NOT NULL, \
             to_id INT NOT NULL, \
             body TEXT NOT NULL, \
+            seen BOOLEAN NOT NULL DEFAULT false, \
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, \
             FOREIGN KEY (from_id) REFERENCES users (id) ON DELETE CASCADE, \
             FOREIGN KEY (to_id) REFERENCES users (id) ON DELETE CASCADE)'

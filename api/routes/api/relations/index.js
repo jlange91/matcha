@@ -1,14 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const formidable = require('formidable')
-const fs = require('fs')
 const e = require('escape-html')
 const jwt = require('jsonwebtoken')
 const connection = require('../../../middleware/database')
 const {
     checkJWT
 } = require('../../../middleware/check_token')
-const util = require('util')
 
 router.get('/', checkJWT, async (req, res) => {
 
@@ -32,7 +29,6 @@ router.get('/', checkJWT, async (req, res) => {
         values: [e(check.id), e(check.id)]
     })
     if (matchs && !matchs.length) {
-      console.log("pute");
         res.json({
             'success': false
         })
@@ -46,7 +42,7 @@ router.get('/', checkJWT, async (req, res) => {
             lastMessage,
             lastDateMessage;
 
-        sql = 'SELECT DISTINCT username, avatar FROM users \
+        sql = 'SELECT DISTINCT id, username, avatar FROM users \
                             WHERE users.id = ?'
         const user = await connection.query({
             sql,
@@ -95,6 +91,7 @@ router.get('/', checkJWT, async (req, res) => {
         avatar += (!user[0].avatar) ? 'no-profil.png': user[0].avatar;
         console.log(avatar);
         return {
+          id: user[0].id,
           username : user[0].username,
           avatar: avatar,
           lastMessage: lastMessage,
@@ -114,7 +111,7 @@ router.get('/', checkJWT, async (req, res) => {
       relations: profils
     });
   } catch (error) {
-    throw new Error('Profil update ' + error)
+    throw new Error('Relations root error ' + error)
   }
 })
 

@@ -48,12 +48,16 @@ app.use(`/${version}/images/get`, require('./routes/api/images/get'))
 
 app.use(`/${version}/relations/`, require('./routes/api/relations/'))
 
+
+app.use(`/${version}/messages/create`, require('./routes/api/messages/create'))
+app.use(`/${version}/messages`, require('./routes/api/messages'))
+
 // app.use(`/${version}/messages/`, require('./routes/api/messages/'))
 // app.use(`/${version}/messages/create`, require('./routes/api/messages/create'))
 // app.use(`/${version}/messages/delete`, require('./routes/api/messages/delete'))
 // app.use(`/${version}/messages/update`, require('./routes/api/messages/update'))
 
-
+var usersSocket = [];
 
 io.use(function(socket, next){
   if (socket.handshake.query && socket.handshake.query.token){
@@ -67,20 +71,45 @@ io.use(function(socket, next){
   }
 })
 .on('connection', function(socket) {
-  console.log('client connection >', socket.id, socket.decoded)
+
+  usersSocket.push({
+  id : socket.id,
+  userId : socket.decoded.id
+  });
+
+  console.log('client connection >', socket.id, socket.decoded,
+              'usersSocket > ', usersSocket)
+
   // Connection now authenticated to receive further events
    socket.on('logout', function () {
     console.log('client logout >', socket.id, socket.decoded)
     socket.disconnect()
   })
 
-  socket.on('message', function(message1, message2) {
-      io.emit('message', message1, message2);
-  });
+  // socket.on('message/' + socket.decoded.id, function(from_id, message) {
+  //   console.log("message: " + message);
+  //     io.emit('message/' + from_id, socket.decoded.id, message);
+  // });
+  socket.on('message', (userId, message) => {
+    const socket_id = usersSocket.find(function(el) {
+      return el.userId === userId;
+    }).id;
+    console.log("ici: " + socket_id)
+     socket.broadcast.to(socket_id)
+     .emit('message', socket.decoded.id, message);
+ });
 
 
   socket.on('disconnect', function () {
-    console.log('client disconnect >', socket.id, socket.decoded)
+    var newUsersSocket = usersSocket.filter(el => {
+      if (el.id === socket.id)
+        return ;
+      return el;
+    });
+    usersSocket = newUsersSocket;
+    console.log(usersSocket);
+    console.log('client disconnect >', socket.id, socket.decoded,
+                'usersSocket > ', usersSocket)
   });
 
   socket.on('end', function (){
