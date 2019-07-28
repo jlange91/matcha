@@ -92,8 +92,8 @@ export default {
     eraseImage(imageName) {
        axios.post('/images/delete', {'image': imageName})
        .then(res => {
-          console.log(res.data)
-         
+         if (res.data.success)
+          this.getUserImages()
        })
        .catch(e => console.log("e ", e));
     },

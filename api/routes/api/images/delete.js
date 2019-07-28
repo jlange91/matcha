@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router()
 const connection = require('../../../middleware/database')
 const jwt = require('jsonwebtoken')
+const e = require('escape-html')
+const fs = require('fs')
 
 const {
     checkJWT
@@ -26,24 +28,36 @@ router.post('/', checkJWT, async (req, res) => {
         })
     }
 
+
     let sql = 'SELECT images.user_id FROM images \
                 WHERE images.name = ?'
 
       let result = await connection.query({
                     sql,
                     timeout: 40000,
-                    values: [ e(req.image)]
+                    values: [ e(req.body.image.substring(19))]
                 })
-    console.log(result)
 
-    // let sql = 'DELETE FROM images \
-    //           WHERE images.name = ?'
+    if (!result || result[0].user_id != check.id)
+        return res.json({
+            'success': false,
+            'message': 'Forbidden'
+        })            
 
-    // await connection.query({
-    //                 sql,
-    //                 timeout: 40000,
-    //                 values: [ e(req.image)]
-    //             })
+    sql = 'DELETE FROM images \
+              WHERE images.name = ? \
+              AND images.user_id = ?'
+
+    await connection.query({
+                    sql,
+                    timeout: 40000,
+                    values: [ e(req.body.image.substring(19)), e(check.id)]
+                })
+
+    const file = "/usr/src/api/assets/" + e(req.body.image.substring(19))
+
+    if (fs.existsSync(file))
+        fs.unlinkSync(file)
 
       return res.json({
           'success': true,

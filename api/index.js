@@ -45,7 +45,7 @@ app.use(`/${version}/tags`, require('./routes/api/tags/'))
 
 app.use(`/${version}/images/upload`, require('./routes/api/images/create'))
 app.use(`/${version}/images/user`, require('./routes/api/images/user_image'))
-app.use(`/${version}/images/delete`, require('./routes/api/images/delete))
+app.use(`/${version}/images/delete`, require('./routes/api/images/delete'))
 app.use(`/${version}/images/get`, require('./routes/api/images/get'))
 
 app.use(`/${version}/relations/`, require('./routes/api/relations/'))
