@@ -5,6 +5,7 @@ const formidable = require('formidable')
 const path = require('path')
 const uuidv4 = require('uuid/v4');
 
+
 const {
     checkJWT
 } = require('../../../middleware/check_token')
@@ -28,6 +29,22 @@ router.post('/', checkJWT, async (req, res) => {
                 'message': 'Forbidden'
             })
         }
+        
+        let sql = 'SELECT DISTINCT * FROM images \
+        WHERE images.user_id = ?'
+
+        const images = await connection.query({
+              sql,
+              timeout: 40000,
+              values: [check.id]
+          })
+
+        if (images.length >= 5)
+           return res.json({
+                'success': false,
+                'message': 'Delete an image before uploading a new one'
+            })
+
 
         const form = new formidable.IncomingForm()
 
@@ -43,57 +60,34 @@ router.post('/', checkJWT, async (req, res) => {
         const uploads = [];
 
 
-        form.on("fileBegin", function(err, file){
+        form.on("fileBegin", async function(err, file){
             const extension = path.extname(file.name)
             const newfileName = uuidv4().replace(/-/g, '') + extension
 
             file.path = form.uploadDir + newfileName
             file.name = newfileName;
+
+            let sql = 'INSERT INTO images (user_id, name) \
+                                VALUES (?, ?)'
+        
+            let result = await connection.query({
+                sql,
+                timeout: 40000,
+                values: [check.id, file.name]
+            })
+            
+            if(!result)
+                return res.json({success: false, message: "upload failed"})
+                    
+            return res.json({success: true})
+
         });
 
-
-        form.on('file', function(field, file){
-            var fileField = {};
-            fileField[field]= file;
-            uploads.push(fileField);
-            console.log("uploads > ", uploads)
+        form.on("error", function(error){
+            res.json({success: false, message: "upload failed " + error})
         });
-
-        console.log("suce")
-
-        // uploads.forEach((image) => {
-        //
-        //     let sql = 'INSERT INTO images (user_id, name) \
-        //                          VALUES (?, ?)'
-        //
-        //     let result = await connection.query({
-        //         sql,
-        //         timeout: 40000,
-        //         values: [check.id, image.name]
-        //     })
-        //
-        //     if(!result)
-        //       res.json({success: false, message: "upload failed"})
-        //
-        //   })
-
-
-        // form.on("error", function(error){
-        //     console.log(error)
-        // });
-        // let result
-        //
-        // form.on('end', function(){
-        //
-        //
-        //
-        //     })
-        //
-        //
-        //
-        // })
-
-        // res.json(result)
+      
+       
 
     } catch (err) {
         throw new Error('Error on post image create' + err)

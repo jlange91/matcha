@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-const formidable = require('formidable')
 const fs = require('fs')
 
 // @route POST api/version/tags

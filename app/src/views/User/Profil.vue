@@ -52,8 +52,8 @@
       <tab name="edit-password">
         <user-password-edit class="mt-32"/>
       </tab>
-    <tab name="image-upload">
-      <image-uploader class="mt-32" />
+    <tab name="image-upload" @click="is_images = true">
+      <image-uploader class="mt-32" :get_images="is_images"/>
     </tab>
       <!-- <tab name="About Us">
       <h1>Why we do it</h1>
@@ -74,6 +74,7 @@ export default {
   // },
   data() {
     return {
+      is_images: false,
       completed: null
     };
   },
