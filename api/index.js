@@ -59,7 +59,7 @@ app.use(`/${version}/messages`, require('./routes/api/messages'))
 // app.use(`/${version}/messages/delete`, require('./routes/api/messages/delete'))
 // app.use(`/${version}/messages/update`, require('./routes/api/messages/update'))
 
-var usersSocket = [];
+var loggedUsers = [];
 
 io.use(function(socket, next){
   if (socket.handshake.query && socket.handshake.query.token){
@@ -74,13 +74,13 @@ io.use(function(socket, next){
 })
 .on('connection', function(socket) {
 
-  usersSocket.push({
-  id : socket.id,
-  userId : socket.decoded.id
+  loggedUsers.push({
+    id : socket.id,
+    userId : socket.decoded.id
   });
 
   console.log('client connection >', socket.id, socket.decoded,
-              'usersSocket > ', usersSocket)
+              'loggedUsers > ', loggedUsers)
 
   // Connection now authenticated to receive further events
    socket.on('logout', function () {
@@ -88,30 +88,29 @@ io.use(function(socket, next){
     socket.disconnect()
   })
 
-  // socket.on('message/' + socket.decoded.id, function(from_id, message) {
-  //   console.log("message: " + message);
-  //     io.emit('message/' + from_id, socket.decoded.id, message);
-  // });
   socket.on('message', (userId, message) => {
-    const socket_id = usersSocket.find(function(el) {
+    let socket_id = loggedUsers.find(function(el) {
       return el.userId === userId;
-    }).id;
+    });
+    if (socket_id)
+      socket_id = socket_id.id;
+    else
+      return ;
     console.log("ici: " + socket_id)
-     socket.broadcast.to(socket_id)
-     .emit('message', socket.decoded.id, message);
+     socket.broadcast.to(socket_id).emit('message', socket.decoded.id, message);
  });
 
 
-  socket.on('disconnect', function () {
-    var newUsersSocket = usersSocket.filter(el => {
+  socket.on('disconnect', () => {
+    var newUsersSocket = loggedUsers.filter(el => {
       if (el.id === socket.id)
         return ;
       return el;
     });
-    usersSocket = newUsersSocket;
-    console.log(usersSocket);
+    loggedUsers = newUsersSocket;
+    console.log(loggedUsers);
     console.log('client disconnect >', socket.id, socket.decoded,
-                'usersSocket > ', usersSocket)
+                'loggedUsers > ', loggedUsers)
   });
 
   socket.on('end', function (){

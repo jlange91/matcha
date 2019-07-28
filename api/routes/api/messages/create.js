@@ -43,11 +43,11 @@ router.post('/', checkJWT, async (req, res) => {
       return (false);
     }
 
-    sql = 'INSERT INTO messages(from_id, to_id, body) VALUES (?,?,?)'
+    sql = 'INSERT INTO messages(from_id, to_id, body, seen) VALUES (?,?,?,?)'
     const newMessage = await connection.query({
         sql,
         timeout: 40000,
-        values: [e(check.id), e(to), e(message)]
+        values: [e(check.id), e(to), e(message), 0]
     })
 
     if (!newMessage) {

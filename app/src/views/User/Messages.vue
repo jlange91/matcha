@@ -1,6 +1,8 @@
 <template>
   <div class="flex flex-wrap">
+
     <div class="flex flex-wrap items-start content-start w-full lg:w-1/3 border-r border-grey-lighter h-full">
+
       <div class="flex flex-shrink justify-between self-start items-center w-full px-2 py-4">
         <div class="text-center px-2 mr-2">
           <a href="#" class="text-lg text-grey hover:text-grey-dark">
@@ -15,7 +17,6 @@
       </div>
 
       <ul class="flex flex-col w-full select-none">
-
 
         <li v-for="relation in relations" @click="select(relation.id)" :key="relation.id"
           class="flex flex-no-wrap items-center hover:bg-grey-300 text-black cursor-pointer p-3"
@@ -39,9 +40,10 @@
           </div>
         </li>
 
-
       </ul>
+
     </div>
+
     <div
        class="w-full lg:w-2/3"
     >
@@ -99,6 +101,15 @@
 
         </div>
 
+
+
+        <div v-if="seen" class="flex flex-row-reverse">
+          <span class="py-1 px-2 shadow-md no-underline rounded-full bg-blue-600 text-white font-sans font-semibold text-xs border-blue btn-primary">
+            Vu.
+          </span>
+        </div>
+
+
         <div class="bg-white flex flex-wrap self-end items-center w-full text-xl my-4">
           <div class="p-2">
             <a href="#" class="text-grey-600 hover:text-grey-900">
@@ -129,12 +140,6 @@
 
   import axios from "../../middleware/axios";
 
-
-    socket.on("message", () => {
-      console.log("pute");
-      // this.getMessages();
-    });
-
   export default {
     data () {
       return {
@@ -144,16 +149,19 @@
         form: {
           message: ""
         },
+        seen: false,
         limit: 10
       }
     },
     mounted() {
-      axios
-        .get("relations")
-        .then(res => {
-          this.relations = res.data.relations;
-        })
-        .catch(e => console.log("e ", e));
+      socket.on("message", (test, test2) => {
+        this.updateMessages();
+        this.updateRelations();
+      });
+      this.updateRelations();
+    },
+    destroyed() {
+      socket.removeListener('message');
     },
     computed: {
       ...mapGetters({
@@ -166,16 +174,25 @@
       },
       select(relation_id){
         this.focus_id = relation_id;
-        this.getMessages();
+        this.updateMessages();
       },
-      getMessages(){
+      updateMessages(){
         axios
           .post("messages", {
             focus_id: this.focus_id,
             limit: this.limit
           })
           .then(res => {
-            this.messages = res.data.messages.reverse()
+            this.messages = (res.data.messages) ? res.data.messages.reverse() : "";
+            this.seen = res.data.seen;
+          })
+          .catch(e => console.log("e ", e));
+      },
+      updateRelations(){
+        axios
+          .get("relations")
+          .then(res => {
+            this.relations = res.data.relations;
           })
           .catch(e => console.log("e ", e));
       },
@@ -187,9 +204,11 @@
           })
           .then(res => {
             if (res.data.success == true)
-              socket.emit('message', this.getUserId, this.form.message);
+              socket.emit('message', this.focus_id, this.form.message);
               this.form.message = "";
-              this.getMessages();
+              setTimeout(() => {
+                  this.updateMessages();
+                }, 1000)
           })
           .catch(e => console.log("e ", e));
       }

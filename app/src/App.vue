@@ -12,10 +12,6 @@ import { mapActions, mapGetters } from 'vuex';
 
 import socket from './middleware/socket-instance';
 
-socket.on("message", (message1, message2) => {
-  console.log(message1, message2)
-});
-
 export default {
     computed: {
       ...mapGetters({
