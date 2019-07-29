@@ -29,6 +29,9 @@ const version = 'v1'
 const setup = require('./database/setup')
 setup.database()
 
+const faker = require('./database/faker')
+faker.start()
+
 app.use(`/${version}/user/login`, require('./routes/api/auth/login'))
 app.use(`/${version}/user/create`, require('./routes/api/auth/register'))
 app.use(`/${version}/user/confirmation`, require('./routes/api/auth/confirmation'))
