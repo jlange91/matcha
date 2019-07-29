@@ -153,7 +153,7 @@
         limit: 10
       }
     },
-    mounted() {
+    created() {
       socket.on("message", (test, test2) => {
         this.updateMessages();
         this.updateRelations();
