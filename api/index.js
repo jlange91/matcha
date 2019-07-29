@@ -39,6 +39,7 @@ app.use(`/${version}/user/delete`, require('./routes/api/user/delete'))
 app.use(`/${version}/user/update-password`, require('./routes/api/user/update-password'))
 app.use(`/${version}/user/update-location`, require('./routes/api/user/update-location'))
 app.use(`/${version}/user/profil`, require('./routes/api/user/profil'))
+app.use(`/${version}/user/avatar`, require('./routes/api/user/avatar'))
 app.use(`/${version}/user/profil/edit`, require('./routes/api/user/profil-edit'))
 
 app.use(`/${version}/tags`, require('./routes/api/tags/'))

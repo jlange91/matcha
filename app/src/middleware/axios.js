@@ -38,6 +38,7 @@ instance.interceptors.response.use(response => {
     session.state.user.username = response.data.user.username
     session.state.user.first_name = response.data.user.first_name
     session.state.user.last_name = response.data.user.last_name
+    session.state.user.avatar = response.data.user.avatar
     profil.state.profil = response.data.profil
     profil.state.location = response.data.location
     tags.state.tags = response.data.tags

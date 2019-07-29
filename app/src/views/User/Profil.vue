@@ -3,7 +3,10 @@
     <tabs>
       <tab name="profil" :selected="true">
         <div class="mt-8 p-4 container mx-auto min-w-sm max-w-lg rounded bg-white shadow">
-          <div>avatar</div>
+          <div>
+            <img v-if="getUser.avatar != null" :src="'/api/v1/images/get/' + getUser.avatar" :alt="getUser.username" class="rounded-full w-32 h-32">
+            <img v-else src="/api/v1/images/get/default.png" class="rounded-full w-32 h-32">
+          </div>
           <div>
             Username: {{getUser.username}}
             <br>

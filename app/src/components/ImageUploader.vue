@@ -15,10 +15,10 @@
           for="file"
           class="curesor-pointer absolute max-w-lg text-center py-2 px-2 rounded bg-teal-600 text-white"
         >Select file</label>
-        <input class="hidden" type="file" name="file" id="file" @change="onInputChange">
+        <input class="hidden" type="file" name="file" id="file" @change="onInputChange" />
       </div>
     </div>
-    <div  class="px-2">
+    <div class="px-2">
       <div v-show="images.length" class="flex flex-row-reverse">
         <form enctype="multipart/form-data">
           <button
@@ -39,25 +39,22 @@
           :key="index"
           class="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 px-2 my-2"
         >
-          <img :src="image" :alt="index">
-          <div class="flex justify-between bg-teal-100 p-2 shadow text-xs text-gray-900">
-            <span v-text="files[index].name"></span>
-            <span v-text="files[index].size"></span>
-          </div>
+          <img :src="image" :alt="index" />
         </div>
       </div>
-       <div class="flex flex-wrap -mx-2 mt-8">
+      <div class="flex flex-wrap -mx-2 mt-8">
         <div
           v-for="(image, index) in user_images"
           :key="index"
-          class="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 px-2 my-2 text-center"
+          class="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 px-2 my-2 text-center cursor-pointer hover:shadow"
+          @click="chooseProfilImage(image.name)"
         >
-          <img :src="'localhost' + '/' + image.name" :alt="index" >
+          <img  :src="'localhost' + '/' + image.name" :alt="index" />
 
-          <button @click="eraseImage(image.name)" class="bg-red-600 text-white px-4 rounded my-2">
-            Effacer
-          </button>
-         
+          <button
+            @click="eraseImage(image.name)"
+            class="bg-red-600 text-white px-4 rounded my-2"
+          >Effacer</button>
         </div>
       </div>
     </div>
@@ -66,11 +63,11 @@
 
 <script>
 import axios from "../middleware/axios";
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   props: {
-    getImages:{
+    getImages: {
       type: Boolean,
       required: false,
       default: false
@@ -86,27 +83,49 @@ export default {
     };
   },
   mounted() {
-     this.getUserImages()
+    this.getUserImages();
   },
   methods: {
+    ...mapActions({
+      setVisibility: "messages/setVisibility",
+      setMessage: "messages/setMessage",
+      setSuccess: "messages/setSuccess"
+    }),
+    chooseProfilImage(imageName) {
+      axios.post('/user/avatar', {
+        image: imageName.substring(19)
+      })
+        .then(res => {
+            if (res.data.success) {
+              self.setMessage("Your profile picture is updated");
+              self.setSuccess(true);
+              self.setVisibility(true);
+            } else {
+              self.setMessage(res.data.message);
+              self.setSuccess(false);
+              self.setVisibility(true);
+            }
+        })
+        .catch(e => console.log("e ", e));
+    },
     eraseImage(imageName) {
-       axios.post('/images/delete', {'image': imageName})
-       .then(res => {
-         if (res.data.success)
-          this.getUserImages()
-       })
-       .catch(e => console.log("e ", e));
+      axios
+        .post("/images/delete", { image: imageName })
+        .then(res => {
+          if (res.data.success) this.getUserImages();
+        })
+        .catch(e => console.log("e ", e));
     },
     getUserImages() {
-      axios.post('/images/user')
-       .then(res => {
-          console.log(res.data.images)
+      axios
+        .post("/images/user")
+        .then(res => {
           res.data.images.forEach(img => {
             img.name = "/api/v1/images/get/" + img.name;
           });
           this.user_images = res.data.images;
-       })
-       .catch(e => console.log("e ", e));
+        })
+        .catch(e => console.log("e ", e));
     },
     upload() {
       const formData = new FormData();
@@ -117,10 +136,19 @@ export default {
 
       axios
         .post("images/upload", formData)
-        .then((res) => {
-           this.getUserImages()
-           this.images = []
-           this.files = []
+        .then(res => {
+          if (res.data.success) {
+            this.getUserImages();
+            this.images = [];
+            this.files = [];
+            this.setMessage("Votre image est upload");
+            this.setSuccess(true);
+            this.setVisibility(true);
+          } else {
+            this.setMessage(res.data.message);
+            this.setSuccess(false);
+            this.setVisibility(true);
+          }
         })
         .catch(e => console.log("e ", e));
     },

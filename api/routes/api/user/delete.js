@@ -31,14 +31,14 @@ router.post('/', [
             const sql = 'DELETE FROM users \
                         WHERE users.id = ?'
 
-            const delted = await connection.query({
+            const deleted = await connection.query({
                 sql,
                 timeout: 40000,
                 values: [e(check.id)]
             })
 
 
-            if (!delted) {
+            if (!deleted) {
                 res.json({
                     'success': false,
                     'message': 'Oops your account did not get deleted try again'
