@@ -8,6 +8,8 @@ const PasswordResetschema = require('./migrations/PasswordResetsSchema')
 const ImagesSchema = require('./migrations/ImagesSchema')
 const MatchSchema = require('./migrations/MatchSchema')
 const MessagesSchema = require('./migrations/MessagesSchema')
+const Likes = require('./migrations/Likes')
+const Views = require('./migrations/Views')
 
 class Setup {
     static database () {
@@ -23,6 +25,8 @@ class Setup {
                 ImagesSchema.createTable()
                 MatchSchema.createTable()
                 MessagesSchema.createTable()
+                Likes.createTable()
+                Views.createTable()
             }, 1000)
         }, 3000)
     }
