@@ -1,6 +1,7 @@
 const UserFaker = require('./faker/UserFaker')
 const UserProfilFaker = require('./faker/UserProfilFaker')
 const MatchFaker = require('./faker/MatchFaker')
+const ImageFaker = require('./faker/ImageFaker')
 
 class Faker {
     static start () {
@@ -8,7 +9,8 @@ class Faker {
             UserFaker.setRows()
             setTimeout(() => {
                 UserProfilFaker.setRows(),
-                MatchFaker.setRows()
+                MatchFaker.setRows(),
+                ImageFaker.setRows()
             }, 1000)
         }, 3000)
     }

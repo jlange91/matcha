@@ -13,7 +13,7 @@ class UserProfilFaker {
                   "Creator.", \
                   1)'
 
-        connection.query(sql, (err) => {if (err) console.log('Error while creating jlange profil', err) })
+        connection.query(sql, (err) => {if (err) console.log('Error while insert jlange profil', err) })
 
         sql = 'INSERT IGNORE INTO profils \
               (user_id, birthdate, gender, sexual_orientation, biography, completed)\
@@ -25,7 +25,7 @@ class UserProfilFaker {
               "Creator.", \
               1)'
 
-          connection.query(sql, (err) => {if (err) console.log('Error while creating dadacruz profil', err) })
+          connection.query(sql, (err) => {if (err) console.log('Error while insert dadacruz profil', err) })
     }
 
 }
