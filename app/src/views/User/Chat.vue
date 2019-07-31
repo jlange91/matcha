@@ -23,7 +23,7 @@
         >
           <div
             class="flex-shrink-0 w-12 h-12 bg-no-repeat bg-center bg-contain rounded-full mr-3"
-            v-bind:style="{ backgroundImage: 'url(' + relation.avatar + ')' }"
+            v-bind:style="{ backgroundImage: 'url(/api/v1/images/get/' + relation.avatar + ')' }"
           ></div>
           <div class="flex-1 min-w-0">
             <div class="flex justify-between mb-1">
@@ -75,27 +75,9 @@
 
           <div class="flex flex-col p-4">
 
-
             <div v-for="message in messages" :class="backgroundColor(message.from_id)" class="rounded-lg text-sm p-3 mb-1">
               <p class="float-right">{{ message.body }}</p>
             </div>
-
-            <!-- <div class="bg-blue-200 rounded-lg text-sm p-3 mb-1">
-              <a
-                href="https://www.youtube.com"
-                class="hover:underline text-blue-600"
-                target="_blank"
-              >https://www.youtube.com</a>
-              <div class="flex items-center mt-2">
-                <blockquote class="border-l-2 border-blue pl-2">
-                  <p class="font-medium text-blue-500">Youtube</p>
-                  <p>Enjoy the videos and music you love, upload original content, and share it all with friends, family, and the world on YouTube.</p>
-                </blockquote>
-                <a href="https://www.youtube.com" target="_blank" class="flex-auto">
-                  <img src="https://s.ytimg.com/yts/img/favicon_96-vflW9Ec0w.png" alt />
-                </a>
-              </div>
-            </div> -->
 
           </div>
 
@@ -154,7 +136,7 @@
       }
     },
     created() {
-      socket.on("message", (test, test2) => {
+      socket.on("message", () => {
         this.updateMessages();
         this.updateRelations();
       });
@@ -173,7 +155,7 @@
         return this.getUserId == from_id ? 'bg-green-200 self-end' : 'bg-blue-200 self-start'
       },
       select(relation_id){
-        this.focus_id = relation_id;
+        this.focus_id = (this.focus_id == relation_id) ? '' : relation_id;
         this.updateMessages();
       },
       updateMessages(){
@@ -192,6 +174,16 @@
         axios
           .get("relations")
           .then(res => {
+            res.data.relations.forEach((el) => {
+              let now = new Date();
+              let old = new Date(el.lastDateMessage);
+
+              if (old == 'Invalid Date')
+                return ;
+              el.lastDateMessage = ((old.getFullYear() < now.getFullYear()) ||
+              (old.getMonth() < now.getMonth()) ||
+              (old.getDate() < now.getDate())) ? el.lastDateMessage.split(' ')[0] : el.lastDateMessage.split(' ')[1];
+            });
             this.relations = res.data.relations;
           })
           .catch(e => console.log("e ", e));
@@ -204,13 +196,20 @@
           })
           .then(res => {
             if (res.data.success == true)
-              socket.emit('message', this.focus_id, this.form.message);
+              socket.emit('message', this.focus_id);
               this.form.message = "";
               setTimeout(() => {
                   this.updateMessages();
+                  this.updateRelations();
                 }, 1000)
           })
           .catch(e => console.log("e ", e));
+          axios
+            .post("notifications/create", {
+              to: this.focus_id,
+              type: 'message',
+            })
+            .catch(e => console.log("e ", e));
       }
     },
   }

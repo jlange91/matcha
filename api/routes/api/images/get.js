@@ -7,7 +7,7 @@ const fs = require('fs')
 // @access Public
 router.get('/:id', async (req, res) => {
   try {
-    const file = "/usr/src/api/assets/" + req.param("id")
+    const file = "/usr/src/api/assets/" + req.params.id
 
     if (fs.existsSync(file))
       res.sendFile(file)

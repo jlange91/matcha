@@ -60,9 +60,9 @@ const router = new Router({
       beforeEnter: requireAuth
     },
     {
-      path: '/messages',
-      name: 'messages',
-      component: () => import('./views/User/Messages.vue'),
+      path: '/chat',
+      name: 'chat',
+      component: () => import('./views/User/Chat.vue'),
       beforeEnter: requireAuth
     }
   ]

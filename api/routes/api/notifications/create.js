@@ -23,10 +23,7 @@ router.post('/', checkJWT, async (req, res) => {
         return (false);
     }
 
-    const {
-        to,
-        message
-    } = req.body
+    const { to, type } = req.body
 
     sql = 'SELECT * FROM likes WHERE (user_id = ? AND liked_id = ?) OR (user_id = ? AND liked_id = ?)'
     const match = await connection.query({
@@ -43,14 +40,14 @@ router.post('/', checkJWT, async (req, res) => {
       return (false);
     }
 
-    sql = 'INSERT INTO messages(from_id, to_id, body, seen) VALUES (?,?,?,?)'
-    const newMessage = await connection.query({
+    sql = 'INSERT IGNORE INTO notifications(user_id, notified_id, type) VALUES (?,?,?)'
+    const newNotification = await connection.query({
         sql,
         timeout: 40000,
-        values: [e(check.id), e(to), e(message), 0]
+        values: [e(check.id), e(to), e(type), 0]
     })
 
-    if (!newMessage) {
+    if (!newNotification) {
         res.json({
             'success': false,
             'message': 'Oops your message did not send try again.'

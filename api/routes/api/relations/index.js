@@ -7,6 +7,12 @@ const {
     checkJWT
 } = require('../../../middleware/check_token')
 
+async function asyncForEach(array, callback) {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array);
+  }
+}
+
 router.get('/', checkJWT, async (req, res) => {
 
   try {
@@ -22,93 +28,56 @@ router.get('/', checkJWT, async (req, res) => {
         })
         return (false);
     }
-    sql = 'SELECT * FROM matchs WHERE user_id = ? OR match_id = ?'
-    const matchs = await connection.query({
+    sql = 'SELECT * FROM likes WHERE user_id = ?'
+    const iLikes = await connection.query({
         sql,
         timeout: 40000,
-        values: [e(check.id), e(check.id)]
+        values: [e(check.id)]
     })
-    if (matchs && !matchs.length) {
+    if (iLikes && !iLikes.length) {
         res.json({
             'success': false
         })
         return (false);
     }
+    var relations = [];
 
-    const profils = await Promise.all(
-      matchs.map(async (m) => {
-        const match_id = (check.id == m.user_id) ? m.match_id : m.user_id;
-        var avatar,
-            lastMessage,
-            lastDateMessage;
-
+    await asyncForEach(iLikes, async (iLike) => {
+      sql = 'SELECT * FROM likes WHERE user_id = ? AND liked_id = ?'
+      const theirLikes = await connection.query({
+          sql,
+          timeout: 40000,
+          values: [e(iLike.liked_id), e(check.id)]
+      })
+      if (theirLikes && theirLikes.length) {
         sql = 'SELECT DISTINCT id, username, avatar FROM users \
                             WHERE users.id = ?'
         const user = await connection.query({
             sql,
             timeout: 40000,
-            values: [match_id]
+            values: [iLike.liked_id]
         })
-        if (user && !user.length) {
-            return {};
+        if (user && user.length) {
+
+          sql = 'SELECT body, DATE_FORMAT(created_at, "%m/%d/%Y %H:%i:%s") AS date \
+                  FROM messages \
+                  WHERE (from_id = ? AND to_id = ?) OR (from_id = ? AND to_id = ?) \
+                  ORDER BY created_at DESC \
+                  LIMIT 1;'
+          const message = await connection.query({
+              sql,
+              timeout: 40000,
+              values: [e(check.id), e(iLike.liked_id), e(iLike.liked_id), e(check.id)]
+          })
+          user[0].lastMessage = (message && !message.length) ? '' : message[0].body;
+          user[0].lastDateMessage = (message && !message.length) ? '' : message[0].date;
+          relations.push(user[0])
         }
-
-        sql = 'SELECT body, DATE_FORMAT(created_at, "%d/%m/%Y %H:%i:%s") AS date \
-                FROM messages \
-                WHERE (from_id = ? AND to_id = ?) OR (from_id = ? AND to_id = ?) \
-                ORDER BY created_at DESC \
-                LIMIT 1;'
-        const message = await connection.query({
-            sql,
-            timeout: 40000,
-            values: [e(check.id), e(match_id), e(match_id), e(check.id)]
-        })
-        lastMessage = (message && !message.length) ? '' : message[0].body;
-        lastDateMessage = (message && !message.length) ? '' : message[0].date;
-
-
-
-
-        // sql =  'SELECT * \
-        //         (SELECT username, avatar\
-        //           FROM users \
-        //           WHERE users.id = ?) \
-        //         (SELECT body, DATE_FORMAT(created_at, "%d/%m/%Y %H:%i:%s") AS date \
-        //           FROM messages \
-        //           WHERE (from_id = ? AND to_id = ?) OR (from_id = ? AND to_id = ?) \
-        //           ORDER BY created_at DESC \
-        //           LIMIT 1);'
-        // const test = await connection.query({
-        //     sql,
-        //     timeout: 40000,
-        //     values: [match_id, e(check.id), e(match_id), e(match_id), e(check.id)]
-        // })
-        // console.log(test);
-
-
-
-        avatar = "/api/v1/images/get/";
-        avatar += (!user[0].avatar) ? 'no-profil.png': user[0].avatar;
-        console.log(avatar);
-        return {
-          id: user[0].id,
-          username : user[0].username,
-          avatar: avatar,
-          lastMessage: lastMessage,
-          lastDateMessage: e(lastDateMessage)
-        };
-      })
-    )
-    if (profils && !profils.length) {
-        res.json({
-            'success': false
-        })
-        return (false);
-    }
-    profils.reduce((acc, m) => (acc + m))
+      }
+    });
     res.json({
       success: true,
-      relations: profils
+      relations: relations
     });
   } catch (error) {
     throw new Error('Relations root error ' + error)

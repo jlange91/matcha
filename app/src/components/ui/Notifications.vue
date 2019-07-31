@@ -2,7 +2,7 @@
   <div @click="is_visible = !is_visible" class="cursor-pointer">
     <div class="text-white px-1 ml-1 flex inline-flex py-1 items-center">
       <svg
-        class="mx-2 h-4 w-4 fill-current text-gray-600 cursor-pointer"
+        class="mx-2 h-5 w-5 fill-current text-gray-600 cursor-pointer"
         viewBox="0 0 20 20"
       >
         <path
@@ -28,35 +28,29 @@
 </template>
 
 <script>
+
+import socket from '../../middleware/socket-instance';
+
 export default {
   data() {
     return {
       is_visible: false,
-      notifications: [
-        {
-          id: 1,
-          type: "message",
-          message: "juju sent le chat mouyé"
-        },
-        {
-          id: 2,
-          type: "view",
-          message: "juju on a vu ton profil"
-        },
-        {
-          id: 3,
-          type: "like",
-          message: "juju a un like"
-        },
-        {
-          id: 4,
-          type: "match",
-          message: "juju a un match"
-        }
-      ]
+      notifications: []
     };
   },
+  created() {
+    socket.on("notif", () => {
+      this.updateNotifications();
+    });
+    this.updateNotifications();
+  },
+  destroyed() {
+    socket.removeListener('notif');
+  },
   methods: {
+    updateNotifications() {
+
+    },
     backGroundStyle(type) {
       if (type === "message") return "bg-green-300";
       if (type === "match") return "bg-red-300";

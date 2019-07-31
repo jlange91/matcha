@@ -28,11 +28,11 @@
               class="no-underline block mt-4 sm:inline-block sm:mt-0 text-teal-600 mr-3"
             > {{ getUser.username }} </span>
             <span :class="getSocket ? 'bg-green-400' : 'bg-red-400'" class="rounded-full h-2 w-2 flex items-center justify-center mr-3"></span>
-              <router-link
-                to="/messages">
-              <svg class="fill-current h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill="#378d94" d="M10 15l-4 4v-4H2a2 2 0 0 1-2-2V3c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-8zM5 7v2h2V7H5zm4 0v2h2V7H9zm4 0v2h2V7h-2z"/></svg>
-            </router-link>
             <notifications />
+            <router-link
+              to="/chat">
+              <messages />
+            </router-link>
           </div>
           <div>
             <router-link

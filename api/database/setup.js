@@ -6,10 +6,11 @@ const UserTagSchema = require('./migrations/UserTagSchema')
 const UserLocationSchema = require('./migrations/UserLocationSchema')
 const PasswordResetschema = require('./migrations/PasswordResetsSchema')
 const ImagesSchema = require('./migrations/ImagesSchema')
-const MatchSchema = require('./migrations/MatchSchema')
 const MessagesSchema = require('./migrations/MessagesSchema')
 const Likes = require('./migrations/Likes')
 const Views = require('./migrations/Views')
+const NotificationsSchema = require('./migrations/NotificationsSchema')
+const loggedUsers = require('./migrations/loggedUsers')
 
 class Setup {
     static database () {
@@ -23,10 +24,11 @@ class Setup {
                 PasswordResetschema.createTable()
                 UserTagSchema.createTable()
                 ImagesSchema.createTable()
-                MatchSchema.createTable()
                 MessagesSchema.createTable()
                 Likes.createTable()
                 Views.createTable()
+                NotificationsSchema.createTable()
+                loggedUsers.createTable()
             }, 1000)
         }, 3000)
     }
