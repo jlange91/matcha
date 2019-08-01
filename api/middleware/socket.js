@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const LoggedUsers = require('../models/LoggedUsers')
+const Notifications = require('../models/Notifications')
 
 module.exports = function (server) {
   var io = require('socket.io')(server);
@@ -26,25 +27,25 @@ module.exports = function (server) {
       socket.disconnect()
     })
 
-    socket.on('message', (userId) => {
-      let user = LoggedUsers.get(userId);
+    socket.on('message', async (userId, focusId) => {
+      let user = await LoggedUsers.get(focusId);
       if (!user)
         return ;
-       socket.broadcast.to(user.socket_id).emit('message');
+      socket.broadcast.to(user.socket_id).emit('message');
+      Notifications.push(userId, focusId, 'message');
     });
 
-    socket.on('notif', (userId) => {
-      let user = LoggedUsers.get(userId);
+    socket.on('notif', async (userId, focusId, type) => {
+      let user = await LoggedUsers.get(userId);
       if (!user)
         return ;
        socket.broadcast.to(user.socket_id).emit('notif');
+       Notifications.push(userId, focusId, type);
     });
 
     socket.on('disconnect', () => {
       LoggedUsers.remove(socket.id)
-      console.log(loggedUsers);
-      console.log('client disconnect >', socket.id, socket.decoded,
-                  'loggedUsers > ', loggedUsers)
+      console.log('client disconnect >', socket.id, socket.decoded)
     });
 
     socket.on('end', function (){

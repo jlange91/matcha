@@ -56,7 +56,6 @@ app.use(`/${version}/relations/`, require('./routes/api/relations/'))
 app.use(`/${version}/messages/create`, require('./routes/api/messages/create'))
 app.use(`/${version}/messages`, require('./routes/api/messages'))
 
-app.use(`/${version}/notifications/create`, require('./routes/api/notifications/create'))
 // app.use(`/${version}/messages/`, require('./routes/api/messages/'))
 // app.use(`/${version}/messages/create`, require('./routes/api/messages/create'))
 // app.use(`/${version}/messages/delete`, require('./routes/api/messages/delete'))

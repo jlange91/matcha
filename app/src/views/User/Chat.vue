@@ -135,6 +135,11 @@
         limit: 10
       }
     },
+    computed: {
+      ...mapGetters({
+        getUserId: "session/getUserId",
+      }),
+    },
     created() {
       socket.on("message", () => {
         this.updateMessages();
@@ -196,7 +201,7 @@
           })
           .then(res => {
             if (res.data.success == true)
-              socket.emit('message', this.focus_id);
+              socket.emit('message', this.getUserId, this.focus_id);
               this.form.message = "";
               setTimeout(() => {
                   this.updateMessages();
@@ -204,12 +209,6 @@
                 }, 1000)
           })
           .catch(e => console.log("e ", e));
-          axios
-            .post("notifications/create", {
-              to: this.focus_id,
-              type: 'message',
-            })
-            .catch(e => console.log("e ", e));
       }
     },
   }
