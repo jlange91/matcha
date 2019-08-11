@@ -195,6 +195,7 @@ export default {
             self.setMessage("Your location is updated");
             self.setSuccess(true);
             self.setVisibility(true);
+            
           } else {
             self.setMessage("There was a problem please try again");
             self.setSuccess(false);
