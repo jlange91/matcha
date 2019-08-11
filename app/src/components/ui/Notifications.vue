@@ -21,7 +21,7 @@
         :key="notification.id"
         :class="backGroundStyle(notification.type)"
       >
-        <p class="p-4">{{ notification.message }}</p>
+        <p class="p-4">{{ notification.message ? notification.message : 'Vous navez pas de noveaux message'}}</p>
       </div>
     </div>
   </div>

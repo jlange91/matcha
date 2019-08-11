@@ -28,7 +28,7 @@ router.post('/', checkJWT, async (req, res) => {
         message
     } = req.body
 
-    sql = 'SELECT * FROM likes WHERE (user_id = ? AND liked_id = ?) OR (user_id = ? AND liked_id = ?)'
+    let sql = 'SELECT * FROM likes WHERE (user_id = ? AND liked_id = ?) OR (user_id = ? AND liked_id = ?)'
     const match = await connection.query({
         sql,
         timeout: 40000,

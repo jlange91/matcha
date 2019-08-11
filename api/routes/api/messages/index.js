@@ -32,7 +32,7 @@ router.post('/', checkJWT, async (req, res) => {
         limit
     } = req.body
 
-    sql = 'SELECT from_id, to_id, body, seen, DATE_FORMAT(created_at, "%d/%m/%Y %H:%i:%s") AS date \
+    let sql = 'SELECT from_id, to_id, body, seen, DATE_FORMAT(created_at, "%d/%m/%Y %H:%i:%s") AS date \
             FROM messages \
             WHERE (from_id = ? AND to_id = ?) OR (from_id = ? AND to_id = ?) \
             ORDER BY created_at DESC \

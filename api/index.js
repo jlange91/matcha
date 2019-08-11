@@ -52,6 +52,8 @@ app.use(`/${version}/images/get`, require('./routes/api/images/get'))
 
 app.use(`/${version}/relations/`, require('./routes/api/relations/'))
 
+app.use(`/${version}/matches`, require('./routes/api/matches'))
+
 
 app.use(`/${version}/messages/create`, require('./routes/api/messages/create'))
 app.use(`/${version}/messages`, require('./routes/api/messages'))

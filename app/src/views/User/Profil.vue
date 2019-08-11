@@ -4,32 +4,40 @@
       <tab name="profil" :selected="true">
         <div class="mt-8 p-4 container mx-auto min-w-sm max-w-lg rounded bg-white shadow">
           <div>
-            <img v-if="getUser.avatar != null" :src="'/api/v1/images/get/' + getUser.avatar" :alt="getUser.username" class="rounded-full w-32 h-32">
-            <img v-else src="/api/v1/images/get/default.png" class="rounded-full w-32 h-32">
+            <img
+              v-if="getUser.avatar != null"
+              :src="'/api/v1/images/get/' + getUser.avatar"
+              :alt="getUser.username"
+              class="rounded-full w-32 h-32"
+            />
+            <img v-else src="/api/v1/images/get/default.png" class="rounded-full w-32 h-32" />
           </div>
           <div>
             Username: {{getUser.username}}
-            <br>
+            <br />
             Email: {{getUser.email}}
-            <br>
+            <br />
             First name: {{getUser.first_name}}
-            <br>
+            <br />
             Last name: {{getUser.last_name}}
           </div>
 
           <div class="mt-8 flex flex-wrap" v-show="getProfil && getProfil.completed">
             Age: {{age}}
-            <br>
+            <br />
             Gender: {{getProfil.gender}}
-            <br>
+            <br />
             Sexual preference: {{getProfil.sexual_orientation}}
-            <br><p>Biography:
-            <span v-html="getProfil.biography" class="break-all"></span></p>
+            <br />
+            <p>
+              Biography:
+              <span v-html="getProfil.biography" class="break-all"></span>
+            </p>
           </div>
-           <div class="mt-8 flex flex-wrap">
+          <div class="mt-8 flex flex-wrap">
             <span
               v-for="tag in getTags"
-              :key="tag.id"
+              :key="tag.name"
               class="m-2 bg-teal-100 rounded-full py-1 px-4 text-teal-700"
             >#{{tag.name}}</span>
           </div>
@@ -38,26 +46,29 @@
               @click.prevent="getNavigatorLocation()"
               class="p-2 rounded my-4 bg-teal-600 text-white hover:shadow"
             >Update location</button>
-            <user-profil-map :lat="lat" :lng="lng"/>
+            <user-profil-map :lat="lat" :lng="lng" />
           </div>
-         
+
           <div class="flex flex-row-reverse mt-8">
             <button @click="confirmDelete" class="bg-red-600 rounded text-white p-2">Delete account</button>
           </div>
         </div>
       </tab>
       <tab name="edit-profil">
-        <user-profil-edit @profile-complete="complete = 1" :user="getUser" :profil="getProfil"/>
+        <user-profil-edit @profile-complete="complete = 1" :user="getUser" :profil="getProfil" />
       </tab>
       <tab name="edit-account">
-        <user-account-edit :user="getUser"/>
+        <user-account-edit :user="getUser" />
       </tab>
       <tab name="edit-password">
-        <user-password-edit class="mt-32"/>
+        <user-password-edit class="mt-32" />
       </tab>
-    <tab name="image-upload" @click="is_images = true">
-      <image-uploader class="mt-32" :get_images="is_images"/>
-    </tab>
+      <tab name="image-upload" @click="is_images = true">
+        <image-uploader class="mt-32" :get_images="is_images" />
+      </tab>
+      <tab name="possible-matches">
+        <possible-matches />
+      </tab>
       <!-- <tab name="About Us">
       <h1>Why we do it</h1>
       </tab>-->
@@ -75,10 +86,11 @@ export default {
   // async updated() {
   //     await axios.post(`user/profil`)
   // },
+
   data() {
     return {
       is_images: false,
-      completed: null
+      completed: null,
     };
   },
   computed: {
@@ -94,18 +106,16 @@ export default {
       //const isLegal = (age >= 18);
     },
     lat() {
-        return Number(JSON.parse(this.getLocation.geo).ll[0]);
+      return Number(JSON.parse(this.getLocation.geo).ll[0]);
     },
     lng() {
       return Number(JSON.parse(this.getLocation.geo).ll[1]);
     }
   },
   methods: {
-
     confirmDelete() {
       const confirm = window.confirm("are you sure ? ");
       if (!confirm) return;
-
       this.deleteUser();
     },
     logoutEvent() {
@@ -165,10 +175,9 @@ export default {
       clearProfil: "profil/clearUserProfil",
       setVisibility: "messages/setVisibility",
       setMessage: "messages/setMessage",
-      setSuccess: "messages/setSuccess",
+      setSuccess: "messages/setSuccess"
     }),
-    getNavigatorLocation() {
-      console.log('ok')
+    getNavigatorLocation() {  
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(this.updatePosition);
       } else {

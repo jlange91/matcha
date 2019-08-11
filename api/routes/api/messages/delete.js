@@ -27,7 +27,7 @@ router.post('/', checkJWT, async (req, res) => {
         id
     } = req.body
 
-    sql = 'DELETE FROM messages WHERE id = ? AND from_id = ?'
+    let sql = 'DELETE FROM messages WHERE id = ? AND from_id = ?'
     const newMessage = await connection.query({
         sql,
         timeout: 40000,

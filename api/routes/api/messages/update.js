@@ -28,7 +28,7 @@ router.post('/', checkJWT, async (req, res) => {
         message
     } = req.body
 
-    sql = 'UPDATE messages \
+    let sql = 'UPDATE messages \
     SET body = ?, created_at = CURRENT_TIMESTAMP\
     WHERE messages.id = ? AND messages.from_id = ?'
     const newMessage = await connection.query({

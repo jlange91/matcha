@@ -3,9 +3,7 @@ const connection = require('../../middleware/database')
 class loggedUsers {
 
     static async createTable() {
-        var sql = ''
-
-        var sql = 'DROP TABLE IF EXISTS logged_users; \
+        const sql = 'DROP TABLE IF EXISTS logged_users; \
             CREATE TABLE IF NOT EXISTS logged_users ( \
              id INT AUTO_INCREMENT PRIMARY KEY, \
              user_id INT NOT NULL, \
@@ -14,7 +12,6 @@ class loggedUsers {
 
         connection.query(sql, (err) => {if (err) console.log('Error while creating email table ', err) })
     }
-
 }
 
 module.exports = loggedUsers
