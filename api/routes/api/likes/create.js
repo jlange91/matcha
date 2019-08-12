@@ -24,17 +24,32 @@ router.post('/', checkJWT, async (req, res) => {
       return (false);
     }
 
-    let sql = ''
+    // did the user already like this person ?
+    let sql = 'SELECT * FROM likes WHERE user_id = ? AND liked_id = ?'
 
+    const user_likes = await connection.query({
+        sql,
+        timeout: 40000,
+        values: [e(check.id), e(req.body.liked_id)]
+    })
+
+    if (user_likes.length)
+      return res.json({
+          'success': false,
+          'message': 'You already like this user'
+        })
+
+    // if he doesnt already like the person save like into database
+    sql = 'INSERT INTO likes (user_id, liked_id) VALUES (? ,?)'
 
     const like = await connection.query({
       sql,
       timeout: 40000,
-      values: [e(check.id), e(check.id)]
+      values: [e(check.id), e(req.body.liked_id)]
     })
 
 
-    if (like) {
+    if (!like) {
       res.json({
         'success': false,
         'message': 'Oops your location did not get updated try again'

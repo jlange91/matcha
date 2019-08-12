@@ -30,6 +30,7 @@ faker.start()
 
 require('./middleware/socket.js')(server)
 
+app.use(`/${version}/users`, require('./routes/api/user/all'))
 app.use(`/${version}/user/login`, require('./routes/api/auth/login'))
 app.use(`/${version}/user/create`, require('./routes/api/auth/register'))
 app.use(`/${version}/user/confirmation`, require('./routes/api/auth/confirmation'))

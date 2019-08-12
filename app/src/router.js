@@ -64,6 +64,12 @@ const router = new Router({
       name: 'chat',
       component: () => import('./views/User/Chat.vue'),
       beforeEnter: requireAuth
+    },
+    {
+      path: '/users',
+      name: 'users',
+      component: () => import('./views/User/Users.vue'),
+      beforeEnter: requireAuth
     }
   ]
 })
