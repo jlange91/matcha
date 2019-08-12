@@ -52,13 +52,11 @@ app.use(`/${version}/images/get`, require('./routes/api/images/get'))
 
 app.use(`/${version}/relations/`, require('./routes/api/relations/'))
 
-app.use(`/${version}/matches`, require('./routes/api/matches'))
-
-app.use(`/${version}/likes`, require('./routes/api/likes/create'))
-
-
 app.use(`/${version}/messages/create`, require('./routes/api/messages/create'))
 app.use(`/${version}/messages`, require('./routes/api/messages'))
+
+
+app.use(`/${version}/notifications/`, require('./routes/api/notifications/'))
 
 // app.use(`/${version}/messages/`, require('./routes/api/messages/'))
 // app.use(`/${version}/messages/create`, require('./routes/api/messages/create'))

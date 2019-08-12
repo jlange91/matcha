@@ -4,6 +4,7 @@ const connection = require('../../../middleware/database')
 const formidable = require('formidable')
 const path = require('path')
 const uuidv4 = require('uuid/v4');
+const Images = require('../../../models/Images')
 
 
 const {
@@ -29,17 +30,8 @@ router.post('/', checkJWT, async (req, res) => {
                 'message': 'Forbidden'
             })
         }
-        
-        let sql = 'SELECT DISTINCT * FROM images \
-        WHERE images.user_id = ?'
 
-        const images = await connection.query({
-              sql,
-              timeout: 40000,
-              values: [check.id]
-          })
-
-        if (images.length >= 5)
+        if (await Images.count(check.id) >= 5)
            return res.json({
                 'success': false,
                 'message': 'Delete an image before uploading a new one'
@@ -67,18 +59,9 @@ router.post('/', checkJWT, async (req, res) => {
             file.path = form.uploadDir + newfileName
             file.name = newfileName;
 
-            let sql = 'INSERT INTO images (user_id, name) \
-                                VALUES (?, ?)'
-        
-            let result = await connection.query({
-                sql,
-                timeout: 40000,
-                values: [check.id, file.name]
-            })
-            
-            if(!result)
+            if(!(await Images.push(check.id, file.name)))
                 return res.json({success: false, message: "upload failed"})
-                    
+
             return res.json({success: true})
 
         });
@@ -86,8 +69,8 @@ router.post('/', checkJWT, async (req, res) => {
         form.on("error", function(error){
             res.json({success: false, message: "upload failed " + error})
         });
-      
-       
+
+
 
     } catch (err) {
         throw new Error('Error on post image create' + err)

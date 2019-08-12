@@ -4,6 +4,8 @@ const connection = require('../../../middleware/database')
 const jwt = require('jsonwebtoken')
 const e = require('escape-html')
 const fs = require('fs')
+const Images = require('../../../models/Images')
+const User = require('../../../models/User')
 
 const {
     checkJWT
@@ -28,58 +30,22 @@ router.post('/', checkJWT, async (req, res) => {
             })
         }
 
-
-        let sql = 'SELECT images.user_id FROM images \
-                WHERE images.name = ?'
-
-        let result = await connection.query({
-            sql,
-            timeout: 40000,
-            values: [e(req.body.image.substring(19))]
-        })
-
-        if (!result || result[0].user_id != check.id)
+        if (!(await Images.currentUserImage(check.id, req.body.image.substring(19))))
             return res.json({
                 'success': false,
                 'message': 'Forbidden'
             })
 
-        sql = 'DELETE FROM images \
-              WHERE images.name = ? \
-              AND images.user_id = ?'
-
-        await connection.query({
-            sql,
-            timeout: 40000,
-            values: [e(req.body.image.substring(19)), e(check.id)]
-        })
+        await Images.delete(check.id, req.body.image.substring(19));
 
         const file = "/usr/src/api/assets/" + e(req.body.image.substring(19))
 
         if (fs.existsSync(file))
-            fs.unlinkSync(file)
-
-            sql = 'SELECT * FROM users \
-            WHERE users.id = ?'
-
-            result = await connection.query({
-                sql,
-                timeout: 40000,
-                values: [e(check.id)]
-            })
-
-            if (result && result[0].avatar == req.body.image.substring(19)) {
-                sql = 'UPDATE users \
-                SET users.avatar = ? \
-                WHERE users.id = ?'
-
-                await connection.query({
-                    sql,
-                    timeout: 40000,
-                    values: ["default.png", e(check.id)]
-                })
-            }
-
+        {
+          fs.unlinkSync(file)
+          if (await User.isSameAvatar(check.id, req.body.image.substring(19)))
+            await User.updateAvatar(check.id, "default.png");
+        }
 
         return res.json({
             'success': true,

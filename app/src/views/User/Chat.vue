@@ -15,7 +15,9 @@
           placeholder="Search"
         />
       </div>
+
       <ul class="flex flex-col w-full select-none">
+
         <li v-for="relation in relations" @click="select(relation.id)" :key="relation.id"
           class="flex flex-no-wrap items-center hover:bg-grey-300 text-black cursor-pointer p-3"
         >
@@ -73,7 +75,7 @@
 
           <div class="flex flex-col p-4">
 
-            <div v-for="message in messages" :class="backgroundColor(message.from_id)" :key="message.id" class="rounded-lg text-sm p-3 mb-1">
+            <div v-for="message in messages" :class="backgroundColor(message.from_id)" class="rounded-lg text-sm p-3 mb-1">
               <p class="float-right">{{ message.body }}</p>
             </div>
 

@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const connection = require('../../../middleware/database')
 const jwt = require('jsonwebtoken')
+const Images = require('../../../models/Images')
 
 const {
     checkJWT
@@ -24,22 +25,13 @@ router.post('/', checkJWT, async (req, res) => {
             'success': false,
             'message': 'Forbidden'
         })
-        
+
     }
-
-    let sql = 'SELECT DISTINCT images.name FROM images \
-              WHERE images.user_id = ?'
-
-    const images = await connection.query({
-                    sql,
-                    timeout: 40000,
-                    values: [check.id]
-                })
-
-      return res.json({
-          'success': true,
-          'images': images || []
+    return res.json({
+        'success': true,
+        'images': await Images.getUserImages(check.id)
       })
+
   } catch(err) {
     throw new Error('Error on post image get' + err)
       }

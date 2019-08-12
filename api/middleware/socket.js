@@ -28,19 +28,19 @@ module.exports = function (server) {
     })
 
     socket.on('message', async (userId, focusId) => {
+      Notifications.push(userId, focusId, 'message');
       let user = await LoggedUsers.get(focusId);
       if (!user)
         return ;
       socket.broadcast.to(user.socket_id).emit('message');
-      Notifications.push(userId, focusId, 'message');
     });
 
     socket.on('notif', async (userId, focusId, type) => {
       let user = await LoggedUsers.get(userId);
       if (!user)
         return ;
-       socket.broadcast.to(user.socket_id).emit('notif');
-       Notifications.push(userId, focusId, type);
+       if (Notifications.push(userId, focusId, type))
+        socket.broadcast.to(user.socket_id).emit('notif');
     });
 
     socket.on('disconnect', () => {

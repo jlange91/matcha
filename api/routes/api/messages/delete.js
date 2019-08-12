@@ -6,6 +6,7 @@ const connection = require('../../../middleware/database')
 const {
     checkJWT
 } = require('../../../middleware/check_token')
+const Messages = require('../../../models/Messages')
 
 router.post('/', checkJWT, async (req, res) => {
 
@@ -27,14 +28,7 @@ router.post('/', checkJWT, async (req, res) => {
         id
     } = req.body
 
-    let sql = 'DELETE FROM messages WHERE id = ? AND from_id = ?'
-    const newMessage = await connection.query({
-        sql,
-        timeout: 40000,
-        values: [e(id), e(check.id)]
-    })
-
-    if (!newMessage) {
+    if (!(await Messages.delete(id, check.id))) {
         res.json({
             'success': false,
             'message': 'Oops your message did not delete try again.'

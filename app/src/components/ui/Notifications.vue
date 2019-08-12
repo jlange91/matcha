@@ -21,7 +21,7 @@
         :key="notification.id"
         :class="backGroundStyle(notification.type)"
       >
-        <p class="p-4">{{ notification.message ? notification.message : 'Vous navez pas de noveaux message'}}</p>
+        <p class="p-4">{{ notification.message }}</p>
       </div>
     </div>
   </div>
@@ -30,6 +30,7 @@
 <script>
 
 import socket from '../../middleware/socket-instance';
+import axios from "../../middleware/axios";
 
 export default {
   data() {
@@ -49,7 +50,13 @@ export default {
   },
   methods: {
     updateNotifications() {
-
+      console.log("updateNotif");
+        axios
+          .get("notifications")
+          .then(res => {
+            console.log("ici" + res.data);
+          })
+          .catch(e => console.log("e ", e));
     },
     backGroundStyle(type) {
       if (type === "message") return "bg-green-300";

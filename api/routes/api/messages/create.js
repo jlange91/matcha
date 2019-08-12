@@ -6,6 +6,8 @@ const connection = require('../../../middleware/database')
 const {
     checkJWT
 } = require('../../../middleware/check_token')
+const Messages = require('../../../models/Messages')
+const Matchs = require('../../../models/Matchs')
 
 router.post('/', checkJWT, async (req, res) => {
 
@@ -28,14 +30,7 @@ router.post('/', checkJWT, async (req, res) => {
         message
     } = req.body
 
-    let sql = 'SELECT * FROM likes WHERE (user_id = ? AND liked_id = ?) OR (user_id = ? AND liked_id = ?)'
-    const match = await connection.query({
-        sql,
-        timeout: 40000,
-        values: [e(check.id), e(to), e(to), e(check.id)]
-    })
-
-    if (match && match.length != 2) {
+    if (!(await Matchs.isMatch(check.id, to))) {
       res.json({
           'success': false,
           'message': 'Oops you did not match this person.'
@@ -43,14 +38,7 @@ router.post('/', checkJWT, async (req, res) => {
       return (false);
     }
 
-    sql = 'INSERT INTO messages(from_id, to_id, body, seen) VALUES (?,?,?,?)'
-    const newMessage = await connection.query({
-        sql,
-        timeout: 40000,
-        values: [e(check.id), e(to), e(message), 0]
-    })
-
-    if (!newMessage) {
+    if (!(await Messages.push(check.id, to, message))) {
         res.json({
             'success': false,
             'message': 'Oops your message did not send try again.'

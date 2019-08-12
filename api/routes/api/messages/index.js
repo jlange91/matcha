@@ -6,6 +6,7 @@ const connection = require('../../../middleware/database')
 const {
     checkJWT
 } = require('../../../middleware/check_token')
+const Messages = require('../../../models/Messages')
 
 var isEmpty = function(obj) {
   return Object.keys(obj).length === 0;
@@ -32,16 +33,9 @@ router.post('/', checkJWT, async (req, res) => {
         limit
     } = req.body
 
-    let sql = 'SELECT from_id, to_id, body, seen, DATE_FORMAT(created_at, "%d/%m/%Y %H:%i:%s") AS date \
-            FROM messages \
-            WHERE (from_id = ? AND to_id = ?) OR (from_id = ? AND to_id = ?) \
-            ORDER BY created_at DESC \
-            LIMIT ?;'
-    let messages = await connection.query({
-        sql,
-        timeout: 40000,
-        values: [e(check.id), e(focus_id), e(focus_id), e(check.id), parseInt(e(limit))]
-    })
+
+    var messages = await Messages.getConversation(check.id, focus_id, limit)
+
     if (messages && !messages.length) {
         res.json({
           success: true,
@@ -51,14 +45,7 @@ router.post('/', checkJWT, async (req, res) => {
     }
     else
     {
-      sql = 'UPDATE messages \
-      SET seen = 1\
-      WHERE (from_id = ? AND to_id = ?)'
-      await connection.query({
-          sql,
-          timeout: 40000,
-          values: [e(focus_id), e(check.id)]
-      })
+      Messages.setSeen(focus_id, check.id);
       var seen = messages.filter((message) => {
         if (message.from_id === check.id && !message.seen)
           return message;

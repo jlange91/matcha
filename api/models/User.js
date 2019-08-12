@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const connection = require('../middleware/database')
 const crypto = require('crypto')
 const mail = require('../helpers/mailer')
+const e = require('escape-html')
 
 class User {
     static async create(newUser) {
@@ -336,6 +337,54 @@ class User {
         } catch (error) {
             throw new Error('has password reset error ' + error)
         }
+    }
+
+    static async getUsernameFromId(userId) {
+        try {
+            const sql = 'SELECT username FROM users \
+                         WHERE id = ?'
+
+            const result = await connection.query({
+                sql,
+                timeout: 40000,
+                values: [userId]
+            })
+            return (result && result.length) ? result[0].username : false;
+        } catch (error) {
+            throw new Error('Select failed in User.getUsernameFromId ' + error)
+        }
+    }
+
+    static async isSameAvatar(id, filename) {
+        try {
+          const sql = 'SELECT * FROM users \
+                      WHERE id = ? AND avatar = ?'
+
+          const result = await connection.query({
+              sql,
+              timeout: 40000,
+              values: [e(id), e(filename)]
+          })
+          return (!result) ? false : true;
+        } catch (error) {
+            throw new Error('Select failed in User.isSameAvatar ' + error)
+        }
+    }
+
+    static async updateAvatar(id, filename) {
+      try {
+        const sql = 'UPDATE users \
+                    SET users.avatar = ? \
+                    WHERE users.id = ?'
+
+        await connection.query({
+            sql,
+            timeout: 40000,
+            values: [e(filename), e(id)]
+        })
+      } catch (error) {
+          throw new Error('Update failed in User.updateAvatar ' + error)
+      }
     }
 
 }

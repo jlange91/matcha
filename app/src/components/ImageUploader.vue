@@ -47,9 +47,10 @@
           v-for="(image, index) in user_images"
           :key="index"
           class="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 px-2 my-2 text-center cursor-pointer hover:shadow"
-          @click="chooseProfilImage(image.name)"
         >
-          <img  :src="image.name" :alt="index" />
+          <img
+          @click="chooseProfilImage(image.name)"
+          :src="'localhost' + '/' + image.name" :alt="index" />
 
           <button
             @click="eraseImage(image.name)"
