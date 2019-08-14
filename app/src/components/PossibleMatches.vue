@@ -7,15 +7,13 @@
               You have no matches please create some tags
             </p>
         </div>
-        <div v-else v-for="matches in possible_matches" :key="matches.id" class="mx-auto w-full flex flex-col justify-between items-center max-w-sm">
-            <img :src="'/api/v1/images/get/' + matches.avatar" alt="" class="rounded-full w-32 h-32">
-            <p class="my-4 text-gray-700 uppercase font-semibold">
-              {{matches.username}}
-            </p>
-            <button @click="likeUser(matches.id)" class="bg-teal-600 text-white p-1 rounded focus:outline-none">
-                Like
-            </button>
-        </div>
+         <user-card v-else
+      
+      v-for="user in possible_matches"
+      :key="user.id"
+      :user="user"
+    
+    />
   </div>
 </template>
 

@@ -8,7 +8,11 @@
     />
     <img v-else src="/api/v1/images/get/default.png" class="rounded-full w-32 h-32" />
     <div class="px-6 py-4">
-      <div class="font-bold text-xl mb-2 text-center">{{user.username}}</div>
+      <div class="font-bold text-xl mb-2 text-center">
+        <p>
+          {{user.username}}
+        </p>    
+      </div>
     </div>
     <div class="px-6 py-4">
       <span
@@ -36,7 +40,7 @@ export default {
     },
     liked: {
       type: Array,
-      required: true
+      required: false
     }
   },
   data() {
@@ -64,6 +68,9 @@ export default {
       return this.isLiked ? 'Unlike' : 'Like'
     },
     isLiked() {
+        if (!this.liked)
+          return
+
         const self = this
           const found = this.liked.find(function(element) {
             return element.liked_id === self.user.id

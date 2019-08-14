@@ -30,8 +30,7 @@ router.post('/', checkJWT, async (req, res) => {
     INNER JOIN users AS matched_user ON matched_user.id = matched_tags.user_id \
     INNER JOIN profils AS current_user_profil ON current_user_profil.user_id = users.id \
     INNER JOIN profils AS matched_user_profil ON matched_user_profil.user_id = matched_user.id \
-      LEFT JOIN likes ON (likes.user_id = matched_user.id AND likes.liked_id = users.id) \
-                      OR (likes.user_id = users.id AND likes.liked_id = matched_user.id) \
+    LEFT JOIN likes ON (likes.liked_id = ?) \
       WHERE users.id = ? AND matched_user.id != ? \
       AND ( \
           CASE \
@@ -61,7 +60,7 @@ router.post('/', checkJWT, async (req, res) => {
     const possible_matches = await connection.query({
       sql,
       timeout: 40000,
-      values: [e(check.id), e(check.id)]
+      values: [e(check.id), e(check.id), e(check.id), e(check.id)]
     })
 
 
