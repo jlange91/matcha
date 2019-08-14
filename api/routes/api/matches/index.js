@@ -60,7 +60,7 @@ router.post('/', checkJWT, async (req, res) => {
     const possible_matches = await connection.query({
       sql,
       timeout: 40000,
-      values: [e(check.id), e(check.id), e(check.id), e(check.id)]
+      values: [e(check.id), e(check.id)]
     })
 
 
