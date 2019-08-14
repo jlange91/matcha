@@ -75,6 +75,7 @@ router.get('/', checkJWT, async (req, res) => {
         }
       }
     });
+    console.log(relations);
     res.json({
       success: true,
       relations: relations

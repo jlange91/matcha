@@ -52,6 +52,18 @@ class Messages {
     })
   }
 
+  static async update(id, message, fromId) {
+    const sql = 'UPDATE messages \
+    SET body = ?, created_at = CURRENT_TIMESTAMP\
+    WHERE messages.id = ? AND messages.from_id = ?'
+    const newMessage = await connection.query({
+        sql,
+        timeout: 40000,
+        values: [e(message), e(id), e(fromId)]
+    })
+    return newMessage;
+  }
+
 
 }
 

@@ -6,6 +6,7 @@ const connection = require('../../../middleware/database')
 const {
     checkJWT
 } = require('../../../middleware/check_token')
+const Messages = require('../../../models/Messages')
 
 router.post('/', checkJWT, async (req, res) => {
 
@@ -16,11 +17,10 @@ router.post('/', checkJWT, async (req, res) => {
     })
 
     if (!check) {
-        res.json({
+        return res.json({
             'success': false,
             'message': 'Forbidden'
         })
-        return (false);
     }
 
     const {
@@ -28,20 +28,11 @@ router.post('/', checkJWT, async (req, res) => {
         message
     } = req.body
 
-    sql = 'UPDATE messages \
-    SET body = ?, created_at = CURRENT_TIMESTAMP\
-    WHERE messages.id = ? AND messages.from_id = ?'
-    const newMessage = await connection.query({
-        sql,
-        timeout: 40000,
-        values: [e(message), e(id), e(check.id)]
-    })
-
-    if (!newMessage) {
-        res.json({
-            'success': false,
-            'message': 'Oops your message did not update try again.'
-        })
+    if (!(await Messages.update(id, message check.id))) {
+          return res.json({
+              'success': false,
+              'message': 'Oops your message did not update try again.'
+          })
     }
 
     res.json({
