@@ -38,7 +38,7 @@
       <div class="w-full px-3 mb-6">
         <p class="text-gray-900 text-sm py-2">Select or create some tags</p>
         <v-select
-        v-model="form.tags"
+          v-model="form.tags"
           @input="updateTags"
           :close-on-select="true"
           :push-tags="true"

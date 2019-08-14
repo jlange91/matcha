@@ -30,6 +30,7 @@ faker.start()
 
 require('./middleware/socket.js')(server)
 
+app.use(`/${version}/users`, require('./routes/api/user/all'))
 app.use(`/${version}/user/login`, require('./routes/api/auth/login'))
 app.use(`/${version}/user/create`, require('./routes/api/auth/register'))
 app.use(`/${version}/user/confirmation`, require('./routes/api/auth/confirmation'))
@@ -51,6 +52,12 @@ app.use(`/${version}/images/delete`, require('./routes/api/images/delete'))
 app.use(`/${version}/images/get`, require('./routes/api/images/get'))
 
 app.use(`/${version}/relations/`, require('./routes/api/relations/'))
+
+app.use(`/${version}/matches`, require('./routes/api/matches'))
+
+app.use(`/${version}/likes`, require('./routes/api/likes/create'))
+app.use(`/${version}/likes/destroy`, require('./routes/api/likes/destroy'))
+
 
 app.use(`/${version}/messages/create`, require('./routes/api/messages/create'))
 app.use(`/${version}/messages`, require('./routes/api/messages'))
