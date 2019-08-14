@@ -17,14 +17,16 @@
         class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
       >{{tag}}</span>
     </div>
-    <button @click="likeUser(user.id)" class="focus:outline-none hover:bg-teal-700 bg-teal-600 text-white uppercase w-full py-2 font-semibold">
-      Like
-    </button>
+    <button
+      @click="isLiked ? unlikeUser(user.id) :  likeUser(user.id) "
+      class="focus:outline-none hover:bg-teal-700 bg-teal-600 text-white uppercase w-full py-2 font-semibold"
+    > {{buttonText}} </button>
   </div>
 </template>
 
 <script>
 import axios from "../middleware/axios";
+
 export default {
   name: "UserCard",
   props: {
@@ -32,26 +34,54 @@ export default {
       type: Object,
       required: true
     },
-    // liked: {
-    //   type: Boolean,
-    //   required: true
-    // }
+    liked: {
+      type: Array,
+      required: true
+    }
   },
   data() {
     return {
-      user_tags: []
+      user_tags: [],
+      // is_liked: this.liked
     };
   },
   methods: {
+    unlikeUser(user_id) {
+      axios.post("likes/destroy", { liked_id: user_id }).then(res => {
+        if (res.data.success)
+          this.$emit('unlike', user_id)
+      });
+    },
     likeUser(user_id) {
-      axios.post('likes', {liked_id: user_id})
-            .then((res) => {
-              console.log(res)
-            })
+      axios.post("likes", { liked_id: user_id }).then(res => {
+         if (res.data.success)
+          this.$emit('like', user_id)
+      });
     }
   },
+  computed: {
+    buttonText() {
+      return this.isLiked ? 'Unlike' : 'Like'
+    },
+    isLiked() {
+        const self = this
+          const found = this.liked.find(function(element) {
+            return element.liked_id === self.user.id
+          });
+
+          if (found)
+            return true
+          else
+            return false
+      }
+    },
   mounted() {
-    this.user_tags = this.user.user_tags.split(",");
+    
+    // console.log(this.user);
+    if (this.user.user_tags) this.user_tags = this.user.user_tags.split(",");
+
+
+    
   }
 };
 </script>
