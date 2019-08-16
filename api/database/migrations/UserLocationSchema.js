@@ -8,6 +8,8 @@ class UserLocationSchema {
              user_id INT NOT NULL, \
              provided BOOLEAN DEFAULT 0 NOT NULL, \
              geo TEXT NOT NULL, \
+             lat INT NOT NULL, \
+             long INT NOT NULL, \
              CONSTRAINT UI_location_users UNIQUE (user_id), \
              FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE)'
 

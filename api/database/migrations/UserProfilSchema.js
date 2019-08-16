@@ -12,6 +12,7 @@ class UserProfilSchema {
              biography TEXT DEFAULT NULL, \
              completed BOOLEAN DEFAULT 0 NOT NULL, \
              updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL, \
+             CONSTRAINT unique_user_id UNIQUE (user_id), \
              FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE)'
 
         connection.query(sql, (err) => {if (err) console.log('Error while creating user profil table ', err) })

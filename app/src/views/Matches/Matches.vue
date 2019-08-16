@@ -1,6 +1,6 @@
 <template>
   <div class="mt-8 p-4 container mx-auto rounded bg-white shadow">
-    <h1 class="text-xl uppercase font-bold mb-8">Matches</h1>
+    <h1 class="text-xl uppercase font-bold mb-8">Possible Matches</h1>
     <user-card
       v-for="user in all_users"
       @like="like"
