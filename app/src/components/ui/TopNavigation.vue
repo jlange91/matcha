@@ -36,6 +36,10 @@
           </div>
           <div>
             <router-link
+              to="/matches"
+              class="no-underline block mt-4 sm:inline-block sm:mt-0 text-teal-600 hover:text-teal-500 mr-4"
+            >Matches</router-link>
+            <router-link
               to="/users"
               class="no-underline block mt-4 sm:inline-block sm:mt-0 text-teal-600 hover:text-teal-500 mr-4"
             >All users</router-link>

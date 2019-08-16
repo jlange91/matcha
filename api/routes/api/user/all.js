@@ -39,7 +39,6 @@ router.post('/', [
                 values: [e(check.id)]
             })
 
-
             if (!users) {
                 res.json({
                     'success': false,
@@ -54,7 +53,6 @@ router.post('/', [
                 timeout: 40000,
                 values: [e(check.id)]
             })
-
 
             res.json({
                 'success': true,
