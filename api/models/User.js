@@ -130,9 +130,9 @@ class User {
 
             const geo = JSON.stringify(location)
         
-            const sql = `INSERT INTO location_users (user_id, geo, lat, long)
+            const sql = `INSERT INTO location_users (user_id, geo, lat, lng)
                             VALUES (?, ?, ?, ?)
-                        ON DUPLICATE KEY UPDATE geo = ?, lat = ?, long = ?`
+                        ON DUPLICATE KEY UPDATE geo = ?, lat = ?, lng = ?`
 
             const result = await connection.query({
                 sql,

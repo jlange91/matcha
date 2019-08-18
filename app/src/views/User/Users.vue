@@ -42,7 +42,8 @@ export default {
         return ele.liked_id != value;
       });
       this.likes = ret
-    }
+    },
+    
   }
 };
 </script>

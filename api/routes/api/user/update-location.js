@@ -54,13 +54,13 @@ router.post('/', [
             const updatedLocation = JSON.stringify({ll})
            
             const sql = 'UPDATE location_users \
-            SET geo = ?, provided = 1\
+            SET geo = ?, lat = ?, lng = ?, provided = 1\
             WHERE location_users.user_id = ?'
 
             const updated = await connection.query({
                 sql,
                 timeout: 40000,
-                values: [updatedLocation, e(check.id)]
+                values: [updatedLocation, lat, lng]
             })
 
 

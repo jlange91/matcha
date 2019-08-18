@@ -14,6 +14,7 @@
 
 <script>
 import axios from "../../middleware/axios";
+
 export default {
   data() {
     return {
@@ -30,6 +31,8 @@ export default {
             .then((res) => {
                 if (res.data.success)
                 {
+                  // console.log('matches ' + res.data.possible_matches)
+
                   this.likes = res.data.user_likes
                   this.all_users = res.data.possible_matches
                 }

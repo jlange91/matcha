@@ -28,6 +28,7 @@
 
 <script>
 import axios from "../middleware/axios";
+import { mapGetters } from "vuex";
 
 export default {
   name: "UserCard",
@@ -44,7 +45,6 @@ export default {
   data() {
     return {
       user_tags: []
-      // is_liked: this.liked
     };
   },
   methods: {
@@ -57,9 +57,47 @@ export default {
       axios.post("likes", { liked_id: user_id }).then(res => {
         if (res.data.success) this.$emit("like", user_id);
       });
+    },
+    isMatch() {
+      
+      console.log(
+        "matched user " +
+          this.user.id +
+          " " +
+          this.user.gender +
+          " looking for " +
+          this.user.sexual_orientation
+      );
+      
+      const current_user_gender = this.getProfil.gender
+      const current_user_sexual_orientation = this.getProfil.sexual_orientation
+      const matched_user_gender = this.user.gender
+      const matched_user_sexual_orientation = this.user.sexual_orientation
+     
+        console.log(
+          "matched user " +
+            this.getProfil.user_id +
+            " " +
+            current_user_gender +
+            " looking for " +
+            current_user_sexual_orientation
+      );
+    
+      if (current_user_gender === 'male' && current_user_sexual_orientation === 'female') {
+          console.log(matched_user_gender)
+          console.log(current_user_gender)
+      }
+    
     }
   },
   computed: {
+    ...mapGetters({
+      getToken: "session/getToken",
+      getUser: "session/getUser",
+      getProfil: "profil/getUserProfil",
+      getLocation: "profil/getUserLocation",
+      getTags: "tags/getTags"
+    }),
     buttonText() {
       return this.isLiked ? "Unlike" : "Like";
     },
@@ -77,7 +115,8 @@ export default {
   },
   mounted() {
     // console.log(this.user);
+     this.isMatch();
     if (this.user.user_tags) this.user_tags = this.user.user_tags.split(",");
   }
-};
+}
 </script>
