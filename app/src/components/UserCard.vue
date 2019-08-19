@@ -20,7 +20,7 @@
       >{{tag}}</span>
     </div>
     <button
-      @click="isLiked ? unlikeUser(user.id) :  likeUser(user.id) "
+      @click="parseLike(user)"
       class="focus:outline-none hover:bg-teal-700 bg-teal-600 text-white uppercase w-full py-2 font-semibold"
     >{{buttonText}}</button>
   </div>
@@ -48,6 +48,20 @@ export default {
     };
   },
   methods: {
+    parseLike(user) {
+      if(this.isLiked) {
+        if (this.$route.path === '/matches')
+          this.unlikeUser(user.user_id)
+        else
+          this.unlikeUser(user.id)
+      }
+      else {
+        if (this.$route.path === '/matches')
+          this.likeUser(user.user_id)
+        else
+          this.likeUser(user.id) 
+      }
+    },
     unlikeUser(user_id) {
       axios.post("likes/destroy", { liked_id: user_id }).then(res => {
         if (res.data.success) this.$emit("unlike", user_id);
@@ -55,49 +69,44 @@ export default {
     },
     likeUser(user_id) {
       axios.post("likes", { liked_id: user_id }).then(res => {
+        console.log(user_id)
         if (res.data.success) this.$emit("like", user_id);
       });
     },
-    isMatch() {
-      
-      console.log(
-        "matched user " +
-          this.user.id +
-          " " +
-          this.user.gender +
-          " looking for " +
-          this.user.sexual_orientation
-      );
-      
-      const current_user_gender = this.getProfil.gender
-      const current_user_sexual_orientation = this.getProfil.sexual_orientation
-      const matched_user_gender = this.user.gender
-      const matched_user_sexual_orientation = this.user.sexual_orientation
-     
-        console.log(
-          "matched user " +
-            this.getProfil.user_id +
-            " " +
-            current_user_gender +
-            " looking for " +
-            current_user_sexual_orientation
-      );
-    
-      if (current_user_gender === 'male' && current_user_sexual_orientation === 'female') {
-          console.log(matched_user_gender)
-          console.log(current_user_gender)
-      }
-    
-    }
+    // isMatch() {
+    //   if (this.user) {
+    //     console.log(
+    //       "matched user " +
+    //         this.user.id +
+    //         " " +
+    //         this.user.gender +
+    //         " looking for " +
+    //         this.user.sexual_orientation
+    //     );
+
+    //     const current_user_gender = this.getProfil.gender;
+    //     const current_user_sexual_orientation = this.getProfil.sexual_orientation;
+    //     const matched_user_gender = this.user.gender;
+    //     const matched_user_sexual_orientation = this.user.sexual_orientation;
+
+    //     console.log(
+    //       "matched user " +
+    //         this.getProfil.user_id +
+    //         " " +
+    //         current_user_gender +
+    //         " looking for " +
+    //         current_user_sexual_orientation
+    //     );
+
+    //     // if (current_user_gender === 'male' && current_user_sexual_orientation === 'female') {
+    //     //     console.log(matched_user_gender)
+    //     //     console.log(current_user_gender)
+    //     // }
+    //   }
+    // }
   },
   computed: {
-    ...mapGetters({
-      getToken: "session/getToken",
-      getUser: "session/getUser",
-      getProfil: "profil/getUserProfil",
-      getLocation: "profil/getUserLocation",
-      getTags: "tags/getTags"
-    }),
+  
     buttonText() {
       return this.isLiked ? "Unlike" : "Like";
     },
@@ -106,7 +115,10 @@ export default {
 
       const self = this;
       const found = this.liked.find(function(element) {
-        return element.liked_id === self.user.id;
+        if (self.$route.path === '/matches')
+          return element.liked_id === self.user.user_id;
+        else
+          return element.liked_id === self.user.id;
       });
 
       if (found) return true;
@@ -115,8 +127,8 @@ export default {
   },
   mounted() {
     // console.log(this.user);
-     this.isMatch();
+    // this.isMatch();
     if (this.user.user_tags) this.user_tags = this.user.user_tags.split(",");
   }
-}
+};
 </script>

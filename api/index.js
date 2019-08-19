@@ -24,8 +24,8 @@ const version = 'v1'
 const setup = require('./database/setup')
 setup.database()
 
-// const faker = require('./database/faker')
-// faker.start()
+const faker = require('./database/faker')
+faker.start()
 
 require('./middleware/socket.js')(server)
 
