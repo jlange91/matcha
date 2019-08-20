@@ -60,147 +60,20 @@ export default {
       this.likes = ret;
     },
     removeUserFromArray(value) {
-      const ret = this.users.filter(function(ele) {
+      const ret = this.filtered_users.filter(function(ele) {
         return ele.id != value;
       });
-      this.users = ret;
+      this.filtered_users = ret;
     },
-    // isMatch(user) {
-    //   const current_user_gender = this.getProfil.gender;
-    //   const current_user_sexual_orientation = this.getProfil.sexual_orientation;
-    //   const matched_user_gender = user.gender;
-    //   const matched_user_sexual_orientation = user.sexual_orientation;
-
-    //   let filtered_users = [];
-
-    //   console.log(
-    //     "1 : ",
-    //     current_user_gender === "male" &&
-    //       current_user_sexual_orientation === "female"
-    //   );
-    //   if (
-    //     current_user_gender === "male" &&
-    //     current_user_sexual_orientation === "female"
-    //   ) {
-    //     //  filtered_users.push(el)
-    //   }
-    //   console.log(
-    //     "2 : ",
-    //     current_user_gender === "female" &&
-    //       current_user_sexual_orientation === "male"
-    //   );
-    //   if (
-    //     current_user_gender === "female" &&
-    //     current_user_sexual_orientation === "male"
-    //   ) {
-    //     //  filtered_users.push(el)
-    //   }
-    //   console.log(
-    //     "3 : ",
-    //     current_user_gender === "male" &&
-    //       current_user_sexual_orientation === "male"
-    //   );
-    //   if (
-    //     current_user_gender === "male" &&
-    //     current_user_sexual_orientation === "male"
-    //   ) {
-    //     //  filtered_users.push(el)
-    //   }
-    //   console.log(
-    //     "4 : ",
-    //     current_user_gender === "female" &&
-    //       current_user_sexual_orientation === "female"
-    //   );
-    //   if (
-    //     current_user_gender === "female" &&
-    //     current_user_sexual_orientation === "female"
-    //   ) {
-    //     //  filtered_users.push(el)
-    //     // this.users.forEach((el) => {
-    //     console.log(
-    //       "4.1 : " + el.gender === "female" &&
-    //         (el.sexual_orientation === "female" ||
-    //           el.sexual_orientation === "bisexual")
-    //     );
-    //     if (
-    //       user.gender === "female" &&
-    //       (user.sexual_orientation === "female" ||
-    //         user.sexual_orientation === "bisexual")
-    //     )
-    //       filtered_users.push(user);
-    //     // })
-    //   }
-    //   console.log(
-    //     "5 : ",
-    //     current_user_gender === "female" &&
-    //       current_user_sexual_orientation === "bisexual"
-    //   );
-    //   if (
-    //     current_user_gender === "female" &&
-    //     current_user_sexual_orientation === "bisexual"
-    //   ) {
-    //     // this.users.forEach((user) => {
-    //     console.log(user);
-    //     console.log(
-    //       (user.gender === "female" &&
-    //         (user.sexual_orientation === "female" ||
-    //           user.sexual_orientation === "bisexual")) ||
-    //         (user.gender === "male" &&
-    //           (user.sexual_orientation === "female" ||
-    //             user.sexual_orientation === "bisexual"))
-    //     );
-    //     console.log(user.gender === "female");
-    //     console.log(user.gender === "male");
-    //     if (
-    //       (user.gender === "female" &&
-    //         (user.sexual_orientation === "female" ||
-    //           user.sexual_orientation === "bisexual")) ||
-    //       (user.gender === "male" &&
-    //         (user.sexual_orientation === "female" ||
-    //           user.sexual_orientation === "bisexual"))
-    //     )
-    //       filtered_users.push(el);
-    //     // })
-    //   }
-    //   console.log(
-    //     "6 : ",
-    //     current_user_gender === "male" &&
-    //       current_user_sexual_orientation === "bisexual"
-    //   );
-    //   if (
-    //     current_user_gender === "male" &&
-    //     current_user_sexual_orientation === "bisexual"
-    //   ) {
-    //     //  filtered_users.push(el)
-    //   }
-    //   // console.log('filtered users')
-    //   // console.log(filtered_users)
-    //   this.filtered_users = filtered_users;
-    //   // this.is_liked()
-    //   // return user
-    // }
+  
     check_users() {
-      if (this.likes.length) {
-        const self = this;
-        this.likes.forEach(element => {
-          self.users.forEach(user => {
-            if (!(element.like_id == user.user_id))
-              self.removeUserFromArray(user.user_id);
-            // this.isMatch(user)
-          });
-        });
-      }
+
 
       const current_user_gender = this.getProfil.gender;
       const current_user_sexual_orientation = this.getProfil.sexual_orientation;
 
       let filtered_users = [];
 
-      // console.log(
-      //   "1 : ",
-      //   current_user_gender === "male" &&
-      //     current_user_sexual_orientation === "female"
-      // );
       if (
         current_user_gender === "male" &&
         current_user_sexual_orientation === "female"
@@ -214,11 +87,7 @@ export default {
           filtered_users.push(user);
         });
       }
-      // console.log(
-      //   "2 : ",
-      //   current_user_gender === "female" &&
-      //     current_user_sexual_orientation === "male"
-      // );
+
       if (
         current_user_gender === "female" &&
         current_user_sexual_orientation === "male"
@@ -232,11 +101,7 @@ export default {
           filtered_users.push(user);
         });
       }
-      // console.log(
-      //   "3 : ",
-      //   current_user_gender === "male" &&
-      //     current_user_sexual_orientation === "male"
-      // );
+
       if (
         current_user_gender === "male" &&
         current_user_sexual_orientation === "male"
@@ -250,11 +115,7 @@ export default {
           filtered_users.push(user);
         });
       }
-      // console.log(
-      //   "4 : ",
-      //   current_user_gender === "female" &&
-      //     current_user_sexual_orientation === "female"
-      // );
+
       if (
         current_user_gender === "female" &&
         current_user_sexual_orientation === "female"
@@ -269,11 +130,7 @@ export default {
           filtered_users.push(el);
         })
       }
-      // console.log(
-      //   "5 : ",
-      //   current_user_gender === "female" &&
-      //     current_user_sexual_orientation === "bisexual"
-      // );
+
       if (
         current_user_gender === "female" &&
         current_user_sexual_orientation === "bisexual"
@@ -290,34 +147,9 @@ export default {
           );
           filtered_users.push(user);
         });
-        // this.users.forEach((user) => {
 
-        // console.log(
-        //   (user.gender === "female" &&
-        //     (user.sexual_orientation === "female" ||
-        //       user.sexual_orientation === "bisexual")) ||
-        //     (user.gender === "male" &&
-        //       (user.sexual_orientation === "female" ||
-        //         user.sexual_orientation === "bisexual"))
-        // );
-        // console.log(user.gender === "female");
-        // console.log(user.gender === "male");
-        // if (
-        //   (user.gender === "female" &&
-        //     (user.sexual_orientation === "female" ||
-        //       user.sexual_orientation === "bisexual")) ||
-        //   (user.gender === "male" &&
-        //     (user.sexual_orientation === "female" ||
-        //       user.sexual_orientation === "bisexual"))
-        // )
-        //   filtered_users.push(el);
-        // })
       }
-      // console.log(
-      //   "6 : ",
-      //   current_user_gender === "male" &&
-      //     current_user_sexual_orientation === "bisexual"
-      // );
+
       if (
         current_user_gender === "male" &&
         current_user_sexual_orientation === "bisexual"
@@ -334,7 +166,7 @@ export default {
         });
       }
 
-      console.log(filtered_users)
+      // console.log(filtered_users)
       this.filtered_users = filtered_users;
     }
   
@@ -346,142 +178,27 @@ export default {
       getProfil: "profil/getUserProfil",
       getLocation: "profil/getUserLocation",
       getTags: "tags/getTags"
-    })
+    }),
+    // filtered() {
+    //   console.log('filtered')
+
+    //   if (this.likes.length) {
+    //     const self = this;
+    //     this.likes.forEach(element => {
+    //       this.filtered_users.forEach(user => {
+    //         console.log(this.filtered_users)
+    //         if (!(element.like_id == user.user_id))
+    //           return self.removeUserFromArray(user.user_id);
+    //         // this.isMatch(user)
+    //       });
+    //     });
+    //     console.log(this.filtered_users)
+    //     return this.filtered_users
+    //   }
+    // }
   },
-  // watch: {
-  //   users() {
-  //     if (this.likes.length) {
-  //       const self = this;
-  //       this.likes.forEach(element => {
-  //         self.users.forEach(user => {
-  //           if (!(element.like_id == user.user_id))
-  //             self.removeUserFromArray(user.user_id);
-  //           // this.isMatch(user)
-  //         });
-  //       });
-  //     }
-
-  //     const current_user_gender = this.getProfil.gender;
-  //     const current_user_sexual_orientation = this.getProfil.sexual_orientation;
-
-  //     let filtered_users = [];
-
-  //     console.log(
-  //       "1 : ",
-  //       current_user_gender === "male" &&
-  //         current_user_sexual_orientation === "female"
-  //     );
-  //     if (
-  //       current_user_gender === "male" &&
-  //       current_user_sexual_orientation === "female"
-  //     ) {
-  //       //  filtered_users.push(el)
-  //     }
-  //     console.log(
-  //       "2 : ",
-  //       current_user_gender === "female" &&
-  //         current_user_sexual_orientation === "male"
-  //     );
-  //     if (
-  //       current_user_gender === "female" &&
-  //       current_user_sexual_orientation === "male"
-  //     ) {
-  //       //  filtered_users.push(el)
-  //     }
-  //     console.log(
-  //       "3 : ",
-  //       current_user_gender === "male" &&
-  //         current_user_sexual_orientation === "male"
-  //     );
-  //     if (
-  //       current_user_gender === "male" &&
-  //       current_user_sexual_orientation === "male"
-  //     ) {
-  //       //  filtered_users.push(el)
-  //     }
-  //     console.log(
-  //       "4 : ",
-  //       current_user_gender === "female" &&
-  //         current_user_sexual_orientation === "female"
-  //     );
-  //     if (
-  //       current_user_gender === "female" &&
-  //       current_user_sexual_orientation === "female"
-  //     ) {
-  //       //  filtered_users.push(el)
-  //       this.users.forEach((el) => {
-  //       // console.log(
-  //       //   "4.1 : " + el.gender === "female" &&
-  //       //     (el.sexual_orientation === "female" ||
-  //       //       el.sexual_orientation === "bisexual")
-  //       // );
-  //       if (
-  //         el.gender === "female" &&
-  //         (el.sexual_orientation === "female" ||
-  //           el.sexual_orientation === "bisexual")
-  //       )
-  //         filtered_users.push(el);
-  //       })
-  //     }
-  //     console.log(
-  //       "5 : ",
-  //       current_user_gender === "female" &&
-  //         current_user_sexual_orientation === "bisexual"
-  //     );
-  //     if (
-  //       current_user_gender === "female" &&
-  //       current_user_sexual_orientation === "bisexual"
-  //     ) {
-  //       this.users.forEach(user => {
-  //         // console.log(user)
-  //         if (
-  //           (user.gender === "female" &&
-  //             (user.sexual_orientation === "female" ||
-  //               user.sexual_orientation === "bisexual")) ||
-  //           (user.gender === "male" &&
-  //             (user.sexual_orientation === "female" ||
-  //               user.sexual_orientation === "bisexual"))
-  //         );
-  //         filtered_users.push(user);
-  //       });
-  //       // this.users.forEach((user) => {
-
-  //       // console.log(
-  //       //   (user.gender === "female" &&
-  //       //     (user.sexual_orientation === "female" ||
-  //       //       user.sexual_orientation === "bisexual")) ||
-  //       //     (user.gender === "male" &&
-  //       //       (user.sexual_orientation === "female" ||
-  //       //         user.sexual_orientation === "bisexual"))
-  //       // );
-  //       // console.log(user.gender === "female");
-  //       // console.log(user.gender === "male");
-  //       // if (
-  //       //   (user.gender === "female" &&
-  //       //     (user.sexual_orientation === "female" ||
-  //       //       user.sexual_orientation === "bisexual")) ||
-  //       //   (user.gender === "male" &&
-  //       //     (user.sexual_orientation === "female" ||
-  //       //       user.sexual_orientation === "bisexual"))
-  //       // )
-  //       //   filtered_users.push(el);
-  //       // })
-  //     }
-  //     console.log(
-  //       "6 : ",
-  //       current_user_gender === "male" &&
-  //         current_user_sexual_orientation === "bisexual"
-  //     );
-  //     if (
-  //       current_user_gender === "male" &&
-  //       current_user_sexual_orientation === "bisexual"
-  //     ) {
-  //       //  filtered_users.push(el)
-  //     }
-
-  //     console.log(filtered_users)
-  //     this.filtered_users = filtered_users;
-  //   }
-  // }
+  watch: {
+    
+  }
 };
 </script>

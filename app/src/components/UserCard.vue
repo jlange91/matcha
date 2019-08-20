@@ -1,5 +1,5 @@
-<template>
-  <div class="max-w-sm rounded overflow-hidden shadow-lg mx-auto my-8">
+<template >
+  <div v-show="this.$route.path === '/matches' ? !isLiked : 'true'" class="max-w-sm rounded overflow-hidden shadow-lg mx-auto my-8">
     <img
       v-if="user.avatar != null"
       :src="'/api/v1/images/get/' + user.avatar"
@@ -48,6 +48,11 @@ export default {
     };
   },
   methods: {
+    // isVisible() {
+    //    if (this.$route.path === '/matches') {
+    //      return this.isLiked
+    //    }
+    // },
     parseLike(user) {
       if(this.isLiked) {
         if (this.$route.path === '/matches')
