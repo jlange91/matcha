@@ -48,11 +48,7 @@ export default {
     };
   },
   methods: {
-    // isVisible() {
-    //    if (this.$route.path === '/matches') {
-    //      return this.isLiked
-    //    }
-    // },
+
     parseLike(user) {
       if(this.isLiked) {
         if (this.$route.path === '/matches')
@@ -78,37 +74,6 @@ export default {
         if (res.data.success) this.$emit("like", user_id);
       });
     },
-    // isMatch() {
-    //   if (this.user) {
-    //     console.log(
-    //       "matched user " +
-    //         this.user.id +
-    //         " " +
-    //         this.user.gender +
-    //         " looking for " +
-    //         this.user.sexual_orientation
-    //     );
-
-    //     const current_user_gender = this.getProfil.gender;
-    //     const current_user_sexual_orientation = this.getProfil.sexual_orientation;
-    //     const matched_user_gender = this.user.gender;
-    //     const matched_user_sexual_orientation = this.user.sexual_orientation;
-
-    //     console.log(
-    //       "matched user " +
-    //         this.getProfil.user_id +
-    //         " " +
-    //         current_user_gender +
-    //         " looking for " +
-    //         current_user_sexual_orientation
-    //     );
-
-    //     // if (current_user_gender === 'male' && current_user_sexual_orientation === 'female') {
-    //     //     console.log(matched_user_gender)
-    //     //     console.log(current_user_gender)
-    //     // }
-    //   }
-    // }
   },
   computed: {
   
@@ -131,8 +96,7 @@ export default {
     }
   },
   mounted() {
-    // console.log(this.user);
-    // this.isMatch();
+
     if (this.user.user_tags) this.user_tags = this.user.user_tags.split(",");
   }
 };

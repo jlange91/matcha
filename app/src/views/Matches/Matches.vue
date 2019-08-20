@@ -34,14 +34,10 @@ export default {
         .post("/matches")
         .then(res => {
           if (res.data.success) {
-            // console.log('matches ' + res.data.possible_matches)
+          
             this.likes = res.data.user_likes;
             this.users = res.data.possible_matches;
             this.check_users()
-            // this.isMatch()
-            // this.isMatch(res.data.possible_matches)
-            // const test = this.isMatch(res.data.possible_matches);
-            // console.log(test)
           }
         })
         .catch(e => console.log(e));
@@ -179,23 +175,6 @@ export default {
       getLocation: "profil/getUserLocation",
       getTags: "tags/getTags"
     }),
-    // filtered() {
-    //   console.log('filtered')
-
-    //   if (this.likes.length) {
-    //     const self = this;
-    //     this.likes.forEach(element => {
-    //       this.filtered_users.forEach(user => {
-    //         console.log(this.filtered_users)
-    //         if (!(element.like_id == user.user_id))
-    //           return self.removeUserFromArray(user.user_id);
-    //         // this.isMatch(user)
-    //       });
-    //     });
-    //     console.log(this.filtered_users)
-    //     return this.filtered_users
-    //   }
-    // }
   },
   watch: {
     
