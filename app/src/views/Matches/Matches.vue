@@ -64,7 +64,6 @@ export default {
   
     check_users() {
 
-
       const current_user_gender = this.getProfil.gender;
       const current_user_sexual_orientation = this.getProfil.sexual_orientation;
 
