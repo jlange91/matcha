@@ -26,7 +26,6 @@ export default {
   },
   async mounted() {
     await this.getAllPossibleMatches();
-    // this.isMatch()
   },
   methods: {
     async getAllPossibleMatches() {
@@ -34,7 +33,6 @@ export default {
         .post("/matches")
         .then(res => {
           if (res.data.success) {
-          
             this.likes = res.data.user_likes;
             this.users = res.data.possible_matches;
             this.check_users()
