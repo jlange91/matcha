@@ -6,6 +6,8 @@ const connection = require('../../../middleware/database')
 const {
     checkJWT
 } = require('../../../middleware/check_token')
+const Like = require('../../../models/Like.js')
+const Message = require('../../../models/Message.js')
 
 async function asyncForEach(array, callback) {
   for (let index = 0; index < array.length; index++) {
@@ -28,57 +30,18 @@ router.get('/', checkJWT, async (req, res) => {
         })
         return (false);
     }
-    sql = 'SELECT * FROM likes WHERE user_id = ?'
-    const iLikes = await connection.query({
-        sql,
-        timeout: 40000,
-        values: [e(check.id)]
-    })
-    if (iLikes && !iLikes.length) {
-        res.json({
-            'success': false
-        })
-        return (false);
-    }
-    var relations = [];
 
-    await asyncForEach(iLikes, async (iLike) => {
-      sql = 'SELECT * FROM likes WHERE user_id = ? AND liked_id = ?'
-      const theirLikes = await connection.query({
-          sql,
-          timeout: 40000,
-          values: [e(iLike.liked_id), e(check.id)]
-      })
-      if (theirLikes && theirLikes.length) {
-        sql = 'SELECT DISTINCT id, username, avatar FROM users \
-                            WHERE users.id = ?'
-        const user = await connection.query({
-            sql,
-            timeout: 40000,
-            values: [iLike.liked_id]
-        })
-        if (user && user.length) {
+    const matchedUsers = await Like.getMatchedUsers(check.id)
 
-          sql = 'SELECT body, DATE_FORMAT(created_at, "%m/%d/%Y %H:%i:%s") AS date \
-                  FROM messages \
-                  WHERE (from_id = ? AND to_id = ?) OR (from_id = ? AND to_id = ?) \
-                  ORDER BY created_at DESC \
-                  LIMIT 1;'
-          const message = await connection.query({
-              sql,
-              timeout: 40000,
-              values: [e(check.id), e(iLike.liked_id), e(iLike.liked_id), e(check.id)]
-          })
-          user[0].lastMessage = (message && !message.length) ? '' : message[0].body;
-          user[0].lastDateMessage = (message && !message.length) ? '' : message[0].date;
-          relations.push(user[0])
+    await asyncForEach(matchedUsers, async (matchedUser) => {
+          const message = await Message.getLastFromId(check.id, matchedUser.id);
+          matchedUser.lastMessage = (message && !message.length) ? '' : message[0].body;
+          matchedUser.lastDateMessage = (message && !message.length) ? '' : message[0].date;
         }
-      }
-    });
-    console.log(relations);
+    );
     res.json({
       success: true,
-      relations: relations
+      relations: matchedUsers
     });
   } catch (error) {
     throw new Error('Relations root error ' + error)

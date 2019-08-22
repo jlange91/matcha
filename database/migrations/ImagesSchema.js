@@ -1,16 +1,20 @@
-const connection = require('../../middleware/database')
+const connection = require('../config/database.js')
 
 class ImagesSchema {
 
-    static createTable() {
+    static async createTable() {
+      try {
         const sql = 'CREATE TABLE IF NOT EXISTS images ( \
              name VARCHAR(255) PRIMARY KEY, \
              user_id INT NOT NULL, \
              CONSTRAINT UN_tag UNIQUE (name), \
              FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE)'
 
-        connection.query(sql, (err) => {if (err) console.log('Error while creating images table ', err) })
+        await connection.query(sql)
+    } catch (error) {
+      throw new Error('CREATE table images failed in database/migrations/ImagesSchema ' + error)
     }
+  }
 
 }
 

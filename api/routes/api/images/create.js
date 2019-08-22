@@ -4,7 +4,7 @@ const connection = require('../../../middleware/database')
 const formidable = require('formidable')
 const path = require('path')
 const uuidv4 = require('uuid/v4');
-const Images = require('../../../models/Images')
+const Image = require('../../../models/Image')
 
 
 const {
@@ -12,69 +12,57 @@ const {
 } = require('../../../middleware/check_token')
 const jwt = require('jsonwebtoken')
 
-// @route POST api/version/tags
-// @desc  Register a new user
-// @access Public
 router.post('/', checkJWT, async (req, res) => {
+  const check = jwt.verify(req.token, process.env.APP_KEY, (err, authData) => {
+      if (err) return false
+      return authData
+  })
 
-    try {
-        //console.log(req)
-        const check = jwt.verify(req.token, process.env.APP_KEY, (err, authData) => {
-            if (err) return false
-            return authData
-        })
+  if (!check) {
+      res.json({
+          'success': false,
+          'message': 'Forbidden'
+      })
+  }
 
-        if (!check) {
-            res.json({
-                'success': false,
-                'message': 'Forbidden'
-            })
-        }
-
-        if (await Images.count(check.id) >= 5)
-           return res.json({
-                'success': false,
-                'message': 'Delete an image before uploading a new one'
-            })
+  if (await Image.count(check.id) >= 5)
+     return res.json({
+          'success': false,
+          'message': 'Delete an image before uploading a new one'
+      })
 
 
-        const form = new formidable.IncomingForm()
+  const form = new formidable.IncomingForm()
 
-        form.multiples = true
+  form.multiples = true
 
-        form.parse(req)
+  form.parse(req)
 
-        form.uploadDir = "/usr/src/api/assets/";
+  form.uploadDir = "/usr/src/api/assets/";
 
-        form.maxFileSize = 1500 * 1024 * 1024;
-
-
-        const uploads = [];
+  form.maxFileSize = 1500 * 1024 * 1024;
 
 
-        form.on("fileBegin", async function(err, file){
-            const extension = path.extname(file.name)
-            const newfileName = uuidv4().replace(/-/g, '') + extension
-
-            file.path = form.uploadDir + newfileName
-            file.name = newfileName;
-
-            if(!(await Images.push(check.id, file.name)))
-                return res.json({success: false, message: "upload failed"})
-
-            return res.json({success: true})
-
-        });
-
-        form.on("error", function(error){
-            res.json({success: false, message: "upload failed " + error})
-        });
+  const uploads = [];
 
 
+  form.on("fileBegin", async function(err, file){
+      const extension = path.extname(file.name)
+      const newfileName = uuidv4().replace(/-/g, '') + extension
 
-    } catch (err) {
-        throw new Error('Error on post image create' + err)
-    }
+      file.path = form.uploadDir + newfileName
+      file.name = newfileName;
+
+      if(!(await Image.push(check.id, file.name)))
+          return res.json({success: false, message: "upload failed"})
+
+      return res.json({success: true})
+
+  });
+
+  form.on("error", function(error){
+      res.json({success: false, message: "upload failed " + error})
+  });
 })
 
 module.exports = router

@@ -10,6 +10,8 @@ const {
     check,
     validationResult
 } = require('express-validator/check');
+const Profil = require('../../../models/Profil.js')
+const Tag = require('../../../models/Tag.js')
 
 // profil
 router.post('/', [
@@ -82,25 +84,17 @@ router.post('/', [
             if (gender === 'men')
                 gender = 'male'
 
-            const sql = 'UPDATE profils \
-                SET biography = ?, birthdate = ?, gender = ?, sexual_orientation = ?, completed = 1\
-                WHERE profils.user_id = ?'
-
-            const profil = await connection.query({
-                sql,
-                timeout: 40000,
-                values: [bio, birthdate, gender, sex_pref, e(check.id)]
-            })
+            const profil = await Profil.updateProfil(bio, birthdate, gender, sex_pref, check.id)
 
             if (!profil) {
-                res.json({
+                return res.json({
                     'success': false,
                     'message': 'Oops your profil did not get updated try again'
                 })
             }
 
             // need to fix
-            // input a,b,c 
+            // input a,b,c
             // a and c get created not b
             newTags.forEach(async (tag) => {
 
@@ -118,7 +112,7 @@ router.post('/', [
 
                 if (!existingTag.length) {
                     sql = 'INSERT INTO tags \
- (name) VALUES (?)'
+                           (name) VALUES (?)'
                     newTag = await connection.query({
                         sql,
                         timeout: 40000,

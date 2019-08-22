@@ -6,7 +6,8 @@ const connection = require('../../../middleware/database')
 const {
     checkJWT
 } = require('../../../middleware/check_token')
-
+const Image = require('../../../models/Image.js')
+const User = require('../../../models/User.js')
 
 // profil
 router.post('/', [
@@ -14,7 +15,7 @@ router.post('/', [
     ],
     async (req, res, next) => {
         try {
-         
+
             const check = jwt.verify(req.token, process.env.APP_KEY, (err, authData) => {
                 if (err) return false
                 return authData
@@ -26,38 +27,23 @@ router.post('/', [
                     'message': 'Forbidden'
                 })
             }
-            
-        
-            let sql = 'SELECT images.user_id FROM images \
-            WHERE images.name = ?'
 
-            let result = await connection.query({
-                          sql,
-                          timeout: 40000,
-                          values: [ e(req.body.image)]
-                      })
-            
-            if (!result || result[0].user_id != check.id)
+
+            const image = await Image.getImageByName(req.body.image)
+
+            if (!image || image[0].user_id != check.id)
                 return res.json({
                     'success': false,
                     'message': 'Forbidden'
-                })            
-
-            sql  = 'UPDATE users \
-                    SET avatar = ? \
-                    WHERE users.id = ?'
-            
-            result = await connection.query({
-                    sql,
-                    timeout: 40000,
-                    values: [ e(req.body.image), e(check.id)]
                 })
-                
-            if (!result)
+
+
+
+            if (!(await User.updateAvatar(check.id, req.body.image)))
               return res.json({
                 'success': false,
                 'message': 'Forbidden'
-            })    
+            })
 
             return res.json({
                 'success': true,

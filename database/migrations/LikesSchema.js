@@ -1,8 +1,9 @@
-const connection = require('../../middleware/database')
+const connection = require('../config/database.js')
 
 class LikesSchema {
 
-    static createTable() {
+    static async createTable() {
+      try {
         const sql = 'CREATE TABLE IF NOT EXISTS likes ( \
              user_id INT NOT NULL, \
              liked_id INT NOT NULL, \
@@ -10,8 +11,11 @@ class LikesSchema {
              FOREIGN KEY (liked_id) REFERENCES users (id) ON DELETE CASCADE, \
              UNIQUE KEY (user_id, liked_id))'
 
-        connection.query(sql, (err) => {if (err) console.log('Error while creating matchs table ', err) })
+        await connection.query(sql)
+    } catch (error) {
+      throw new Error('CREATE table likes failed in database/migrations/LikesSchema ' + error)
     }
+  }
 
 }
 

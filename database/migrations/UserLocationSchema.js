@@ -1,8 +1,9 @@
-const connection = require('../../middleware/database')
+const connection = require('../config/database.js')
 
 class UserLocationSchema {
 
-    static createTable() {
+    static async createTable() {
+      try {
         const sql = 'CREATE TABLE IF NOT EXISTS location_users ( \
              id INT AUTO_INCREMENT PRIMARY KEY, \
              user_id INT NOT NULL, \
@@ -11,8 +12,11 @@ class UserLocationSchema {
              CONSTRAINT UI_location_users UNIQUE (user_id), \
              FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE)'
 
-        connection.query(sql, (err) => {if (err) console.log('Error while creating user location table ', err) })
+        await connection.query(sql)
+    } catch (error) {
+      throw new Error('CREATE table location_users failed in database/migrations/UserLocationSchema ' + error)
     }
+  }
 
 }
 

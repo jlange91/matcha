@@ -1,19 +1,22 @@
 const connection = require('../middleware/database')
-const User = require('./User')
-const Matchs = require('./Matchs')
+const Match = require('./Match')
 const e = require('escape-html')
 
-class Notifications {
+class Notification {
 
     static async exist(userId, focusId, type) {
-      const sql = 'SELECT * FROM notifications WHERE (user_id = ? AND notified_id = ? AND type = ? AND seen = 0)'
-      const ifExist = await connection.query({
-          sql,
-          timeout: 40000,
-          values: [e(userId), e(focusId), e(type)]
-      })
+      try {
+        const sql = 'SELECT * FROM notifications WHERE (user_id = ? AND notified_id = ? AND type = ? AND seen = 0)'
+        const ifExist = await connection.query({
+            sql,
+            timeout: 40000,
+            values: [e(userId), e(focusId), e(type)]
+        })
 
-      return (ifExist && ifExist.length) ? true : false;
+        return (ifExist && ifExist.length) ? true : false;
+      } catch (error) {
+          throw new Error('SELECT failed in model Notification.exist ' + error)
+      }
     }
 
 
@@ -36,7 +39,7 @@ class Notifications {
         }
         return true
       } catch (error) {
-        throw new Error('Push notifications failed Notifications.js ' + error)
+          throw new Error('INSERT failed in model Notification.push ' + error)
       }
     }
 
@@ -52,10 +55,9 @@ class Notifications {
               timeout: 40000,
               values: [e(userId)]
           })
-          console.log(await User.getUsernameFromId(userId))
           return notifications
         } catch (error) {
-            throw new Error('Get notifications failed Notifications.js ' + error)
+            throw new Error('SELECT failed in model Notification.get ' + error)
         }
     }
 
@@ -67,10 +69,10 @@ class Notifications {
             if (!result)
                 return false
             return true
-        } catch (error) {
-            throw new Error('Remove notifications failed Notifications.js ' + error)
-        }
+          } catch (error) {
+              throw new Error('DELETE failed in model Notification.remove ' + error)
+          }
     }
 }
 
-module.exports = Notifications
+module.exports = Notification

@@ -2,39 +2,29 @@ const express = require('express')
 const router = express.Router()
 const connection = require('../../../middleware/database')
 const jwt = require('jsonwebtoken')
-const Images = require('../../../models/Images')
+const Image = require('../../../models/Image')
 
 const {
     checkJWT
 } = require('../../../middleware/check_token')
 
-// @route POST api/version/tags
-// @desc  Register a new user
-// @access Public
 router.post('/', checkJWT, async (req, res) => {
-  try {
+  const check = jwt.verify(req.token, process.env.APP_KEY, (err, authData) => {
+      if (err) return false
+      return authData
+  })
 
-    // http://localhost/api/v1/images/get/
-    const check = jwt.verify(req.token, process.env.APP_KEY, (err, authData) => {
-        if (err) return false
-        return authData
-    })
-
-    if (!check) {
-        return res.json({
-            'success': false,
-            'message': 'Forbidden'
-        })
-
-    }
-    return res.json({
-        'success': true,
-        'images': await Images.getUserImages(check.id)
+  if (!check) {
+      return res.json({
+          'success': false,
+          'message': 'Forbidden'
       })
 
-  } catch(err) {
-    throw new Error('Error on post image get' + err)
-      }
+  }
+  return res.json({
+      'success': true,
+      'images': await Image.getUserImages(check.id)
+    })
 })
 
 module.exports = router

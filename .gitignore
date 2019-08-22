@@ -1,2 +1,4 @@
 */node_modules
 ./api/assets/*
+node_modules
+yarn.lock

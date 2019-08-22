@@ -2,9 +2,6 @@ const express = require('express')
 const router = express.Router()
 const fs = require('fs')
 
-// @route POST api/version/tags
-// @desc  Register a new user
-// @access Public
 router.get('/:id', async (req, res) => {
   try {
     const file = "/usr/src/api/assets/" + req.params.id
@@ -17,7 +14,7 @@ router.get('/:id', async (req, res) => {
           'message': 'Image not found.'
       })
   } catch(err) {
-    throw new Error('Error on post image get' + err)
+    throw new Error('Error on image get' + err)
       }
 })
 

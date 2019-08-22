@@ -1,8 +1,9 @@
-const connection = require('../../middleware/database')
+const connection = require('../config/database.js')
 
 class EmailConfirmationSchema {
 
-    static createTable() {
+    static async createTable() {
+      try {
         const sql = 'CREATE TABLE IF NOT EXISTS email_confirmations ( \
              id INT AUTO_INCREMENT PRIMARY KEY, \
              user_id INT NOT NULL, \
@@ -12,7 +13,10 @@ class EmailConfirmationSchema {
              CONSTRAINT UH_email_confirmation UNIQUE (hash), \
              FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE)'
 
-        connection.query(sql, (err) => {if (err) console.log('Error while creating email table ', err) })
+        await connection.query(sql)
+      } catch (error) {
+        throw new Error('CREATE table email_confirmations failed in database/migrations/EmailConfirmationSchema ' + error)
+      }
     }
 
 }

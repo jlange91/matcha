@@ -1,6 +1,4 @@
 const mysql = require('mysql')
-const dotenv = require('dotenv');
-dotenv.config();
 
 const pool = mysql.createPool({
     connectionLimit: 100,
@@ -30,8 +28,5 @@ pool.getConnection((err, connection) => {
 // Promisify for Node.js async/await.
 const util = require('util');
 pool.query = util.promisify(pool.query) // Magic happens here.
-
-// set the db for the rest of the queries
-pool.config.connectionConfig.database = process.env.DB_NAME
 
 module.exports = pool

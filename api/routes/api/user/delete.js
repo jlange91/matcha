@@ -6,7 +6,7 @@ const connection = require('../../../middleware/database')
 const {
     checkJWT
 } = require('../../../middleware/check_token')
-
+const User = require('../../../models/User.js')
 
 // profil
 router.post('/', [
@@ -14,7 +14,7 @@ router.post('/', [
     ],
     async (req, res, next) => {
         try {
-         
+
             const check = jwt.verify(req.token, process.env.APP_KEY, (err, authData) => {
                 if (err) return false
                 return authData
@@ -26,24 +26,15 @@ router.post('/', [
                     'message': 'Forbidden'
                 })
             }
-            
-        
-            const sql = 'DELETE FROM users \
-                        WHERE users.id = ?'
 
-            const deleted = await connection.query({
-                sql,
-                timeout: 40000,
-                values: [e(check.id)]
-            })
+            const deleted = await User.delete(check.id)
 
 
-            if (!deleted) {
-                res.json({
+            if (!deleted)
+                return res.json({
                     'success': false,
                     'message': 'Oops your account did not get deleted try again'
                 })
-            }
 
 
             res.json({

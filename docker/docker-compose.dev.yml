@@ -49,6 +49,9 @@ services:
     build:
       context: ../.
       dockerfile: docker/api/Dockerfile.dev
+    depends_on:
+      db:
+        condition: service_healthy
     image: myapp-api
     env_file:
       - ./api/api.env
@@ -70,8 +73,12 @@ services:
     restart: always
     env_file:
      - ./db/db.env
+    volumes:
+     - ./../database:/root
     ports:
       - '3306:3306'
+    healthcheck:
+      test: "exit 0"
 
   # phpmyadmin
   phpmyadmin:

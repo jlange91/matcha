@@ -1,8 +1,9 @@
-const connection = require('../../middleware/database')
+const connection = require('../config/database.js')
 
 class ViewsSchema {
 
-    static createTable() {
+    static async createTable() {
+      try {
         const sql = 'CREATE TABLE IF NOT EXISTS views ( \
             id INT AUTO_INCREMENT PRIMARY KEY, \
             user_id INT NOT NULL, \
@@ -11,8 +12,11 @@ class ViewsSchema {
             FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE, \
             FOREIGN KEY (viewed_id) REFERENCES users (id) ON DELETE CASCADE)'
 
-        connection.query(sql, (err) => {if (err) console.log('Error while creating Views table ', err) })
+        await connection.query(sql)
+    } catch (error) {
+      throw new Error('CREATE table views failed in database/migrations/ViewsSchema ' + error)
     }
+  }
 
 }
 

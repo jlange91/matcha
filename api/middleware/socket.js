@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
-const LoggedUsers = require('../models/LoggedUsers')
-const Notifications = require('../models/Notifications')
+const LoggedUser = require('../models/LoggedUser')
+const Notification = require('../models/Notification')
 
 module.exports = function (server) {
   var io = require('socket.io')(server);
@@ -17,7 +17,7 @@ module.exports = function (server) {
     }
   }).on('connection', function(socket) {
 
-    LoggedUsers.push(socket.decoded.id, socket.id)
+    LoggedUser.push(socket.decoded.id, socket.id)
 
     console.log('client connection >', socket.id, socket.decoded)
 
@@ -28,23 +28,23 @@ module.exports = function (server) {
     })
 
     socket.on('message', async (userId, focusId) => {
-      Notifications.push(userId, focusId, 'message');
-      let user = await LoggedUsers.get(focusId);
+      Notification.push(userId, focusId, 'message');
+      let user = await LoggedUser.get(focusId);
       if (!user)
         return ;
       socket.broadcast.to(user.socket_id).emit('message');
     });
 
     socket.on('notif', async (userId, focusId, type) => {
-      let user = await LoggedUsers.get(userId);
+      let user = await LoggedUser.get(userId);
       if (!user)
         return ;
-       if (Notifications.push(userId, focusId, type))
+       if (Notification.push(userId, focusId, type))
         socket.broadcast.to(user.socket_id).emit('notif');
     });
 
     socket.on('disconnect', () => {
-      LoggedUsers.remove(socket.id)
+      LoggedUser.remove(socket.id)
       console.log('client disconnect >', socket.id, socket.decoded)
     });
 

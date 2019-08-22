@@ -1,8 +1,9 @@
-const connection = require('../../middleware/database')
-// add birth date and completed 
+const connection = require('../config/database.js')
+// add birth date and completed
 class UserProfilSchema {
 
-    static createTable() {
+    static async createTable() {
+      try {
         const sql = 'CREATE TABLE IF NOT EXISTS profils ( \
              id INT AUTO_INCREMENT PRIMARY KEY, \
              user_id INT NOT NULL, \
@@ -12,10 +13,14 @@ class UserProfilSchema {
              biography TEXT DEFAULT NULL, \
              completed BOOLEAN DEFAULT 0 NOT NULL, \
              updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL, \
+             CONSTRAINT UN_user UNIQUE (user_id), \
              FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE)'
 
-        connection.query(sql, (err) => {if (err) console.log('Error while creating user profil table ', err) })
+        await connection.query(sql)
+    } catch (error) {
+      throw new Error('CREATE table profils failed in database/migrations/UserProfilSchema ' + error)
     }
+  }
 
 }
 

@@ -6,63 +6,58 @@ const e = require('escape-html')
 
 class User {
     static async create(newUser) {
-        try {
-            const found = await User.findOne(newUser.email, newUser.username)
-            if (found) {
-                return {
-                    'success': false,
-                    'message': 'Username or email already exist'
-                }
-            }
+      const found = await User.findOne(newUser.email, newUser.username)
+      if (found) {
+          return {
+              'success': false,
+              'message': 'Username or email already exist'
+          }
+      }
 
-            const createdUser = await User.createUser(newUser)
-            if (!createdUser) {
-                return {
-                    'success': false,
-                    'message': 'Sorry we couldn\'t create your account please try again'
-                }
-            }
+      const createdUser = await User.createUser(newUser)
+      if (!createdUser) {
+          return {
+              'success': false,
+              'message': 'Sorry we couldn\'t create your account please try again'
+          }
+      }
 
-            const createdProfil = await User.createUserProfil(createdUser, newUser.location)
-            if (!createdProfil) {
-                return {
-                    'success': false,
-                    'message': 'Sorry we couldn\'t create your profil please try again'
-                }
-            }
+      const createdProfil = await User.createUserProfil(createdUser, newUser.location)
+      if (!createdProfil) {
+          return {
+              'success': false,
+              'message': 'Sorry we couldn\'t create your profil please try again'
+          }
+      }
 
-            const sendEmailConfirmation = await User.sendEmailConfirmation(createdUser, newUser.email)
-            if (!sendEmailConfirmation) {
-                // erase user account
-                User.delete(createdUser)
-                return {
-                    'success': false,
-                    'message': 'Sorry we couldn\'t send your email confirmation so we deleted your account please try again'
-                }
-            }
+      const sendEmailConfirmation = await User.sendEmailConfirmation(createdUser, newUser.email)
+      if (!sendEmailConfirmation) {
+          // erase user account
+          User.delete(createdUser)
+          return {
+              'success': false,
+              'message': 'Sorry we couldn\'t send your email confirmation so we deleted your account please try again'
+          }
+      }
 
-            return {
-                'success': true,
-                'message': 'Please check your inbox to confirm your account'
-            }
-
-        } catch (error) {
-            throw new Error('Error while creating user User.js' + error)
-        }
+      return {
+          'success': true,
+          'message': 'Please check your inbox to confirm your account'
+      }
     }
 
     static async delete(userId) {
         try {
-            const sql = 'DELETE FROM users WHERE users.id = ?'
+          const sql = 'DELETE FROM users WHERE users.id = ?'
 
-            const result = await connection.query({
-                sql,
-                timeout: 40000,
-                values: [userId]
-            })
-            return result
+          const result = await connection.query({
+              sql,
+              timeout: 40000,
+              values: [userId]
+          })
+          return result
         } catch (error) {
-            throw new Error('Error while deleting user User.js' + error)
+            throw new Error('DELETE failed in model User.delete ' + error)
         }
     }
 
@@ -83,9 +78,9 @@ class User {
             if (sentEmail)
                 return true
             return false
-        } catch (error) {
-            throw new Error('Error sendEmailConfirmation User.js' + error)
-        }
+          } catch (error) {
+              throw new Error('INSERT failed in model User.sendEmailConfirmation ' + error)
+          }
     }
 
     static async sendEmail(email, hash) {
@@ -102,7 +97,7 @@ class User {
                 return false
             return true
         } catch (error) {
-            throw new Error('Error sendEmail User.js' + error)
+            throw new Error('Error sendEmail in model User.sendEmail' + error)
         }
     }
 
@@ -120,9 +115,9 @@ class User {
             if (!result)
                 return false
             return true
-        } catch (error) {
-            throw new Error('Error while creating user profil User.js' + error)
-        }
+          } catch (error) {
+              throw new Error('INSERT failed in model User.createUserProfil ' + error)
+          }
     }
 
     static async createUserLocation(id, location) {
@@ -143,7 +138,7 @@ class User {
                 return false
             return true
         } catch (error) {
-            throw new Error('Error while creating user location User.js' + error)
+            throw new Error('INSERT failed in model User.createUserLocation ' + error)
         }
     }
 
@@ -165,7 +160,7 @@ class User {
                  return false
             return true
         } catch (error) {
-            throw new Error('Password update ' + error)
+            throw new Error('UPDATE failed in model User.updatePassword ' + error)
         }
     }
 
@@ -191,7 +186,7 @@ class User {
                 return false
             return result.insertId
         } catch (error) {
-            throw new Error('Create user failed User.js ' + error)
+            throw new Error('INSERT failed in model User.createUser ' + error)
         }
     }
 
@@ -210,7 +205,7 @@ class User {
                 return false
             return result
         } catch (error) {
-            throw new Error('Find user failed User.js ' + error)
+            throw new Error('SELECT failed in model User.findOne ' + error)
         }
 
     }
@@ -230,7 +225,7 @@ class User {
                 return false
             return true
         } catch (error) {
-            throw new Error('Confirm account User.js ' + error)
+            throw new Error('UPDATE failed in model User.confirmAccount ' + error)
         }
     }
 
@@ -239,7 +234,7 @@ class User {
             const result = await bcrypt.compareSync(password, 10); // true
             return result
         } catch (error) {
-            throw new Error('bcrypt compare error ' + error)
+            throw new Error('bcrypt compare error in model User.comparePassword ' + error)
         }
     }
 
@@ -262,7 +257,7 @@ class User {
 
             return mail
         } catch (error) {
-            throw new Error('Password error ' + error)
+            throw new Error('Password error in model User.passwordReset' + error)
         }
     }
 
@@ -279,7 +274,7 @@ class User {
                 return false
             return true
         } catch (error) {
-            throw new Error('Error sendEmail User.js' + error)
+            throw new Error('Error sendEmail in model User.sendPasswordResetEmail' + error)
         }
     }
 
@@ -297,7 +292,7 @@ class User {
                 return false
             return true
         } catch (error) {
-            throw new Error('Create password reset failed ' + error)
+            throw new Error('INSERT failed in model User.createPasswordReset ' + error)
         }
     }
 
@@ -317,7 +312,7 @@ class User {
                 return false
             return true
         } catch (error) {
-            throw new Error('Destroy password reset failed ' + error)
+            throw new Error('DELETE failed in model User.deletePasswordReset ' + error)
         }
     }
 
@@ -335,7 +330,7 @@ class User {
                 return false
             return true
         } catch (error) {
-            throw new Error('has password reset error ' + error)
+            throw new Error('SELECT failed in model User.hasPasswordReset ' + error)
         }
     }
 
@@ -351,7 +346,7 @@ class User {
             })
             return (result && result.length) ? result[0].username : false;
         } catch (error) {
-            throw new Error('Select failed in User.getUsernameFromId ' + error)
+            throw new Error('Select failed in model User.getUsernameFromId ' + error)
         }
     }
 
@@ -367,7 +362,7 @@ class User {
           })
           return (!result) ? false : true;
         } catch (error) {
-            throw new Error('Select failed in User.isSameAvatar ' + error)
+            throw new Error('Select failed in model User.isSameAvatar ' + error)
         }
     }
 
@@ -383,7 +378,25 @@ class User {
             values: [e(filename), e(id)]
         })
       } catch (error) {
-          throw new Error('Update failed in User.updateAvatar ' + error)
+          throw new Error('Update failed in model User.updateAvatar ' + error)
+      }
+    }
+
+    static async getAllUsers(id) {
+      try {
+        const sql = 'SELECT DISTINCT users.*, GROUP_CONCAT(tags.name) AS user_tags FROM users \
+                LEFT JOIN user_tag AS current_user_tags ON current_user_tags.user_id = users.id \
+                LEFT JOIN tags ON tags.id = current_user_tags.tag_id \
+                WHERE users.id != ? \
+                GROUP BY users.id'
+
+        const users = await connection.query({
+            sql,
+            timeout: 40000,
+            values: [e(id)]
+        })
+      } catch (error) {
+          throw new Error('Update failed in model User.getAllUsers ' + error)
       }
     }
 

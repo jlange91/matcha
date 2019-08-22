@@ -1,6 +1,6 @@
 const connection = require('../middleware/database')
 
-class LoggedUsers {
+class LoggedUser {
 
     static async get(userId) {
         try {
@@ -10,9 +10,9 @@ class LoggedUsers {
             if (result && !result.length)
                 return null
             return result[0]
-        } catch (error) {
-            throw new Error('Get logged users failed LoggedUsers.js ' + error)
-        }
+          } catch (error) {
+              throw new Error('SELECT failed in model LoggedUser.get ' + error)
+          }
     }
 
     static async push(userId, socketId) {
@@ -23,9 +23,9 @@ class LoggedUsers {
             if (result && !result.length)
                 return false
             return true
-        } catch (error) {
-            throw new Error('Push logged users failed LoggedUsers.js ' + error)
-        }
+          } catch (error) {
+              throw new Error('INSERT failed in model LoggedUser.push ' + error)
+          }
     }
 
     static async remove(socketId) {
@@ -37,10 +37,10 @@ class LoggedUsers {
             if (!result)
                 return false
             return true
-        } catch (error) {
-            throw new Error('Remove logged users failed LoggedUsers.js ' + error)
-        }
+          } catch (error) {
+              throw new Error('DELETE failed in model LoggedUser.remove ' + error)
+          }
     }
 }
 
-module.exports = LoggedUsers
+module.exports = LoggedUser

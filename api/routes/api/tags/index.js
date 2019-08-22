@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const connection = require('../../../middleware/database')
-const Tags = require('../../../models/Tags.js')
+const Tag = require('../../../models/Tag.js')
 
 // @route POST api/version/tags
 // @desc  Register a new user
@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
 
     try {
 
-        res.json(await Tags.getAllTags())
+        res.json(await Tag.getAllTags())
 
     } catch (err) {
         throw new Error('Error on post user create ' + err)

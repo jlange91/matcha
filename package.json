@@ -5,9 +5,14 @@
   "author": "Thomas",
   "license": "MIT",
   "dependencies": {
-    "create-react-app": "^1.3.1"
+    "dotenv": "^8.1.0",
+    "faker": "^4.1.0",
+    "mysql": "^2.17.1",
+    "util": "^0.12.1"
   },
   "scripts": {
+    "db:setup": "node -r dotenv/config database/setup.js dotenv_config_path=database/db.env",
+    "db:faker": "node -r dotenv/config database/faker.js dotenv_config_path=database/db.env",
     "dev:install": "sh ./script/00-install-dev.sh",
     "dev:up": "docker-compose -f docker/docker-compose.dev.yml up",
     "dev:down": "docker-compose -f docker/docker-compose.dev.yml down",

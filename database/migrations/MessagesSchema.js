@@ -1,8 +1,9 @@
-const connection = require('../../middleware/database')
+const connection = require('../config/database.js')
 
 class MessagesSchema {
 
-    static createTable() {
+    static async createTable() {
+      try {
         const sql = 'CREATE TABLE IF NOT EXISTS messages ( \
             id INT AUTO_INCREMENT PRIMARY KEY, \
             from_id INT NOT NULL, \
@@ -13,8 +14,11 @@ class MessagesSchema {
             FOREIGN KEY (from_id) REFERENCES users (id) ON DELETE CASCADE, \
             FOREIGN KEY (to_id) REFERENCES users (id) ON DELETE CASCADE)'
 
-        connection.query(sql, (err) => {if (err) console.log('Error while creating matchs table ', err) })
+        await connection.query(sql)
+    } catch (error) {
+      throw new Error('CREATE table messages failed in database/migrations/MessagesSchema ' + error)
     }
+  }
 
 }
 

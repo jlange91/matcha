@@ -10,26 +10,25 @@ class EmailConfirmation {
 
             const result = await connection.query({sql, timeout: 40000, values: [email, hash]})
             if (result && !result.length)
-                return false 
+                return false
             return true // result[0]
         } catch (error) {
-            throw new Error('Find email confirmation failed EmailConfimation.js ' + error)
+            throw new Error('SELECT failed in model EmailConfimation.find ' + error)
         }
     }
 
     static async destroy(email) {
         try {
-            
             const sql = 'DELETE FROM email_confirmations \
                          WHERE email = ?'
-            
+
             const result = await connection.query({sql, timeout: 40000, values: [email]})
 
             if (!result)
                 return false
             return true
         } catch (error) {
-            throw new Error('Destroy email confirmation failed EmailConfimation.js ' + error)
+            throw new Error('DELETE failed in model EmailConfimation.destroy ' + error)
         }
     }
 }

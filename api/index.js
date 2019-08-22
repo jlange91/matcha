@@ -21,13 +21,6 @@ app.use(cors(corsOptions))
 // Routes
 const version = 'v1'
 
-// DB setup
-const setup = require('./database/setup')
-setup.database()
-
-const faker = require('./database/faker')
-faker.start()
-
 require('./middleware/socket.js')(server)
 
 app.use(`/${version}/users`, require('./routes/api/user/all'))

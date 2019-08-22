@@ -1,8 +1,9 @@
-const connection = require('../../middleware/database')
+const connection = require('../config/database.js')
 
 class PasswordResetsSchema {
 
-    static createTable() {
+    static async createTable() {
+      try {
         const sql = 'CREATE TABLE IF NOT EXISTS password_resets ( \
             id INT AUTO_INCREMENT PRIMARY KEY, \
             user_id INT NOT NULL, \
@@ -12,9 +13,12 @@ class PasswordResetsSchema {
             CONSTRAINT UH_email_confirmation UNIQUE (hash), \
             CONSTRAINT UE_email_confirmation UNIQUE (email), \
             FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE)'
-            
-        connection.query(sql, (err) => {if (err) console.log('Error while creating email table ', err) })
+
+        await connection.query(sql)
+    } catch (error) {
+      throw new Error('CREATE table password_resets failed in database/migrations/PasswordResetsSchema ' + error)
     }
+  }
 
 }
 

@@ -6,7 +6,8 @@ const connection = require('../../../middleware/database')
 const {
     checkJWT
 } = require('../../../middleware/check_token')
-
+const User = require('../../../models/User.js')
+const Like = require('../../../models/Like.js')
 
 // profil
 router.post('/', [
@@ -27,36 +28,18 @@ router.post('/', [
                 })
             }
 
-            sql = 'SELECT DISTINCT users.*, GROUP_CONCAT(tags.name) AS user_tags FROM users \
-                    LEFT JOIN user_tag AS current_user_tags ON current_user_tags.user_id = users.id \
-                    LEFT JOIN tags ON tags.id = current_user_tags.tag_id \
-                    WHERE users.id != ? \
-                    GROUP BY users.id'
-
-            const users = await connection.query({
-                sql,
-                timeout: 40000,
-                values: [e(check.id)]
-            })
-
+            const users = await User.getAllUsers(check.id);
 
             if (!users) {
-                res.json({
+                return res.json({
                     'success': false,
                     'message': 'No users in database'
                 })
             }
 
-            sql = 'SELECT likes.liked_id FROM likes WHERE likes.user_id = ?'
+            const likes = await Like.getMyLikes(check.id);
 
-            const likes = await connection.query({
-                sql,
-                timeout: 40000,
-                values: [e(check.id)]
-            })
-
-
-            res.json({
+            return res.json({
                 'success': true,
                 'users': users,
                 'likes': likes
