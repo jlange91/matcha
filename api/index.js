@@ -1,4 +1,3 @@
-// Load env variables
 require('dotenv').config({
   path: '.env'
 })

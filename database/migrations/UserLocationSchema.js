@@ -9,7 +9,9 @@ class UserLocationSchema {
              user_id INT NOT NULL, \
              provided BOOLEAN DEFAULT 0 NOT NULL, \
              geo TEXT NOT NULL, \
-             CONSTRAINT UI_location_users UNIQUE (user_id), \
+             lat DECIMAL(9,6) NOT NULL, \
+             lng DECIMAL(9,6) NOT NULL, \
+             CONSTRAINT u_user_id UNIQUE (user_id), \
              FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE)'
 
         await connection.query(sql)

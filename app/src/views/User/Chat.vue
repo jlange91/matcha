@@ -75,7 +75,7 @@
 
           <div class="flex flex-col p-4">
 
-            <div v-for="message in messages" :class="backgroundColor(message.from_id)" class="rounded-lg text-sm p-3 mb-1">
+            <div v-for="message in messages" :key="message.id" :class="backgroundColor(message.from_id)" class="rounded-lg text-sm p-3 mb-1">
               <p class="float-right">{{ message.body }}</p>
             </div>
 

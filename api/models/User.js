@@ -124,16 +124,19 @@ class User {
         try {
 
             const geo = JSON.stringify(location)
-
-            const sql = `INSERT INTO location_users (user_id, geo)
-                            VALUES (?, ?)
-                        ON DUPLICATE KEY UPDATE geo = ?`
+        
+            const sql = `INSERT INTO location_users (user_id, geo, lat, lng)
+                            VALUES (?, ?, ?, ?)
+                        ON DUPLICATE KEY UPDATE geo = ?, lat = ?, lng = ?`
 
             const result = await connection.query({
                 sql,
                 timeout: 40000,
-                values: [id, geo, geo]
+                values: [id, geo, location.ll[0], location.ll[1], geo, location.ll[0], location.ll[1]]
             })
+
+            console.log('SQL ' + sql)
+            console.log('result ' + result)
             if (!result)
                 return false
             return true
@@ -395,6 +398,7 @@ class User {
             timeout: 40000,
             values: [e(id)]
         })
+        return users;
       } catch (error) {
           throw new Error('Update failed in model User.getAllUsers ' + error)
       }

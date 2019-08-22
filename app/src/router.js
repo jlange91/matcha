@@ -70,6 +70,12 @@ const router = new Router({
       name: 'users',
       component: () => import('./views/User/Users.vue'),
       beforeEnter: requireAuth
+    },
+    {
+      path: '/matches',
+      name: 'matches',
+      component: () => import('./views/Matches/Matches.vue'),
+      beforeEnter: requireAuth
     }
   ]
 })

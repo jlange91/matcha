@@ -39,7 +39,7 @@ router.post('/', [
 
             const likes = await Like.getMyLikes(check.id);
 
-            return res.json({
+            res.json({
                 'success': true,
                 'users': users,
                 'likes': likes
