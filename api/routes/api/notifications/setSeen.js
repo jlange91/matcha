@@ -8,7 +8,7 @@ const {
     checkJWT
 } = require('../../../middleware/check_token')
 
-router.get('/', checkJWT, async (req, res) => {
+router.post('/', checkJWT, async (req, res) => {
   const check = jwt.verify(req.token, process.env.APP_KEY, (err, authData) => {
       if (err) return false
       return authData
@@ -22,11 +22,16 @@ router.get('/', checkJWT, async (req, res) => {
       return (false);
   }
 
-  const notifs = await Notification.get(check.id);
+  const {
+      notifications,
+  } = req.body
+
+  notifications.forEach(async (notification) => {
+    await Notification.setSeen(notification.id);
+  })
 
   res.json({
     success: true,
-    notifications: notifs
   });
 })
 

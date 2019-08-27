@@ -29,18 +29,30 @@ module.exports = function (server) {
 
     socket.on('message', async (userId, focusId) => {
       Notification.push(userId, focusId, 'message');
-      let user = await LoggedUser.get(focusId);
-      if (!user)
-        return ;
-      socket.broadcast.to(user.socket_id).emit('message');
+      let users = await LoggedUser.get(focusId);
+      if (users && users.length) {
+        for (let i = 0; i < users.length; i++)
+        {
+          socket.broadcast.to(users[i].socket_id).emit('message');
+          socket.broadcast.to(users[i].socket_id).emit('notif');
+        }
+      }
+      users = await LoggedUser.get(userId);
+      if (users && users.length) {
+        for (let i = 0; i < users.length; i++)
+          socket.broadcast.to(users[i].socket_id).emit('message');
+      }
     });
 
     socket.on('notif', async (userId, focusId, type) => {
-      let user = await LoggedUser.get(userId);
-      if (!user)
+      let users = await LoggedUser.get(userId);
+      if (!users)
         return ;
        if (Notification.push(userId, focusId, type))
-        socket.broadcast.to(user.socket_id).emit('notif');
+       {
+         for (let i = 0; i < users.length; i++)
+          socket.broadcast.to(users[i].socket_id).emit('notif');
+       }
     });
 
     socket.on('disconnect', () => {

@@ -1,5 +1,5 @@
 <template>
-  <div @click="is_visible = !is_visible" class="cursor-pointer">
+  <div @click="displayNotifications()" class="cursor-pointer">
     <div class="text-white px-1 ml-1 flex inline-flex py-1 items-center">
       <svg
         class="mx-2 h-5 w-5 fill-current text-gray-600 cursor-pointer"
@@ -21,7 +21,7 @@
         :key="notification.id"
         :class="backGroundStyle(notification.type)"
       >
-        <p class="p-4">{{ notification.message }}</p>
+        <p class="p-4">{{ notification.username1 + " " + types[notification.type] }}</p>
       </div>
     </div>
   </div>
@@ -36,7 +36,14 @@ export default {
   data() {
     return {
       is_visible: false,
-      notifications: []
+      notifications: [],
+      types: {
+            like: "vous a likez.",
+            unlike: "vous a unlikez.",
+            view: "a vu votre profil.",
+            message: "vous a envoyez un message.",
+            match: "vous a matchez."
+        },
     };
   },
   created() {
@@ -50,13 +57,23 @@ export default {
   },
   methods: {
     updateNotifications() {
-      console.log("updateNotif");
         axios
           .get("notifications")
           .then(res => {
-            console.log("ici" + res.data);
+            this.notifications = res.data.notifications
+          })
+          .catch(e => console.log("e ", e))
+    },
+    displayNotifications() {
+      this.is_visible = !this.is_visible
+      if (this.is_visible === true)
+      {
+        axios
+          .post("notifications/setSeen", {
+            notifications: this.notifications
           })
           .catch(e => console.log("e ", e));
+      }
     },
     backGroundStyle(type) {
       if (type === "message") return "bg-green-300";
@@ -67,7 +84,7 @@ export default {
   },
   computed: {
     notificationsCount() {
-      return this.notifications.length;
+      return (this.notifications) ? this.notifications.length : 0;
     }
   }
 };

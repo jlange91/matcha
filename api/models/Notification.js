@@ -22,8 +22,6 @@ class Notification {
 
     static async push(userId, focusId, type) {
       try {
-        if (!(await Matchs.isMatch(userId, focusId)))
-          return false;
         if (await this.exist(userId, focusId, type))
           return false;
 
@@ -59,6 +57,19 @@ class Notification {
         } catch (error) {
             throw new Error('SELECT failed in model Notification.get ' + error)
         }
+    }
+
+    static async setSeen(id) {
+        try {
+            const sql = 'UPDATE notifications SET seen = 1 WHERE id = ?'
+
+            const result = await connection.query({sql, timeout: 40000, values: [id]})
+            if (!result)
+                return false
+            return true
+          } catch (error) {
+              throw new Error('UPDATE failed in model Notification.setSeen ' + error)
+          }
     }
 
     static async remove(id) {

@@ -9,7 +9,7 @@ class LoggedUser {
             const result = await connection.query({sql, timeout: 40000, values: [userId]})
             if (result && !result.length)
                 return null
-            return result[0]
+            return result
           } catch (error) {
               throw new Error('SELECT failed in model LoggedUser.get ' + error)
           }

@@ -19,7 +19,7 @@ const createDatabase = async () => {
     // set the db for the rest of the queries
     connection.config.connectionConfig.database = process.env.DB_NAME
   } catch (err) {
-    throw new Error('Database creation failed in database/config ' + err)
+    throw new Error('Database creation failed in database/setup ' + err)
   }
 }
 
