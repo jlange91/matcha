@@ -59,16 +59,19 @@ router.post('/', checkJWT, async (req, res) => {
     //     GROUP BY matched_user.id \
     //     ORDER BY matched_user.id ASC'
    
-        let sql = 'SELECT matched_user.*, matched_user_profil.*, GROUP_CONCAT(tags.name) AS user_tags FROM users \
-      INNER JOIN user_tag AS current_user_tags ON current_user_tags.user_id = users.id \
-      INNER JOIN user_tag AS matched_tags ON current_user_tags.tag_id = matched_tags.tag_id \
-      INNER JOIN users AS matched_user ON matched_user.id = matched_tags.user_id \
-      INNER JOIN profils AS current_user_profil ON current_user_profil.user_id = users.id \
-      INNER JOIN profils AS matched_user_profil ON matched_user_profil.user_id = matched_user.id \
-      INNER JOIN tags ON tags.id = matched_tags.tag_id \
-      WHERE (users.id = ? AND matched_user.id != ?) \
-        GROUP BY matched_user.id \
-        ORDER BY matched_user.id ASC'
+        let sql = 'SELECT matched_user.*, matched_user_profil.*, GROUP_CONCAT(tags.name) AS user_tags, COUNT(tags.id) AS total_common_tags, SQRT(POWER(location.latitude - users.latitude, 2) + POWER(location.longitude - users.longitude, 2)) * 111.32 \
+                    AS distance \
+                    FROM users \
+                    INNER JOIN user_tag AS current_user_tags ON current_user_tags.user_id = users.id \
+                    INNER JOIN user_tag AS matched_tags ON current_user_tags.tag_id = matched_tags.tag_id \
+                    INNER JOIN users AS matched_user ON matched_user.id = matched_tags.user_id \
+                    INNER JOIN profils AS current_user_profil ON current_user_profil.user_id = users.id \
+                    INNER JOIN profils AS matched_user_profil ON matched_user_profil.user_id = matched_user.id \
+                    INNER JOIN locations AS location ON location.user_id = matched_user.id \
+                    INNER JOIN tags ON tags.id = matched_tags.tag_id \
+                    WHERE (users.id = ? AND matched_user.id != ?) \
+                      GROUP BY matched_user.id \
+                      ORDER BY distance ASC'
 
     const possible_matches = await connection.query({
       sql,
