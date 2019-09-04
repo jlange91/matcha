@@ -1,7 +1,8 @@
 const UsersFaker = require('./faker/UsersFaker')
-const UserProfilFaker = require('./faker/UserProfilFaker')
+const UserProfilFaker = require('./faker/UsersProfilFaker')
 const LikesFaker = require('./faker/LikesFaker')
 const ImageFaker = require('./faker/ImageFaker')
+const UsersLocationFaker = require('./faker/UsersLocationFaker')
 const connection = require('./config/database.js')
 const faker = require('faker')
 
@@ -34,6 +35,8 @@ class Faker {
       tmpUser = {}
     }
     this.setAll()
+
+    
   }
 
   async setAll() {
@@ -52,6 +55,7 @@ class Faker {
   async setUsers() {
     await UsersFaker.setUsers(this.fakeUsers)
     await UserProfilFaker.setUsers(this.fakeUsers)
+    await UsersLocationFaker.setUserLocation(1)
   }
 }
 
