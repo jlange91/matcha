@@ -21,7 +21,7 @@
         :key="notification.id"
         :class="backGroundStyle(notification.type)"
       >
-        <p class="p-4">{{ notification.username1 + " " + types[notification.type] }}</p>
+        <p class="p-4">{{ notification.username1 + types[notification.type] }}</p>
       </div>
     </div>
   </div>
@@ -38,11 +38,11 @@ export default {
       is_visible: false,
       notifications: [],
       types: {
-            like: "vous a likez.",
-            unlike: "vous a unlikez.",
-            view: "a vu votre profil.",
-            message: "vous a envoyez un message.",
-            match: "vous a matchez."
+            like: " vous a likez.",
+            unlike: " vous a unlikez.",
+            view: " a vu votre profil.",
+            message: " vous a envoyez un message.",
+            match: " vous a matchez."
         },
     };
   },

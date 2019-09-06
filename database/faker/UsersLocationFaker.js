@@ -2,36 +2,35 @@ const connection = require('../config/database.js')
 const csv = require('csv-parser')
 const fs = require('fs')
 
- 
+
 class UsersLocationFaker {
-  
-  static async setUserLocation(user_id) {
+
+  static async setUsersLocation(users) {
+    var sql;
+
+    for (var i = 0; users[i]; i++) {
       try {
         // open csv
         const results = [];
-        fs.createReadStream('../locations/seeds_fr.csv')
-        .pipe(csv())
-        .on('data', (data) => results.push(data))
-        .on('end', () => {
-          console.log(results);
-          // [
-          //   { NAME: 'Daffy Duck', AGE: '24' },
-          //   { NAME: 'Bugs Bunny', AGE: '22' }
-          // ]
+        const fd = fs.createReadStream('./database/locations/seeds_fr.csv')
+        const end = new Promise(function(resolve, reject) {
+          fd.pipe(csv())
+          .on('data', (data) => results.push(data))
+          .on('end', () => resolve());
         });
+        await end;
         // get a random lat and long
-        console.log(results)
         let rand = results[Math.floor(Math.random() * results.length)];
 
-        console.log(rand)
-        let sql = 'INSERT INTO location_users (user_id, lat, lng) \
-                   VALUES (?, ?, ?)'
+        sql = 'INSERT INTO location_users (user_id, lat, lng, geo) \
+                   VALUES ((SELECT id from users WHERE username = ?), ?, ?, ?)'
 
-        // await connection.query({sql, timeout: 40000, values: [user_id, lat, lng]})
+        await connection.query({sql, timeout: 40000, values: [users[i].username, rand.lat, rand.lng, rand.country]})
       } catch (error) {
-        throw new Error('INSERT 1 failed in database/faker/UsersFaker.setAdmins ' + error)
+        throw new Error('INSERT ' + i + ' failed in database/faker/UsersLocationFaker.setUsersLocation ' + error)
       }
     }
+  }
 }
 
 module.exports = UsersLocationFaker

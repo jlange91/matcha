@@ -35,8 +35,6 @@ class Faker {
       tmpUser = {}
     }
     this.setAll()
-
-    
   }
 
   async setAll() {
@@ -55,8 +53,8 @@ class Faker {
   async setUsers() {
     await UsersFaker.setUsers(this.fakeUsers)
     await UserProfilFaker.setUsers(this.fakeUsers)
-    await UsersLocationFaker.setUserLocation(1)
+    await UsersLocationFaker.setUsersLocation(this.fakeUsers)
   }
 }
 
-new Faker({limit: 1000});
+new Faker({limit: 100});
