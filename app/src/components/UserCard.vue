@@ -24,19 +24,16 @@
       class="focus:outline-none hover:bg-teal-700 bg-teal-600 text-white uppercase w-full py-2 font-semibold"
     >{{buttonText}}</button>
 
-    <user-profil-modal v-show="false" :modal-name="selected_user" :user="user" />
+    <user-profil-modal :modal-name="user.username" :user="user" />
   </div>
 </template>
 
 <script>
 import axios from "../middleware/axios";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "UserCard",
-  // components: {
-  //   UserProfilModal
-  // },
   props: {
     user: {
       type: Object,
@@ -55,15 +52,13 @@ export default {
     };
   },
   methods: {
-    openUserProfilModal(username) {
-      // if (!this.open_modal) {
-      //   this.selected_user = user
-      //   this.open_modal = true
-      // } else {
-      //   this.open_modal = false 
-      //   this.selected_user = null
-      // }
-      this.selected_user = username
+    ...mapActions({
+      setUserProfilId: "viewing/setUserProfilId",
+      clearUserProfilId: "viewing/clearUserProfilId"
+    }),
+    openUserProfilModal(user) {
+      this.clearUserProfilId()
+      this.setUserProfilId(user.id)
     },
     parseLike(user) {
       if(this.isLiked) {
@@ -92,7 +87,7 @@ export default {
     },
   },
   computed: {
-  
+
     buttonText() {
       return this.isLiked ? "Unlike" : "Like";
     },
