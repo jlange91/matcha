@@ -4,7 +4,7 @@ const faker = require('faker')
 class TagsFaker {
 
   static async createTags() {
-    for (var i = 0; i < 100; i++) {
+    for (var i = 0; i < 50; i++) {
       try {
         let sql = 'INSERT INTO tags (name) \
                    VALUES (?)'
