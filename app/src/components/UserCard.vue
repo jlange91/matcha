@@ -9,7 +9,7 @@
     <img v-else src="/api/v1/images/get/default.png" class="rounded-full w-32 h-32" />
     <div class="px-6 py-4">
       <div class="font-bold text-xl mb-2 text-center">
-        <p>{{user.username}}</p>
+        <p @click="openUserProfilModal(user)">{{user.username}}</p>
       </div>
     </div>
     <div class="px-6 py-4">
@@ -23,6 +23,8 @@
       @click="parseLike(user)"
       class="focus:outline-none hover:bg-teal-700 bg-teal-600 text-white uppercase w-full py-2 font-semibold"
     >{{buttonText}}</button>
+
+    <user-profil-modal v-show="false" :modal-name="selected_user" :user="user" />
   </div>
 </template>
 
@@ -32,6 +34,9 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "UserCard",
+  // components: {
+  //   UserProfilModal
+  // },
   props: {
     user: {
       type: Object,
@@ -44,11 +49,22 @@ export default {
   },
   data() {
     return {
-      user_tags: []
+      user_tags: [],
+      open_modal: false,
+      selected_user: null
     };
   },
   methods: {
-
+    openUserProfilModal(username) {
+      // if (!this.open_modal) {
+      //   this.selected_user = user
+      //   this.open_modal = true
+      // } else {
+      //   this.open_modal = false 
+      //   this.selected_user = null
+      // }
+      this.selected_user = username
+    },
     parseLike(user) {
       if(this.isLiked) {
         if (this.$route.path === '/matches')

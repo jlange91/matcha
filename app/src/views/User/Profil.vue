@@ -23,8 +23,9 @@
             Gender: {{getProfil.gender}}
             <br>
             Sexual preference: {{getProfil.sexual_orientation}}
-            <br><p>Biography:
-            <span v-html="getProfil.biography" class="break-all"></span></p>
+            <br>
+            <p class="inline-flex w-full">Biography: 
+              <span v-html="getProfil.biography"></span></p>
           </div>
            <div class="mt-8 flex flex-wrap">
             <span
