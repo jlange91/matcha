@@ -38,7 +38,7 @@
               @click.prevent="getNavigatorLocation()"
               class="p-2 rounded my-4 bg-teal-600 text-white hover:shadow"
             >Update location</button>
-            <user-profil-map :lat="lat" :lng="lng"/>
+            <user-profil-map :lat="getLocation.lat" :lng="getLocation.lng"/>
           </div>
          
           <div class="flex flex-row-reverse mt-8">
@@ -93,12 +93,12 @@ export default {
       return moment().diff(this.getProfil.birthdate, "years");
       //const isLegal = (age >= 18);
     },
-    lat() {
-        return Number(JSON.parse(this.getLocation.geo).ll[0]);
-    },
-    lng() {
-      return Number(JSON.parse(this.getLocation.geo).ll[1]);
-    }
+    // lat() {
+    //     return Number(JSON.parse(this.getLocation.geo).ll[0]);
+    // },
+    // lng() {
+    //   return Number(JSON.parse(this.getLocation.geo).ll[1]);
+    // }
   },
   methods: {
 

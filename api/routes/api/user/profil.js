@@ -52,6 +52,8 @@ router.post('/', checkJWT, async (req, res) => {
 
     sql = 'SELECT DISTINCT * FROM location_users \
     WHERE location_users.user_id = ?'
+
+
     const location = await connection.query({
         sql,
         timeout: 40000,
