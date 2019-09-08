@@ -15,6 +15,7 @@
     "db:setup": "node -r dotenv/config database/setup.js dotenv_config_path=database/db.env",
     "db:faker": "node -r dotenv/config database/faker.js dotenv_config_path=database/db.env",
     "db:drop": "node -r dotenv/config database/drop.js dotenv_config_path=database/db.env",
+    "db:fresh": "yarn db:drop && yarn db:setup && yarn db:faker",
     "dev:install": "sh ./script/00-install-dev.sh",
     "dev:up": "docker-compose -f docker/docker-compose.dev.yml up",
     "dev:down": "docker-compose -f docker/docker-compose.dev.yml down",

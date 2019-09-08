@@ -3,6 +3,8 @@ const UserProfilFaker = require('./faker/UsersProfilFaker')
 const LikesFaker = require('./faker/LikesFaker')
 const ImageFaker = require('./faker/ImageFaker')
 const UsersLocationFaker = require('./faker/UsersLocationFaker')
+const TagsFaker = require('./faker/TagsFaker')
+const UsersTagsFaker = require('./faker/UsersTagsFaker')
 const connection = require('./config/database.js')
 const faker = require('faker')
 
@@ -40,6 +42,7 @@ class Faker {
   async setAll() {
     await this.setAdmins()
     await this.setUsers()
+    await this.createUsersTags()
     exitProperly()
   }
 
@@ -48,6 +51,7 @@ class Faker {
     await UserProfilFaker.setAdmins()
     await LikesFaker.setAdmins()
     await ImageFaker.setAdmins()
+    await TagsFaker.createTags()
   }
 
   async setUsers() {
@@ -55,6 +59,12 @@ class Faker {
     await UserProfilFaker.setUsers(this.fakeUsers)
     await UsersLocationFaker.setUsersLocation(this.fakeUsers)
   }
+
+  async createUsersTags() {
+    await UsersTagsFaker.createUserTags()
+  }
 }
+
+
 
 new Faker({limit: 100});
