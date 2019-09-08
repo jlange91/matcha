@@ -124,7 +124,7 @@ class User {
         try {
 
             const geo = JSON.stringify(location)
-        
+
             const sql = `INSERT INTO location_users (user_id, geo, lat, lng)
                             VALUES (?, ?, ?, ?)
                         ON DUPLICATE KEY UPDATE geo = ?, lat = ?, lng = ?`
@@ -401,6 +401,39 @@ class User {
         return users;
       } catch (error) {
           throw new Error('Update failed in model User.getAllUsers ' + error)
+      }
+    }
+
+    static async update(user, confirmed, userId) {
+      try {
+        const sql = 'UPDATE users \
+        SET email = ?, username = ?, first_name = ?, last_name = ?, confirmed = ?\
+        WHERE users.id = ?'
+
+        const newUser = await connection.query({
+            sql,
+            timeout: 40000,
+            values: [e(user.email), e(user.username), e(user.first_name), e(user.last_name), confirmed, e(userId)]
+        })
+        return newUser;
+      } catch (error) {
+          throw new Error('Update failed in model User.update ' + error)
+      }
+    }
+
+    static async getById(id) {
+      try {
+        const sql = 'SELECT DISTINCT * FROM users \
+                      WHERE users.id = ?'
+
+        const user = await connection.query({
+            sql,
+            timeout: 40000,
+            values: [id]
+        })
+        return user;
+      } catch (error) {
+          throw new Error('Update failed in model User.update ' + error)
       }
     }
 

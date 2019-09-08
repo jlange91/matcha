@@ -12,6 +12,7 @@ const {
 } = require('express-validator/check');
 const Profil = require('../../../models/Profil.js')
 const Tag = require('../../../models/Tag.js')
+const UserTag = require('../../../models/UserTag.js')
 
 // profil
 router.post('/', [
@@ -93,65 +94,32 @@ router.post('/', [
                 })
             }
 
-            // need to fix
-            // input a,b,c
-            // a and c get created not b
-            newTags.forEach(async (tag) => {
+            const dropUserTags = await UserTag.deleteByUserId(check.id)
 
-                let sql = 'SELECT * FROM tags WHERE name = ?'
-
-                let existingTag = []
-
-                existingTag = await connection.query({
-                    sql,
-                    timeout: 40000,
-                    values: [tag]
+            if (!dropUserTags) {
+                return res.json({
+                    'success': false,
+                    'message': `Oops your tag ${tag} did not get created`
                 })
-
+            }
+            newTags.forEach(async (tag) => {
+                let sql
+                let existingTag = []
                 let newTag = null;
 
+                existingTag = await Tag.getByName(tag)
                 if (!existingTag.length) {
-                    sql = 'INSERT INTO tags \
-                           (name) VALUES (?)'
-                    newTag = await connection.query({
-                        sql,
-                        timeout: 40000,
-                        values: [tag]
+                  newTag = await Tag.push(tag)
+
+                  if (!newTag) {
+                    return res.json({
+                        'success': false,
+                        'message': `Oops your tag ${tag} did not get created`
                     })
-
-                    if (!newTag) {
-                        res.json({
-                            'success': false,
-                            'message': `Oops your tag ${tag} did not get created`
-                        })
-                    }
-                } else {
-                    sql = 'DELETE FROM user_tag \
-                    WHERE user_id = ?'
-
-                    const dropUserTags = await connection.query({
-                        sql,
-                        timeout: 40000,
-                        values: [e(check.id)]
-                    })
-
-                    if (!dropUserTags) {
-                        res.json({
-                            'success': false,
-                            'message': `Oops your tag ${tag} did not get created`
-                        })
-                    }
+                  }
                 }
 
-
-                sql = 'INSERT INTO user_tag \
-                         (user_id, tag_id) VALUES (?, ?)'
-
-                const userTag = await connection.query({
-                    sql,
-                    timeout: 40000,
-                    values: [e(check.id), newTag ? newTag.insertId : existingTag[0].id]
-                })
+                const userTag = await UserTag.push(check.id, newTag ? newTag.insertId : existingTag[0].id)
 
                 if (!userTag.insertId) {
                     return res.json({
@@ -159,12 +127,10 @@ router.post('/', [
                         'message': `Oops your tag ${tag} did not get created`
                     })
                 }
-
             })
 
             res.json({
                 'success': true,
-                //'message': `Oops your tag ${tag} did not get created`
             })
         } catch (error) {
             throw new Error('Profil edit ' + error)

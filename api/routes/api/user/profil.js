@@ -5,6 +5,11 @@ const connection = require('../../../middleware/database')
 const {
     checkJWT
 } = require('../../../middleware/check_token')
+const Profil = require('../../../models/Profil.js')
+const UserTag = require('../../../models/UserTag.js')
+const LocationUsers = require('../../../models/LocationUsers.js')
+const User = require('../../../models/User.js')
+
 // profil
 router.post('/', checkJWT, async (req, res) => {
 
@@ -14,61 +19,28 @@ router.post('/', checkJWT, async (req, res) => {
     })
 
     if (!check) {
-        res.json({
+        return res.json({
             'success': false,
             'message': 'Forbidden'
         })
-        return (false);
     }
-    let sql = 'SELECT DISTINCT * FROM profils \
-                        WHERE profils.user_id = ?'
 
-    const profil = await connection.query({
-        sql,
-        timeout: 40000,
-        values: [check.id]
-    })
+    const profil = await Profil.getByUserId(check.id)
     if (profil && !profil.length) {
-        res.json({
+        return res.json({
             'success': false
         })
-        return (false);
     }
 
-    sql = 'SELECT DISTINCT * FROM users \
-                        WHERE users.id = ?'
-
-    const user = await connection.query({
-        sql,
-        timeout: 40000,
-        values: [check.id]
-    })
+    const user = await User.getById(check.id)
     if (user && !user.length) {
-        res.json({
+        return res.json({
             'success': false
         })
-        return (false);
     }
 
-    sql = 'SELECT DISTINCT * FROM location_users \
-    WHERE location_users.user_id = ?'
-
-
-    const location = await connection.query({
-        sql,
-        timeout: 40000,
-        values: [check.id]
-    })
-
-    sql = 'SELECT tags.id, tags.name FROM tags \
-           JOIN user_tag WHERE user_tag.user_id = ? \
-           AND user_tag.tag_id = tags.id'
-
-    const user_tags = await connection.query({
-        sql,
-        timeout: 40000,
-        values: [check.id]
-    })
+    const location = await LocationUsers.getByUserId(check.id)
+    const user_tags = await UserTag.getByUserId(check.id)
 
     res.json({
         success: true,

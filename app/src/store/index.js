@@ -24,9 +24,14 @@ const store = () => {
             messages,
             session,
             profil,
+<<<<<<< Updated upstream
             tags,
             viewing
         }
+=======
+            tags
+        },
+>>>>>>> Stashed changes
     })
 }
 

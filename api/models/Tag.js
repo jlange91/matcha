@@ -18,9 +18,9 @@ class Tag {
     }
   }
 
-  static async getAllTags(userId, matchId) {
+  static async getAllTags() {
     try {
-      const sql = 'SELECT * FROM tags'
+      const sql = 'SELECT * FROM tags ORDER BY BINARY name'
       const tags = await connection.query({
           sql,
           timeout: 40000

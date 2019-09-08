@@ -53,19 +53,8 @@ router.post('/', [
                 same_email,
                 user
             } = req.body
-            
-            const confirmed = same_email ? true : false;
 
-            const sql = 'UPDATE users \
-            SET email = ?, username = ?, first_name = ?, last_name = ?, confirmed = ?\
-            WHERE users.id = ?'
-
-            const newUser = await connection.query({
-                sql,
-                timeout: 40000,
-                values: [user.email, user.username, user.first_name, user.last_name, confirmed, e(check.id)]
-            })
-
+            const newUser = await User.update(user, same_email ? true : false, check.id)
 
             if (!newUser) {
                 res.json({
@@ -78,7 +67,7 @@ router.post('/', [
 
             if (!same_email)
                 sendMail = await User.sendEmailConfirmation(e(check.id), user.email);
-                
+
             if (!sendMail) {
                 res.json({
                     'success': false,

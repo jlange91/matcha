@@ -12,7 +12,7 @@ class Profil {
       const profil = await connection.query({
           sql,
           timeout: 40000,
-          values: [bio, birthdate, gender, sex_pref, e(id)]
+          values: [e(bio), birthdate, gender, sex_pref, e(id)]
       })
       return profil;
     } catch (error) {
@@ -20,6 +20,21 @@ class Profil {
     }
   }
 
+  static async getByUserId(userId) {
+    try {
+      let sql = 'SELECT DISTINCT * FROM profils \
+                  WHERE profils.user_id = ?'
+
+      const profil = await connection.query({
+          sql,
+          timeout: 40000,
+          values: [userId]
+      })
+      return profil;
+    } catch (error) {
+        throw new Error('UPDATE failed in model Profil.updateProfil ' + error)
+    }
+  }
 }
 
 module.exports = Profil
