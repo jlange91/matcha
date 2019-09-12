@@ -385,19 +385,33 @@ class User {
       }
     }
 
-    static async getAllUsers(id) {
+    static async getAllUsers(id = null) {
       try {
-        const sql = 'SELECT DISTINCT users.*, GROUP_CONCAT(tags.name) AS user_tags FROM users \
-                LEFT JOIN user_tag AS current_user_tags ON current_user_tags.user_id = users.id \
-                LEFT JOIN tags ON tags.id = current_user_tags.tag_id \
-                WHERE users.id != ? \
-                GROUP BY users.id'
-
-        const users = await connection.query({
-            sql,
-            timeout: 40000,
-            values: [e(id)]
-        })
+        let sql
+        let users
+        if (id) {
+            sql = 'SELECT DISTINCT users.*, GROUP_CONCAT(tags.name) AS user_tags FROM users \
+                    LEFT JOIN user_tag AS current_user_tags ON current_user_tags.user_id = users.id \
+                    LEFT JOIN tags ON tags.id = current_user_tags.tag_id \
+                    WHERE users.id != ? \
+                    GROUP BY users.id'
+    
+            users = await connection.query({
+                sql,
+                timeout: 40000,
+                values: [e(id)]
+            }) 
+        }   else {
+            sql = 'SELECT DISTINCT users.*, GROUP_CONCAT(tags.name) AS user_tags FROM users \
+                    LEFT JOIN user_tag AS current_user_tags ON current_user_tags.user_id = users.id \
+                    LEFT JOIN tags ON tags.id = current_user_tags.tag_id \
+                    GROUP BY users.id'
+    
+            users = await connection.query({
+                sql,
+                timeout: 40000
+            })
+        }
         return users;
       } catch (error) {
           throw new Error('Update failed in model User.getAllUsers ' + error)

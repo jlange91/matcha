@@ -46,7 +46,7 @@ router.post('/', checkJWT, async (req, res) => {
       timeout: 40000,
       values: [e(check.id), e(check.id)]
     })
-    console.log("Possible matches", possible_matches)
+ 
     if (!possible_matches) {
       res.json({
         'success': false,

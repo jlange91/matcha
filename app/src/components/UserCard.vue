@@ -20,6 +20,7 @@
       >{{tag}}</span>
     </div>
     <button
+      v-if="getLogged"
       @click="parseLike(user)"
       class="focus:outline-none hover:bg-teal-700 bg-teal-600 text-white uppercase w-full py-2 font-semibold"
     >{{buttonText}}</button>
@@ -81,13 +82,14 @@ export default {
     },
     likeUser(user_id) {
       axios.post("likes", { liked_id: user_id }).then(res => {
-        console.log(user_id)
         if (res.data.success) this.$emit("like", user_id);
       });
     },
   },
   computed: {
-
+    ...mapGetters({
+      getLogged: 'session/getLogged'
+    }),
     buttonText() {
       return this.isLiked ? "Unlike" : "Like";
     },

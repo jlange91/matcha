@@ -69,13 +69,19 @@ const router = new Router({
       path: '/users',
       name: 'users',
       component: () => import('./views/User/Users.vue'),
-      beforeEnter: requireAuth
+      // beforeEnter: requireAuth
     },
     {
       path: '/matches',
       name: 'matches',
       component: () => import('./views/Matches/Matches.vue'),
       beforeEnter: requireAuth
+    },
+    {
+      path: '/user/:user',
+      name: 'user',
+      component: () => import('./views/User/User.vue'),
+      beforeEnter: fetchUser
     }
   ]
 })
@@ -174,6 +180,21 @@ async function requireGuest(to, from, next) {
     message.state.visible = true
     message.state.success = false
     message.state.message = e
+    return next()
+  }
+}
+
+async function fetchUser(to, from, next) {
+  try {
+    console.log(to.params.user)
+    const endpoint = `/user/${to.params.user}`
+    const res = await axios.get(endpoint)
+
+    console.log(res)
+  } catch (error) {
+    message.state.visible = true
+    message.state.success = false
+    message.state.message = error
     return next()
   }
 }
