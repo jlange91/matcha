@@ -9,10 +9,10 @@
     <img v-else src="/api/v1/images/get/default.png" class="rounded-full w-32 h-32" />
     <div class="px-6 py-4">
       <div class="font-bold text-xl mb-2 text-center">
-        <!-- <router-link :to="`/user/${user.username}`">
+        <router-link :to="`/user/${user.username}`">
           {{user.username}}
-        </router-link> -->
-        <p @click.prevent="goToUserProfil(user.username)">{{user.username}}</p>
+        </router-link>
+        <!-- <p @click.prevent="goToUserProfil(user.username)">{{user.username}}</p> -->
       </div>
     </div>
     <div class="px-6 py-4">
@@ -78,7 +78,7 @@ export default {
         if (this.$route.path === '/matches')
           this.likeUser(user.user_id)
         else
-          this.likeUser(user.id) 
+          this.likeUser(user.id)
       }
     },
     unlikeUser(user_id) {

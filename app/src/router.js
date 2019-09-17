@@ -187,8 +187,8 @@ async function requireGuest(to, from, next) {
 
 async function fetchUser(to, from, next) {
   try {
-    const endpoint = `/user/${to.params.user}`
-    const res = await axios.post(endpoint)
+    const endpoint = `/profil/${to.params.user}`
+    const res = await axios.get(endpoint)
     if (res.data.success) {
       user.state.data = res.data.user
       return next()

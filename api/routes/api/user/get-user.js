@@ -6,14 +6,13 @@ const UserTag = require('../../../models/UserTag.js')
 const LocationUsers = require('../../../models/LocationUsers.js')
 const User = require('../../../models/User.js')
 // profil
-router.post('/',
+router.get('/:user',
     async (req, res, next) => {
         try {
-           
-            const username = req.headers.referer.split("http://localhost/user/")[1]
-           console.log(req.headers)
+            const username = req.params.user
             if (username) {
                 const user = await User.getByUsername(username)
+                console.log(username)
                 console.log(user)
                 if (user && !user.length) {
                     return res.json({
@@ -32,7 +31,7 @@ router.post('/',
                 return res.json({
                     'success': false
                 })
-            }        
+            }
 
         } catch (error) {
             throw new Error('user delete ' + error)
