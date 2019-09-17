@@ -9,7 +9,10 @@
     <img v-else src="/api/v1/images/get/default.png" class="rounded-full w-32 h-32" />
     <div class="px-6 py-4">
       <div class="font-bold text-xl mb-2 text-center">
-        <p @click="openUserProfilModal(user)">{{user.username}}</p>
+        <!-- <router-link :to="`/user/${user.username}`">
+          {{user.username}}
+        </router-link> -->
+        <p @click.prevent="goToUserProfil(user.username)">{{user.username}}</p>
       </div>
     </div>
     <div class="px-6 py-4">
@@ -25,7 +28,7 @@
       class="focus:outline-none hover:bg-teal-700 bg-teal-600 text-white uppercase w-full py-2 font-semibold"
     >{{buttonText}}</button>
 
-    <user-profil-modal :modal-name="user.username" :user="user" />
+    <!-- <user-profil-modal :modal-name="user.username" :user="user" /> -->
   </div>
 </template>
 
@@ -60,6 +63,9 @@ export default {
     openUserProfilModal(user) {
       this.clearUserProfilId()
       this.setUserProfilId(user.id)
+    },
+    goToUserProfil(username) {
+      this.$router.push(`/user/${username}`)
     },
     parseLike(user) {
       if(this.isLiked) {

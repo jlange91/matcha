@@ -36,7 +36,7 @@ app.use(`/${version}/user/profil`, require('./routes/api/user/profil'))
 app.use(`/${version}/user/avatar`, require('./routes/api/user/avatar'))
 app.use(`/${version}/user/profil/edit`, require('./routes/api/user/profil-edit'))
 
-app.use(`/${version}/user`, require('./routes/api/user/get-user'))
+app.use(`/${version}/user/:user`, require('./routes/api/user/get-user'))
 
 app.use(`/${version}/tags`, require('./routes/api/tags/'))
 
