@@ -450,6 +450,24 @@ class User {
           throw new Error('Update failed in model User.update ' + error)
       }
     }
+    
+    static async getByUsername(username) {
+      try {
+        const sql = 'SELECT DISTINCT * FROM users \
+                        INNER JOIN profils ON profils.user_id = users.id \
+                        INNER JOIN location_users ON location_users.user_id = users.id \
+                      WHERE users.username = ?'
+
+        const user = await connection.query({
+            sql,
+            timeout: 40000,
+            values: [username]
+        })
+        return user;
+      } catch (error) {
+          throw new Error('Update failed in model User.update ' + error)
+      }
+    }
 
 }
 

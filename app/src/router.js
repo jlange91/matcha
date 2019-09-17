@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import NProgress from 'nprogress'
 import session from './store/modules/session'
 import message from './store/modules/messages'
+import user from './store/modules/user'
 import axios from "./middleware/axios";
 
  //import axios from "../../../middleware/axios";
@@ -186,16 +187,19 @@ async function requireGuest(to, from, next) {
 
 async function fetchUser(to, from, next) {
   try {
-    console.log(to.params.user)
-    const endpoint = `/user/${to.params.user}`
-    const res = await axios.get(endpoint)
-
-    console.log(res)
+    const endpoint = `/user`
+    const res = await axios.post(endpoint, {username: to.params.user})
+    if (res.data.success) {
+      user.state.data = res.data.user
+      return next()
+    }
+    else
+      return next('/')
   } catch (error) {
     message.state.visible = true
     message.state.success = false
     message.state.message = error
-    return next()
+    return next('/')
   }
 }
 

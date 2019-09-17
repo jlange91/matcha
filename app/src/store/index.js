@@ -8,6 +8,7 @@ import session from './modules/session/index'
 import profil from './modules/profil/index'
 import tags from './modules/tags/index'
 import viewing from './modules/viewing/index'
+import user from './modules/user/index'
 
 // import state from './state'
 // import * as getters from './getters'
@@ -25,7 +26,8 @@ const store = () => {
             session,
             profil,
             tags,
-            viewing
+            viewing,
+            user
         }
     })
 }

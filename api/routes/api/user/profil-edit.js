@@ -2,7 +2,6 @@ const express = require('express')
 const router = express.Router()
 const jwt = require('jsonwebtoken')
 const e = require('escape-html')
-const connection = require('../../../middleware/database')
 const {
     checkJWT
 } = require('../../../middleware/check_token')
