@@ -189,6 +189,7 @@ async function fetchUser(to, from, next) {
   try {
     const endpoint = `/profil/${to.params.user}`
     const res = await axios.get(endpoint)
+    console.log(res.data)
     if (res.data.success) {
       user.state.data = res.data.user
       return next()

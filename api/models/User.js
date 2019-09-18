@@ -453,7 +453,7 @@ class User {
     
     static async getByUsername(username) {
       try {
-        const sql = 'SELECT DISTINCT * FROM users \
+        const sql = 'SELECT DISTINCT users.*, location_users.lat, location_users.lng, profils.user_id, profils.birthdate, profils.gender, profils.sexual_orientation, profils.biography, profils.completed  FROM users \
                         INNER JOIN profils ON profils.user_id = users.id \
                         INNER JOIN location_users ON location_users.user_id = users.id \
                       WHERE users.username = ?'

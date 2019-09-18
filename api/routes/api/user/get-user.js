@@ -5,21 +5,29 @@ const Profil = require('../../../models/Profil.js')
 const UserTag = require('../../../models/UserTag.js')
 const LocationUsers = require('../../../models/LocationUsers.js')
 const User = require('../../../models/User.js')
+const mimelib = require("mimelib");
 // profil
 router.get('/:user',
     async (req, res, next) => {
         try {
-            const username = req.params.user
+
+            const username = mimelib.decodeQuotedPrintable(e(req.params.user))
+            // probleme avec les accent !!!
+            console.log(username)
             if (username) {
                 const user = await User.getByUsername(username)
-                console.log(username)
-                console.log(user)
+               
                 if (user && !user.length) {
                     return res.json({
                         'success': false
                     })
                 }
+
+                console.log(user[0].id)
                 const user_tags = await UserTag.getByUserId(user[0].id)
+                
+                console.log(user_tags)
+                
                 res.json({
                     success: true,
                     user: {

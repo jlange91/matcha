@@ -10,6 +10,7 @@
     "axios": "^0.18.0",
     "b64-to-blob": "^1.2.19",
     "core-js": "^2.6.5",
+    "mimelib": "^0.3.1",
     "moment": "^2.24.0",
     "moment-range": "^4.0.2",
     "nprogress": "^0.2.0",
