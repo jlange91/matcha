@@ -12,8 +12,7 @@ router.get('/:user',
         try {
 
             const username = mimelib.decodeQuotedPrintable(e(req.params.user))
-            // probleme avec les accent !!!
-            console.log(username)
+ 
             if (username) {
                 const user = await User.getByUsername(username)
                
@@ -23,10 +22,7 @@ router.get('/:user',
                     })
                 }
 
-                console.log(user[0].id)
                 const user_tags = await UserTag.getByUserId(user[0].id)
-                
-                console.log(user_tags)
                 
                 res.json({
                     success: true,
