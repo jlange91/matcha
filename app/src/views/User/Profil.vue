@@ -167,9 +167,9 @@ export default {
       setVisibility: "messages/setVisibility",
       setMessage: "messages/setMessage",
       setSuccess: "messages/setSuccess",
+      setUserLocation: "profil/setUserLocation"
     }),
     getNavigatorLocation() {
-      console.log('ok')
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(this.updatePosition);
       } else {
@@ -187,6 +187,7 @@ export default {
             self.setMessage("Your location is updated");
             self.setSuccess(true);
             self.setVisibility(true);
+            this.setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude})
           } else {
             self.setMessage("There was a problem please try again");
             self.setSuccess(false);
