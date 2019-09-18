@@ -37,7 +37,6 @@ router.post('/', checkJWT, async (req, res) => {
       SET count = ? \
       WHERE user_id = ? AND viewed_id = ?'
       
-      console.log(user_views[0].count )
       await connection.query({
           sql,
           timeout: 40000,
@@ -60,13 +59,13 @@ router.post('/', checkJWT, async (req, res) => {
 
 
     if (!view) {
-      res.json({
+      return res.json({
         'success': false,
         'message': 'Oops your view not get updated try again'
       })
     }
 
-    res.json({
+    return res.json({
       success: true,
     });
 
