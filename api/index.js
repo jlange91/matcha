@@ -52,6 +52,7 @@ app.use(`/${version}/matches`, require('./routes/api/matches'))
 app.use(`/${version}/likes`, require('./routes/api/likes/create'))
 app.use(`/${version}/likes/destroy`, require('./routes/api/likes/destroy'))
 
+app.use(`/${version}/view`, require('./routes/api/views/create'))
 
 app.use(`/${version}/messages/create`, require('./routes/api/messages/create'))
 app.use(`/${version}/messages`, require('./routes/api/messages'))
