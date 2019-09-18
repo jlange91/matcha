@@ -32,19 +32,19 @@ router.post('/', checkJWT, async (req, res) => {
         timeout: 40000,
         values: [e(check.id), e(req.body.viewed_id)]
     })
-
     if (user_views.length) {
       sql = 'UPDATE views \
-              SET count = ? \
-              WHERE user_id = ? AND viewed_id = ?'
-
+      SET count = ? \
+      WHERE user_id = ? AND viewed_id = ?'
+      
+      console.log(user_views[0].count )
       await connection.query({
           sql,
           timeout: 40000,
-          values: [user_views.count + 1, e(check.id), e(req.body.viewed_id)]
+          values: [user_views[0].count + 1, e(check.id), e(req.body.viewed_id)]
       })
 
-      res.json({
+      return res.json({
         success: true,
       });
     }
@@ -55,7 +55,7 @@ router.post('/', checkJWT, async (req, res) => {
     const view = await connection.query({
       sql,
       timeout: 40000,
-      values: [e(check.id), e(req.body.liked_id), 1]
+      values: [e(check.id), e(req.body.viewed_id), 1]
     })
 
 

@@ -47,6 +47,7 @@
 <script>
 import { mapGetters } from "vuex";
 import axios from "../../middleware/axios";
+
 export default {
   data() {
     return {
@@ -55,8 +56,14 @@ export default {
   },
   mounted() {
     this.userLikes()
+    if (this.getLogged)
+    this.addViewToUser()
   },
   methods: {
+    addViewToUser() {
+      console.log('add view')
+      axios.post("view", { viewed_id: this.getUserData.user_info.id }).then().catch(e => console.log(e));
+    },
     parseLike(user) {
       if(this.isLiked) {
         // if (this.$route.path === '/matches')
