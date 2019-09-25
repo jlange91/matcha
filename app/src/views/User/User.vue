@@ -21,7 +21,7 @@
             <br>
             Sexual preference: {{getUserData.user_info.sexual_orientation}}
             <br>
-            <p class="inline-flex w-full">Biography: 
+            <p class="inline-flex w-full">Biography:
               <span v-html="getUserData.user_info.biography"></span></p>
           </div>
            <div class="mt-8 flex flex-wrap">
@@ -32,7 +32,7 @@
             >#{{tag.name}}</span>
           </div>
           <div class="mt-8">
-       
+
             <user-profil-map :lat="getUserData.user_info.lat" :lng="getUserData.user_info.lng"/>
           </div>
           <button
@@ -40,7 +40,7 @@
       @click="parseLike(getUserData.user_info)"
       class="focus:outline-none hover:bg-teal-700 bg-teal-600 text-white uppercase w-full py-2 font-semibold"
     >{{buttonText}}</button>
-        
+
         </div>
 </template>
 
@@ -113,8 +113,8 @@ export default {
   userBirthDate() {
     const today = new Date();
     const birthDate = new Date(this.getUserData.user_info.birthdate);
-    const age = today.getFullYear() - birthDate.getFullYear();
     const m = today.getMonth() - birthDate.getMonth();
+    let age = today.getFullYear() - birthDate.getFullYear();
     if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
         age--;
     }

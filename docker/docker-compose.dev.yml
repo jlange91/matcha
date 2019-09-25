@@ -8,14 +8,6 @@ services:
       context: ../.
       dockerfile: docker/server/Dockerfile.dev
     image: myapp-server
-    deploy:
-      resources: # Set these values when you know what you do!
-        limits:
-          cpus: '0.001'
-          memory: 50M
-        reservations:
-          cpus: '0.0001'
-          memory: 20M
     ports:
       - '80:80' # Connect localhost 80 port to container 80 port
     links: # Link services to access http://app and  http://api inside the container
@@ -38,14 +30,6 @@ services:
 
   api:
     container_name: api
-    deploy:
-      resources: # Set these values when you know what you do!
-        limits:
-          cpus: '0.001'
-          memory: 50M
-        reservations:
-          cpus: '0.0001'
-          memory: 20M
     build:
       context: ../.
       dockerfile: docker/api/Dockerfile.dev

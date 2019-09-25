@@ -10,13 +10,13 @@
       <input class="appearance-none block w-full bg-gray-200 text-gray-700 border  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder="Jane">
       <!-- <p class="text-red-500 text-xs italic">Please fill out this field.</p> -->
     </div>
-    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+    <!-- <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0"> -->
       <!-- <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
-        
+
       </label> -->
-      <input class="appearance-none block w-full bg-gray-200 text-gray-700 border mt-6 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder="Jane">
+      <!-- <input class="appearance-none block w-full bg-gray-200 text-gray-700 border mt-6 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder="Jane"> -->
       <!-- <p class="text-red-500 text-xs italic">Please fill out this field.</p> -->
-    </div>
+    <!-- </div> -->
     <!-- <div class="w-full md:w-1/2 px-3">
       <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
         Last Name
@@ -26,7 +26,7 @@
   </div>
 
   <div class="flex flex-wrap -mx-3 mb-2">
-  
+
     <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
       <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
         Gender
@@ -56,13 +56,13 @@
         </div>
       </div>
     </div>
-  
+
   </div>
 </form>
     <user-card
       @like="like"
       @unlike="unlike"
-      v-for="user in all_users"
+      v-for="user in sortedArray"
       :key="user.id"
       :user="user"
       :liked="likes"
@@ -72,6 +72,9 @@
 
 <script>
 import axios from "../../middleware/axios";
+import moment from "moment";
+import { mapGetters } from "vuex";
+
 export default {
   mounted() {
     this.getAllUsers();
@@ -81,6 +84,47 @@ export default {
       all_users: [],
       likes: []
     };
+  },
+  computed: {
+    ...mapGetters({
+      getUserLocation: 'profil/getUserLocation',
+      getTags: 'tags/getTags',
+    }),
+    sortedArray() {
+      const location = this.getUserLocation
+      const tags = this.getTags
+
+      const sortByAge = (a, b) => {
+        let ageA = moment().diff(a.birthdate, "years"),
+            ageB = moment().diff(b.birthdate, "years");
+        if (ageA < ageB)
+          return -1
+        if (ageA > ageB)
+          return 1
+        return 0
+      }
+
+      const sortByLocation = (a, b) => {
+        let distanceA = Math.sqrt(Math.pow(a.lat - location.lat, 2) + Math.pow(a.lng - location.lng, 2)) * 111.32
+        let distanceB = Math.sqrt(Math.pow(b.lat - location.lat, 2) + Math.pow(b.lng - location.lng, 2)) * 111.32
+        if (distanceA < distanceB)
+          return -1
+        if (distanceA > distanceB)
+          return 1
+        return 0
+      }
+
+      // in progress
+      function sortByPopularity(a, b) {
+      }
+
+      function sortByTags(a, b) {
+        console.log(user)
+        return 0
+      }
+
+      return this.all_users.sort(sortByTags);
+    }
   },
   methods: {
     getAllUsers() {
@@ -101,7 +145,7 @@ export default {
       });
       this.likes = ret
     },
-    
+
   }
 };
 </script>

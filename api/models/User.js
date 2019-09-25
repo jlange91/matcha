@@ -387,34 +387,40 @@ class User {
 
     static async getAllUsers(id = null) {
       try {
-        let sql
-        let users
+        let sql, users
+
         if (id) {
-            sql = 'SELECT DISTINCT users.*, GROUP_CONCAT(tags.name) AS user_tags FROM users \
+            sql = 'SELECT DISTINCT users.*, GROUP_CONCAT(tags.name) AS user_tags, profils.* , location_users.lat, location_users.lng\
+                    FROM users \
                     LEFT JOIN user_tag AS current_user_tags ON current_user_tags.user_id = users.id \
                     LEFT JOIN tags ON tags.id = current_user_tags.tag_id \
+                    LEFT JOIN profils ON profils.user_id = users.id \
+                    LEFT JOIN location_users ON location_users.user_id = users.id \
                     WHERE users.id != ? \
                     GROUP BY users.id'
-    
+
             users = await connection.query({
                 sql,
                 timeout: 40000,
                 values: [e(id)]
-            }) 
+            })
         }   else {
-            sql = 'SELECT DISTINCT users.*, GROUP_CONCAT(tags.name) AS user_tags FROM users \
+            sql = 'SELECT DISTINCT users.*, GROUP_CONCAT(tags.name) AS user_tags, profils.*, location_users.lat, location_users.lng\
+                    FROM users \
                     LEFT JOIN user_tag AS current_user_tags ON current_user_tags.user_id = users.id \
                     LEFT JOIN tags ON tags.id = current_user_tags.tag_id \
+                    LEFT JOIN profils ON profils.user_id = users.id \
+                    LEFT JOIN location_users ON location_users.user_id = users.id \
                     GROUP BY users.id'
-    
+
             users = await connection.query({
                 sql,
                 timeout: 40000
             })
         }
-        return users;
+        return users
       } catch (error) {
-          throw new Error('Update failed in model User.getAllUsers ' + error)
+          throw new Error('SELECT failed in model User.getAllUsers ' + error)
       }
     }
 
@@ -450,7 +456,7 @@ class User {
           throw new Error('Update failed in model User.update ' + error)
       }
     }
-    
+
     static async getByUsername(username) {
       try {
         const sql = 'SELECT DISTINCT users.*, location_users.lat, location_users.lng, profils.user_id, profils.birthdate, profils.gender, profils.sexual_orientation, profils.biography, profils.completed  FROM users \
