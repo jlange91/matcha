@@ -17,7 +17,7 @@
             Last name: {{getUser.last_name}}
           </div>
 
-          <div class="mt-8 flex flex-wrap" v-show="getProfil && getProfil.completed">
+          <div class="mt-8 flex flex-wrap" v-if="getProfil && getProfil.completed">
             Age: {{age}}
             <br>
             Gender: {{getProfil.gender}}
@@ -59,6 +59,9 @@
     <tab name="image-upload" @click="is_images = true">
       <image-uploader class="mt-32" :get_images="is_images"/>
     </tab>
+    <tab name="user-likes">
+      <user-likes class="mt-32" />
+    </tab>
       <!-- <tab name="About Us">
       <h1>Why we do it</h1>
       </tab>-->
@@ -91,6 +94,7 @@ export default {
       getTags: "tags/getTags"
     }),
     age() {
+      if (this.getProfil && this.getProfil.birthdate)
       return moment().diff(this.getProfil.birthdate, "years");
       //const isLegal = (age >= 18);
     },
@@ -113,6 +117,7 @@ export default {
       this.$socket.emit("logout", this.getUser);
     },
     async logout() {
+      this.$router.push("/");
       await this.logoutEvent();
       const token = localStorage.getItem("token");
       if (token) localStorage.removeItem("token");
@@ -124,7 +129,6 @@ export default {
       this.setMessage("Your account is deleted");
       this.setSuccess(true);
       this.setVisibility(true);
-      this.$router.push("/");
     },
     deleteUser() {
       axios
