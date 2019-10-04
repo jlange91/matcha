@@ -65,6 +65,9 @@
     <tab name="user-views">
       <user-views class="mt-32" />
     </tab>
+    <tab name="user-browsing-history">
+      <user-browsing-history class="mt-32" />
+    </tab>
       <!-- <tab name="About Us">
       <h1>Why we do it</h1>
       </tab>-->

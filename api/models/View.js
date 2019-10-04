@@ -19,6 +19,22 @@ class View {
     }
   }
 
+  static async getPeopleUsernameWhoIViewed(id) {
+    try {
+      const sql = 'SELECT users.username FROM views \
+      INNER JOIN users ON users.id = views.viewed_id \
+      WHERE views.user_id = ?'
+      const likes = await connection.query({
+          sql,
+          timeout: 40000,
+          values: [e(id)]
+      })
+      return likes;
+    } catch (error) {
+        throw new Error('SELECT failed in model View.getPeopleUsernameIViewed' + error)
+    }
+  }
+
 }
 
 module.exports = View

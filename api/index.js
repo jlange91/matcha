@@ -54,6 +54,7 @@ app.use(`/${version}/user/likes`, require('./routes/api/likes/get'))
 app.use(`/${version}/likes/destroy`, require('./routes/api/likes/destroy'))
 
 app.use(`/${version}/user/views`, require('./routes/api/views/get'))
+app.use(`/${version}/user/browsing`, require('./routes/api/views/browsing'))
 
 app.use(`/${version}/view`, require('./routes/api/views/create'))
 
