@@ -17,6 +17,7 @@
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
     "vue-select": "^3.1.0",
+    "vue-slider-component": "^3.0.41",
     "vue-socket.io-extended": "^3.2.1",
     "vue2-dropzone": "^3.5.9",
     "vuex": "^3.0.1"

@@ -16,7 +16,7 @@ class ImageFaker {
       try {
         sql = 'INSERT IGNORE INTO images \
              (name, user_id) \
-             VALUES ("4390c3af2bad41ffa2464481d758c443.jpg", (SELECT id from users WHERE username = "dadacruz"))'
+             VALUES ("d6d894d4853547a2ac1ec25029f0cc84.jpg", (SELECT id from users WHERE username = "dadacruz"))'
 
          await connection.query(sql)
       } catch (error) {
