@@ -35,6 +35,22 @@ class Like {
     }
   }
 
+  static async getPeopleUsernameWhoLikesMe(id) {
+    try {
+      const sql = 'SELECT users.username FROM likes \
+      INNER JOIN users ON users.id = likes.user_id \
+      WHERE likes.liked_id = ?'
+      const likes = await connection.query({
+          sql,
+          timeout: 40000,
+          values: [e(id)]
+      })
+      return likes;
+    } catch (error) {
+        throw new Error('SELECT failed in model Like.getPeopleWhoLikesMe' + error)
+    }
+  }
+
 }
 
 module.exports = Like

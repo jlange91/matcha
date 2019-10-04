@@ -1,6 +1,13 @@
 <template>
   <div class="mt-8 p-4 container mx-auto min-w-sm max-w-lg rounded bg-white shadow">
-      user likes
+      user who likes you
+      <ul class="my-4">
+        <li v-for="(user, i) in user_likes" :key="i">
+            <router-link class="text-teal-600 cursor-pointer" :to="`/user/${user.username}`">
+              {{user.username}}
+            </router-link>
+        </li>
+      </ul>
   </div>
 </template>
 
@@ -18,10 +25,10 @@ export default {
   },
   methods: {
      getUserLikes() {
-      axios.get("/likes").then((res) => {
-            // res.data.possible_matches.forEach(element => {
-            //     this.possible_matches.push(element)
-            // });
+      axios.post("/user/likes").then((res) => {
+        if(res.data.success) {
+          this.user_likes = res.data.user_likes
+        }
       });
     }
   }

@@ -61,7 +61,6 @@ export default {
   },
   methods: {
     addViewToUser() {
-      console.log('add view')
       axios.post("view", { viewed_id: this.getUserData.user_info.id }).then().catch(e => console.log(e));
     },
     parseLike(user) {

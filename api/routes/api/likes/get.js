@@ -3,13 +3,13 @@ const router = express.Router()
 const e = require('escape-html')
 const jwt = require('jsonwebtoken')
 const Likes = require('../../../models/Like')
-const User = require('../../../models/User')
+const connection = require('../../../middleware/database')
 const {
   checkJWT
 } = require('../../../middleware/check_token')
 
 
-router.get('/', checkJWT, async (req, res) => {
+router.post('/', checkJWT, async (req, res) => {
 
   try {
     const check = jwt.verify(req.token, process.env.APP_KEY, (err, authData) => {
@@ -25,15 +25,21 @@ router.get('/', checkJWT, async (req, res) => {
       return (false);
     }
 
-    const user_likes = await Likes.getMyLikes(check.id)
- 
-    if (!user_likes)
+    const users = await Likes.getPeopleUsernameWhoLikesMe(e(check.id))
+
+    if (!users)
       return res.json({
           'success': false,
           'message': 'You have no likes'
         })
     
-   
+    console.log(users)
+
+    return res.json({
+          'success': true,
+          'user_likes': users
+        })
+    
    
 
   } catch (error) {
