@@ -3,6 +3,9 @@ const router = express.Router()
 const e = require('escape-html')
 const jwt = require('jsonwebtoken')
 const connection = require('../../../middleware/database')
+const Profil = require('../../../models/Profil')
+const ratings = require('../../../helpers/ratings')
+
 const {
   checkJWT
 } = require('../../../middleware/check_token')
@@ -52,9 +55,11 @@ router.post('/', checkJWT, async (req, res) => {
     if (!like) {
       res.json({
         'success': false,
-        'message': 'Oops your location did not get updated try again'
+        'message': 'Oops your like did not get updated try again'
       })
     }
+    
+    await Profil.increaseUserFameRating(req.body.liked_id, ratings.LIKES)
 
     res.json({
       success: true,

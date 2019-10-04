@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="w-full bg-teal-600 text-white py-2 text-xs uppercase">
-      <ul class="list-reset flex items-center">
+      <ul class="list-reset flex items-center text-xs">
         <li
           v-for="tab in tabs"
           :class="{ 'bg-white text-teal-600 rounded-full px-1 shadow-lg': tab.isActive }"

@@ -3,6 +3,8 @@ const router = express.Router()
 const e = require('escape-html')
 const jwt = require('jsonwebtoken')
 const connection = require('../../../middleware/database')
+const Profil = require('../../../models/Profil')
+const ratings = require('../../../helpers/ratings')
 const {
   checkJWT
 } = require('../../../middleware/check_token')
@@ -31,6 +33,8 @@ router.post('/', checkJWT, async (req, res) => {
         timeout: 40000,
         values: [e(check.id), e(req.body.liked_id)]
     })
+
+    await Profil.decreaseUserFameRating(req.body.liked_id, ratings.LIKES)
 
     res.json({
       success: true,

@@ -7,6 +7,7 @@ class UserProfilSchema {
         const sql = 'CREATE TABLE IF NOT EXISTS profils ( \
              id INT AUTO_INCREMENT PRIMARY KEY, \
              user_id INT NOT NULL, \
+             fame_rating INT NOT NULL DEFAULT 0, \
              birthdate DATE DEFAULT NULL, \
              gender ENUM("female", "male") DEFAULT NULL, \
              sexual_orientation ENUM("bisexual", "female", "male") NOT NULL, \
