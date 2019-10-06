@@ -42,26 +42,26 @@ class Faker {
   async setAll() {
     await this.setAdmins()
     await this.setUsers()
-    await UsersTagsFaker.createUserTags()
     exitProperly()
   }
-  
+
   async setAdmins() {
     await UsersFaker.setAdmins()
     await UserProfilFaker.setAdmins()
     await LikesFaker.setAdmins()
     await ImageFaker.setAdmins()
-    await TagsFaker.createTags()
   }
-  
+
   async setUsers() {
     await UsersFaker.setUsers(this.fakeUsers)
     await UserProfilFaker.setUsers(this.fakeUsers)
     await UsersLocationFaker.setUsersLocation(this.fakeUsers)
+    await TagsFaker.setUsers()
+    await UsersTagsFaker.createUserTags(this.fakeUsers)
   }
 
 }
 
 
 
-new Faker({limit: 100});
+new Faker({limit: 20});

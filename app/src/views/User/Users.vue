@@ -4,6 +4,9 @@
     <form class="w-full">
   <div class="flex flex-wrap -mx-3 mb-6">
     <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+
+      <filters-form :all_users="all_users" @filteredArray="updateFinalArray"></filters-form>
+
       <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
         Search
       </label>
@@ -62,7 +65,7 @@
     <user-card
       @like="like"
       @unlike="unlike"
-      v-for="user in sortedArray"
+      v-for="user in finalArray"
       :key="user.id"
       :user="user"
       :liked="likes"
@@ -72,59 +75,22 @@
 
 <script>
 import axios from "../../middleware/axios";
-import moment from "moment";
-import { mapGetters } from "vuex";
+import VueSlider from 'vue-slider-component'
+import 'vue-slider-component/theme/default.css'
 
 export default {
+  components: {
+    VueSlider
+  },
   mounted() {
     this.getAllUsers();
   },
   data() {
     return {
       all_users: [],
+      finalArray: [],
       likes: []
     };
-  },
-  computed: {
-    ...mapGetters({
-      getUserLocation: 'profil/getUserLocation',
-      getTags: 'tags/getTags',
-    }),
-    sortedArray() {
-      const location = this.getUserLocation
-      const tags = this.getTags
-
-      const sortByAge = (a, b) => {
-        let ageA = moment().diff(a.birthdate, "years"),
-            ageB = moment().diff(b.birthdate, "years");
-        if (ageA < ageB)
-          return -1
-        if (ageA > ageB)
-          return 1
-        return 0
-      }
-
-      const sortByLocation = (a, b) => {
-        let distanceA = Math.sqrt(Math.pow(a.lat - location.lat, 2) + Math.pow(a.lng - location.lng, 2)) * 111.32
-        let distanceB = Math.sqrt(Math.pow(b.lat - location.lat, 2) + Math.pow(b.lng - location.lng, 2)) * 111.32
-        if (distanceA < distanceB)
-          return -1
-        if (distanceA > distanceB)
-          return 1
-        return 0
-      }
-
-      // in progress
-      function sortByPopularity(a, b) {
-      }
-
-      function sortByTags(a, b) {
-        console.log(user)
-        return 0
-      }
-
-      return this.all_users.sort(sortByTags);
-    }
   },
   methods: {
     getAllUsers() {
@@ -145,7 +111,9 @@ export default {
       });
       this.likes = ret
     },
-
+    updateFinalArray(newValue) {
+      this.finalArray = newValue;
+    }
   }
 };
 </script>
