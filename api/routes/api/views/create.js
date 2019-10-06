@@ -65,6 +65,8 @@ router.post('/', checkJWT, async (req, res) => {
       })
     }
 
+    await Profil.increaseUserFameRating(e(req.body.viewed_id), ratings.VIEWS)
+    
     return res.json({
       success: true,
     });

@@ -193,20 +193,11 @@ class User {
         }
     }
 
-    // email VARCHAR(255), \
-    // username VARCHAR(30), \
-    // first_name VARCHAR(30), \
-    // last_name VARCHAR(30), \
-    // password VARCHAR(255), \
-    // avatar VARCHAR(255) DEFAULT "default.png", \
-    // confirmed TINYINT DEFAULT 0 NOT NULL, \
-    // created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, \
-    // updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL, \
-
     static async findOne(email, username) {
         try {
             const sql = 'SELECT DISTINCT username, first_name, last_name, avatar, confirmed, created_at, updated_at FROM users \
-                WHERE users.email = ? \
+                WHERE users.spam = 0 AND \
+                users.email = ? \
                 OR users.username = ?'
 
             const result = await connection.query({
@@ -406,7 +397,7 @@ class User {
                     LEFT JOIN tags ON tags.id = current_user_tags.tag_id \
                     LEFT JOIN profils ON profils.user_id = users.id \
                     LEFT JOIN location_users ON location_users.user_id = users.id \
-                    WHERE users.id != ? \
+                    WHERE users.id != ? AND users.spam = 0 \
                     GROUP BY users.id'
 
             users = await connection.query({
@@ -421,6 +412,7 @@ class User {
                     LEFT JOIN tags ON tags.id = current_user_tags.tag_id \
                     LEFT JOIN profils ON profils.user_id = users.id \
                     LEFT JOIN location_users ON location_users.user_id = users.id \
+                    WHERE users.spam = 0 \
                     GROUP BY users.id'
 
             users = await connection.query({

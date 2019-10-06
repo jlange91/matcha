@@ -40,7 +40,7 @@ router.post('/', checkJWT, async (req, res) => {
     if (await User.isSameAvatar(check.id, req.body.image.substring(19)))
       await User.updateAvatar(check.id, "default.png");
   }
-
+  await Profil.decreaseUserFameRating(e(req.body.viewed_id), ratings.UPLOAD)
   return res.json({
       'success': true,
   })

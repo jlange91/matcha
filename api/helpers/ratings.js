@@ -7,3 +7,4 @@ function define(name, value) {
 
 define("LIKES", 5);
 define("VIEWS", 1);
+define("UPLOAD", 1);
