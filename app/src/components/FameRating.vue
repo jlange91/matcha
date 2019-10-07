@@ -20,7 +20,7 @@ export default {
   },
   computed: {
     fuckMeImFamous() {
-      return this.fame_rating >= 100 ? 100 :  this.fame_rating
+      return this.fame_rating >= 100 ? 100 :  this.fame_rating >= 0 ? this.fame_rating : 0
     },
     width() {
       return `width: ${this.fuckMeImFamous}%`
