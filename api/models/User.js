@@ -195,7 +195,7 @@ class User {
 
     static async findOne(email, username) {
         try {
-            const sql = 'SELECT DISTINCT username, first_name, last_name, avatar, confirmed, created_at, updated_at FROM users \
+            const sql = 'SELECT DISTINCT id, email, username, first_name, last_name, avatar, confirmed, created_at, updated_at FROM users \
                 WHERE users.spam = 0 AND \
                 users.email = ? \
                 OR users.username = ?'
@@ -244,20 +244,20 @@ class User {
 
     static async passwordReset(user) {
         try {
-            // check if password reset exist for that user
-            const passwordReset = await User.hasPasswordReset(e(user.id))
+  
+            const passwordReset = await User.hasPasswordReset(user[0].id)
             // if it exist delete it
-            const u = []
+            let u = []
             if (passwordReset)
                 u = await User.deletePasswordReset(user[0].email)
 
             const hash = crypto.randomBytes(16).toString('hex');
-
-            const newPasswordReset = null
+            let newPasswordReset = null
             if (u.length)
-                newPasswordReset = await User.createPasswordReset(u[0].id, u[0].email, hash)
+                newPasswordReset = await User.createPasswordReset(user[0].id, user[0].email, hash)
 
-            if (!u.length || !newPasswordReset)
+                
+            if (!newPasswordReset)
                 return false
 
             const mail = await User.sendPasswordResetEmail(user[0].email, hash)
@@ -359,7 +359,7 @@ class User {
 
     static async isSameAvatar(id, filename) {
         try {
-          const sql = 'SELECT username, first_name, last_name, avatar, confirmed, created_at, updated_at FROM users \
+          const sql = 'SELECT id, email, username, first_name, last_name, avatar, confirmed, created_at, updated_at FROM users \
                       WHERE id = ? AND avatar = ?'
 
           const result = await connection.query({
@@ -394,7 +394,7 @@ class User {
         let sql, users
 
         if (id) {
-            sql = 'SELECT DISTINCT users.username, users.first_name, users.last_name, users.avatar, users.confirmed, users.created_at, users.updated_at, GROUP_CONCAT(tags.name) AS user_tags, profils.* , location_users.lat, location_users.lng\
+            sql = 'SELECT DISTINCT users.id, users.email, users.username, users.first_name, users.last_name, users.avatar, users.confirmed, users.created_at, users.updated_at, GROUP_CONCAT(tags.name) AS user_tags, profils.* , location_users.lat, location_users.lng\
                     FROM users \
                     LEFT JOIN user_tag AS current_user_tags ON current_user_tags.user_id = users.id \
                     LEFT JOIN tags ON tags.id = current_user_tags.tag_id \
@@ -409,7 +409,7 @@ class User {
                 values: [e(id)]
             })
         }   else {
-            sql = 'SELECT DISTINCT users.username, users.first_name, users.last_name, users.avatar, users.confirmed, users.created_at, users.updated_at, GROUP_CONCAT(tags.name) AS user_tags, profils.*, location_users.lat, location_users.lng\
+            sql = 'SELECT DISTINCT  users.id, users.email, users.username, users.first_name, users.last_name, users.avatar, users.confirmed, users.created_at, users.updated_at, GROUP_CONCAT(tags.name) AS user_tags, profils.*, location_users.lat, location_users.lng\
                     FROM users \
                     LEFT JOIN user_tag AS current_user_tags ON current_user_tags.user_id = users.id \
                     LEFT JOIN tags ON tags.id = current_user_tags.tag_id \
@@ -448,7 +448,7 @@ class User {
 
     static async getById(id) {
       try {
-        const sql = 'SELECT DISTINCT users.username, users.first_name, users.last_name, users.avatar, users.confirmed, users.created_at, users.updated_at FROM users \
+        const sql = 'SELECT DISTINCT  users.id, users.email, users.username, users.first_name, users.last_name, users.avatar, users.confirmed, users.created_at, users.updated_at FROM users \
                       WHERE users.id = ?'
 
         const user = await connection.query({
@@ -464,7 +464,7 @@ class User {
 
     static async getByUsername(username) {
       try {
-        const sql = 'SELECT DISTINCT users.username, users.first_name, users.last_name, users.avatar, users.confirmed, users.created_at, users.updated_at, location_users.lat, location_users.lng, profils.user_id, profils.birthdate, profils.gender, profils.sexual_orientation, profils.biography, profils.completed  FROM users \
+        const sql = 'SELECT DISTINCT  users.id, users.email, users.username, users.first_name, users.last_name, users.avatar, users.confirmed, users.created_at, users.updated_at, location_users.lat, location_users.lng, profils.user_id, profils.birthdate, profils.gender, profils.sexual_orientation, profils.biography, profils.completed  FROM users \
                         INNER JOIN profils ON profils.user_id = users.id \
                         INNER JOIN location_users ON location_users.user_id = users.id \
                       WHERE users.username = ?'
