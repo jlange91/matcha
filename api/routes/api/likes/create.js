@@ -27,6 +27,8 @@ router.post('/', checkJWT, async (req, res) => {
       return (false);
     }
 
+    // CHECK IF THE USER HAS A PROFILE PIC 
+
     // did the user already like this person ?
     let sql = 'SELECT * FROM likes WHERE user_id = ? AND liked_id = ?'
 

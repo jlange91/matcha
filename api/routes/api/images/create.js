@@ -42,10 +42,6 @@ router.post('/', checkJWT, async (req, res) => {
 
   form.maxFileSize = 1500 * 1024 * 1024;
 
-
-  const uploads = [];
-
-
   form.on("fileBegin", async function(err, file){
       const extension = path.extname(file.name)
       const newfileName = uuidv4().replace(/-/g, '') + extension
