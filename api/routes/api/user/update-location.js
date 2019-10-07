@@ -60,7 +60,7 @@ router.post('/', [
             const updated = await connection.query({
                 sql,
                 timeout: 40000,
-                values: [updatedLocation, lat, lng, e(check.id)]
+                values: [e(updatedLocation), e(lat), e(lng), e(check.id)]
             })
 
 

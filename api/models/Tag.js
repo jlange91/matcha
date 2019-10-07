@@ -10,7 +10,7 @@ class Tag {
       const newTag = await connection.query({
           sql,
           timeout: 40000,
-          values: [tag]
+          values: [e(tag)]
       })
       return newTag
     } catch (error) {
@@ -40,7 +40,7 @@ class Tag {
         existingTag = await connection.query({
             sql,
             timeout: 40000,
-            values: [name]
+            values: [e(name)]
         })
         return existingTag;
     } catch (error) {

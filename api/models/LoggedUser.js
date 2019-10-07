@@ -1,4 +1,5 @@
 const connection = require('../middleware/database')
+const e = require('escape-html')
 
 class LoggedUser {
 
@@ -6,7 +7,7 @@ class LoggedUser {
         try {
             const sql = 'SELECT DISTINCT * FROM logged_users WHERE user_id = ?'
 
-            const result = await connection.query({sql, timeout: 40000, values: [userId]})
+            const result = await connection.query({sql, timeout: 40000, values: [e(userId)]})
             if (result && !result.length)
                 return null
             return result
@@ -19,7 +20,7 @@ class LoggedUser {
         try {
             const sql = 'INSERT INTO logged_users (user_id, socket_id) VALUES (?,?)'
 
-            const result = await connection.query({sql, timeout: 40000, values: [userId, socketId]})
+            const result = await connection.query({sql, timeout: 40000, values: [e(userId), e(socketId)]})
             if (result && !result.length)
                 return false
             return true
@@ -32,7 +33,7 @@ class LoggedUser {
         try {
             const sql = 'DELETE FROM logged_users WHERE socket_id = ?'
 
-            const result = await connection.query({sql, timeout: 40000, values: [socketId]})
+            const result = await connection.query({sql, timeout: 40000, values: [e(socketId)]})
 
             if (!result)
                 return false

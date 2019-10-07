@@ -6,6 +6,7 @@ const {
     check,
     validationResult
 } = require('express-validator/check');
+const e = require('escape-html')
 
 router.post('/', [
     check('email', 'Your email is not valid').trim().escape().not().isEmpty().isEmail().normalizeEmail(),
@@ -37,7 +38,7 @@ router.post('/', [
         const result = await connection.query({
             sql,
             timeout: 40000,
-            values: [email, hash]
+            values: [e(email), e(hash)]
         })
 
         if (result && !result.length) {

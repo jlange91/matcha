@@ -1,4 +1,5 @@
 const connection = require('../middleware/database')
+const e = require('escape-html')
 
 class EmailConfirmation {
 
@@ -8,7 +9,7 @@ class EmailConfirmation {
                         WHERE email_confirmations.email = ? \
                         AND email_confirmations.hash = ?'
 
-            const result = await connection.query({sql, timeout: 40000, values: [email, hash]})
+            const result = await connection.query({sql, timeout: 40000, values: [e(email), e(hash)]})
             if (result && !result.length)
                 return false
             return true // result[0]
@@ -22,7 +23,7 @@ class EmailConfirmation {
             const sql = 'DELETE FROM email_confirmations \
                          WHERE email = ?'
 
-            const result = await connection.query({sql, timeout: 40000, values: [email]})
+            const result = await connection.query({sql, timeout: 40000, values: [e(email)]})
 
             if (!result)
                 return false

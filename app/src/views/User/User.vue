@@ -41,7 +41,7 @@
       class="focus:outline-none hover:bg-teal-700 bg-teal-600 text-white uppercase w-full py-2 font-semibold"
     >{{buttonText}}</button>
 
-        <button  @click="spam(getUserData.user_info)" class="mt-8 bg-red-600 text-white hover:bg-red-400 px-4 py-2 rounded font-semibold cursor-pointer">
+        <button  v-if="getLogged" @click="spam(getUserData.user_info)" class="mt-8 bg-red-600 text-white hover:bg-red-400 px-4 py-2 rounded font-semibold cursor-pointer">
           Spam
         </button>
         </div>

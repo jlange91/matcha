@@ -12,7 +12,7 @@ class LocationUsers {
       const location = await connection.query({
           sql,
           timeout: 40000,
-          values: [userId]
+          values: [e(userId)]
       })
       return location;
     } catch (error) {

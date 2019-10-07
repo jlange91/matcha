@@ -28,7 +28,7 @@ class UserTag {
       const user_tags = await connection.query({
           sql,
           timeout: 40000,
-          values: [userId]
+          values: [e(userId)]
       })
       return user_tags;
     } catch (error) {

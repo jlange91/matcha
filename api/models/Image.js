@@ -60,7 +60,7 @@ class Image {
       const images = await connection.query({
                       sql,
                       timeout: 40000,
-                      values: [id]
+                      values: [e(id)]
                   })
 
       return images || [];

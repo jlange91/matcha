@@ -28,7 +28,7 @@ class Profil {
       const profil = await connection.query({
           sql,
           timeout: 40000,
-          values: [userId]
+          values: [e(userId)]
       })
       return profil;
     } catch (error) {
@@ -44,7 +44,7 @@ class Profil {
       const fameRating = await connection.query({
           sql,
           timeout: 40000,
-          values: [userId]
+          values: [e(userId)]
       })
       return fameRating;
     } catch (error) {

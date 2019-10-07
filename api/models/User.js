@@ -53,7 +53,7 @@ class User {
           const result = await connection.query({
               sql,
               timeout: 40000,
-              values: [userId]
+              values: [e(userId)]
           })
           return result
         } catch (error) {
@@ -69,7 +69,7 @@ class User {
             const result = await connection.query({
                 sql,
                 timeout: 40000,
-                values: [userId, email, hash]
+                values: [e(userId), e(email), e(hash)]
             })
             if (!result) {
                 return false
@@ -109,7 +109,7 @@ class User {
             let result = await connection.query({
                 sql,
                 timeout: 40000,
-                values: [createdUser]
+                values: [e(createdUser)]
             })
 
             if (!result)
@@ -132,11 +132,9 @@ class User {
             const result = await connection.query({
                 sql,
                 timeout: 40000,
-                values: [id, geo, location.ll[0], location.ll[1], geo, location.ll[0], location.ll[1]]
+                values: [e(id), e(geo), e(location.ll[0]), e(location.ll[1]), e(geo), e(location.ll[0]), e(location.ll[1])]
             })
 
-            console.log('SQL ' + sql)
-            console.log('result ' + result)
             if (!result)
                 return false
             return true
@@ -156,7 +154,7 @@ class User {
             const result = await connection.query({
                 sql,
                 timeout: 40000,
-                values: [hash, email]
+                values: [e(hash), e(email)]
             })
 
             if (!result)
@@ -178,11 +176,11 @@ class User {
                 sql,
                 timeout: 40000, // 40s
                 values: [
-                    newUser.email,
-                    newUser.username,
-                    newUser.first_name,
-                    newUser.last_name,
-                    hash,
+                    e(newUser.email),
+                    e(newUser.username),
+                    e(newUser.first_name),
+                    e(newUser.last_name),
+                    e(hash),
                 ]
             })
             if (!result)
@@ -203,7 +201,7 @@ class User {
             const result = await connection.query({
                 sql,
                 timeout: 40000,
-                values: [email, username]
+                values: [e(email), e(username)]
             })
             if (result && !result.length)
                 return false
@@ -224,7 +222,7 @@ class User {
             const result = await connection.query({
                 sql,
                 timeout: 40000,
-                values: [email, username]
+                values: [e(email), e(username)]
             })
             if (result && !result.length)
                 return false
@@ -244,7 +242,7 @@ class User {
             const result = await connection.query({
                 sql,
                 timeout: 40000,
-                values: [email]
+                values: [e(email)]
             })
             if (!result)
                 return false
@@ -333,7 +331,7 @@ class User {
             const result = await connection.query({
                 sql,
                 timeout: 40000,
-                values: [email]
+                values: [e(email)]
             })
 
             if (!result)
@@ -352,7 +350,7 @@ class User {
             const result = await connection.query({
                 sql,
                 timeout: 40000,
-                values: [userId]
+                values: [e(userId)]
             })
             if (!result)
                 return false
@@ -370,7 +368,7 @@ class User {
             const result = await connection.query({
                 sql,
                 timeout: 40000,
-                values: [userId]
+                values: [e(userId)]
             })
             return (result && result.length) ? result[0].username : false;
         } catch (error) {
@@ -459,7 +457,7 @@ class User {
         const newUser = await connection.query({
             sql,
             timeout: 40000,
-            values: [e(user.email), e(user.username), e(user.first_name), e(user.last_name), confirmed, e(userId)]
+            values: [e(user.email), e(user.username), e(user.first_name), e(user.last_name), e(confirmed), e(userId)]
         })
         return newUser;
       } catch (error) {
@@ -475,7 +473,7 @@ class User {
         const user = await connection.query({
             sql,
             timeout: 40000,
-            values: [id]
+            values: [e(id)]
         })
         return user;
       } catch (error) {
@@ -485,7 +483,7 @@ class User {
 
     static async getByUsername(username) {
       try {
-        const sql = 'SELECT DISTINCT  users.id, users.email, users.username, users.first_name, users.last_name, users.avatar, users.confirmed, users.created_at, users.updated_at, location_users.lat, location_users.lng, profils.user_id, profils.birthdate, profils.gender, profils.sexual_orientation, profils.biography, profils.completed  FROM users \
+        const sql = 'SELECT DISTINCT  users.id, users.email, users.username, users.first_name, users.last_name, users.avatar, users.confirmed, users.created_at, users.updated_at, location_users.lat, location_users.lng, profils.fame_rating, profils.user_id, profils.birthdate, profils.gender, profils.sexual_orientation, profils.biography, profils.completed  FROM users \
                         INNER JOIN profils ON profils.user_id = users.id \
                         INNER JOIN location_users ON location_users.user_id = users.id \
                       WHERE users.username = ?'
@@ -493,7 +491,7 @@ class User {
         const user = await connection.query({
             sql,
             timeout: 40000,
-            values: [username]
+            values: [e(username)]
         })
         return user;
       } catch (error) {
