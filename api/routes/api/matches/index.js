@@ -36,7 +36,7 @@ router.post('/', checkJWT, async (req, res) => {
               INNER JOIN profils AS matched_user_profil ON matched_user_profil.user_id = matched_user.id \
               INNER JOIN location_users AS matched_user_location ON matched_user_location.user_id = matched_user.id \
               INNER JOIN tags ON tags.id = matched_tags.tag_id \
-              WHERE (users.id = ? AND matched_user.id != ?) \
+              WHERE (users.id = ? AND matched_user.id != ? AND matched_user.spam = 0) \
                 GROUP BY matched_user.id, users.id \
                 ORDER BY distance ASC'
 

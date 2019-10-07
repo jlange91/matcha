@@ -115,8 +115,11 @@ export default {
     }
   },
   mounted() {
+    setTimeout(() => {
 
-    if (this.user.user_tags) this.user_tags = this.user.user_tags.split(",");
+      if (this.user && this.user.user_tags.length) 
+        this.user_tags = this.user.user_tags.split(",");
+    }, 1000)
   }
 };
 </script>

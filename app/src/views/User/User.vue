@@ -41,11 +41,14 @@
       class="focus:outline-none hover:bg-teal-700 bg-teal-600 text-white uppercase w-full py-2 font-semibold"
     >{{buttonText}}</button>
 
+        <button  @click="spam(getUserData.user_info)" class="mt-8 bg-red-600 text-white hover:bg-red-400 px-4 py-2 rounded font-semibold cursor-pointer">
+          Spam
+        </button>
         </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import axios from "../../middleware/axios";
 
 export default {
@@ -55,13 +58,26 @@ export default {
     }
   },
   mounted() {
-    this.userLikes()
-    if (this.getLogged)
-    this.addViewToUser()
+    setTimeout(() => {
+      if (this.getUserData.user_info.id === this.getSessionUserId)
+        this.$router.push('/')
+      this.userLikes()
+      if (this.getLogged)
+      this.addViewToUser()
+    }, 500)
   },
   methods: {
     addViewToUser() {
       axios.post("view", { viewed_id: this.getUserData.user_info.id }).then().catch(e => console.log(e));
+    },
+    spam(user) {
+      axios.post("spam", { spam_id: user.id }).then((res) => {
+        if(res.data.success) {
+      this.setMessage("Your signaled this user as spam");
+        this.setSuccess(true);
+        this.setVisibility(true);
+        }
+      }).catch(e => console.log(e));
     },
     parseLike(user) {
       if(this.isLiked) {
@@ -100,11 +116,18 @@ export default {
       });
       this.likes = ret
     },
+       ...mapActions({
+
+      setVisibility: "messages/setVisibility",
+      setMessage: "messages/setMessage",
+      setSuccess: "messages/setSuccess",
+    }),
   },
   computed: {
     ...mapGetters({
       getUserData: 'user/getData',
-      getLogged: 'session/getLogged'
+      getLogged: 'session/getLogged',
+      getSessionUserId: 'session/getUserId'
     }),
     buttonText() {
       return this.isLiked ? "Unlike" : "Like";
