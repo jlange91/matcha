@@ -214,6 +214,27 @@ class User {
 
     }
 
+    static async findOneWithPassword(email, username) {
+        try {
+            const sql = 'SELECT DISTINCT id, email, username, password, first_name, last_name, avatar, confirmed, created_at, updated_at FROM users \
+                WHERE users.spam = 0 AND \
+                users.email = ? \
+                OR users.username = ?'
+
+            const result = await connection.query({
+                sql,
+                timeout: 40000,
+                values: [email, username]
+            })
+            if (result && !result.length)
+                return false
+            return result
+        } catch (error) {
+            throw new Error('SELECT failed in model User.findOne ' + error)
+        }
+
+    }
+
     static async confirmAccount(email) {
         try {
             const sql = 'UPDATE users \

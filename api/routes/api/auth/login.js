@@ -43,7 +43,7 @@ router.post('/', [
             ll
         }
 
-        let result = await User.findOne(login, login)
+        let result = await User.findOneWithPassword(login, login)
         if (!result) {
             return res.json({
                 'success': false,
