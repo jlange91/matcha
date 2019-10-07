@@ -23,7 +23,7 @@ class UsersFaker {
         sql = 'INSERT IGNORE INTO users \
               (avatar, email, username, first_name, last_name, password, confirmed) \
               VALUES ( \
-              "4390c3af2bad41ffa2464481d758c443.jpg", \
+              "d6d894d4853547a2ac1ec25029f0cc84.jpg", \
               "dadacruz@student.42.fr", \
               "dadacruz", \
               "David", \

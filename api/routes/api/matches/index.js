@@ -40,13 +40,12 @@ router.post('/', checkJWT, async (req, res) => {
                 GROUP BY matched_user.id, users.id \
                 ORDER BY distance ASC'
 
-
-    const possible_matches = await connection.query({
-      sql,
-      timeout: 40000,
-      values: [e(check.id), e(check.id)]
-    })
- 
+                const possible_matches = await connection.query({
+                  sql,
+                  timeout: 40000,
+                  values: [e(check.id), e(check.id)]
+                })
+                
     if (!possible_matches) {
       res.json({
         'success': false,
