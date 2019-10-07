@@ -35,7 +35,7 @@ class Profil {
         throw new Error('UPDATE failed in model Profil.updateProfil ' + error)
     }
   }
-  
+
   static async getUserFameRating(userId) {
     try {
       let sql = 'SELECT profils.fame_rating FROM profils \
@@ -51,33 +51,33 @@ class Profil {
         throw new Error('SELECT failed in model Profil.getUserFameRating ' + error)
     }
   }
-  
+
   static async increaseUserFameRating(userId, value) {
     try {
 
       let fameRating = await this.getUserFameRating(userId)
-   
+
       if (fameRating[0]) {
         let newFameRating = fameRating[0].fame_rating + value
 
         let sql = 'UPDATE profils \
                    SET fame_rating = ? \
                    WHERE profils.user_id = ?'
-  
+
         fameRating = await connection.query({
           sql,
           timeout: 40000,
           values: [e(newFameRating), e(userId)]
         })
-  
+
         return fameRating;
       }
-     
+
     } catch (error) {
         throw new Error('UPDATE failed in model Profil.increaseUserFameRating ' + error)
     }
   }
-  
+
   static async decreaseUserFameRating(userId, value) {
     try {
       let fameRating = await this.getUserFameRating(userId)
@@ -95,7 +95,7 @@ class Profil {
         timeout: 40000,
         values: [e(newFameRating), e(userId)]
       })
-      
+
       return fameRating;
       }
     } catch (error) {

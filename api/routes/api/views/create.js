@@ -6,7 +6,8 @@ const connection = require('../../../middleware/database')
 const {
   checkJWT
 } = require('../../../middleware/check_token')
-
+const Profil = require('../../../models/Profil.js')
+const ratings = require('../../../helpers/ratings')
 
 router.post('/', checkJWT, async (req, res) => {
 
@@ -36,7 +37,7 @@ router.post('/', checkJWT, async (req, res) => {
       sql = 'UPDATE views \
       SET count = ? \
       WHERE user_id = ? AND viewed_id = ?'
-      
+
       await connection.query({
           sql,
           timeout: 40000,
@@ -66,7 +67,7 @@ router.post('/', checkJWT, async (req, res) => {
     }
 
     await Profil.increaseUserFameRating(e(req.body.viewed_id), ratings.VIEWS)
-    
+
     return res.json({
       success: true,
     });

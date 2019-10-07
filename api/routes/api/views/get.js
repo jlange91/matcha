@@ -32,15 +32,13 @@ router.post('/', checkJWT, async (req, res) => {
           'success': false,
           'message': 'You have no views'
         })
-    
-    console.log(users)
 
     return res.json({
           'success': true,
           'user_views': users
         })
-    
-   
+
+
 
   } catch (error) {
     throw new Error('Relations root error ' + error)

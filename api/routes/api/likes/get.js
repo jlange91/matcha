@@ -32,15 +32,13 @@ router.post('/', checkJWT, async (req, res) => {
           'success': false,
           'message': 'You have no likes'
         })
-    
-    console.log(users)
 
     return res.json({
           'success': true,
           'user_likes': users
         })
-    
-   
+
+
 
   } catch (error) {
     throw new Error('Relations root error ' + error)

@@ -5,7 +5,9 @@ const formidable = require('formidable')
 const path = require('path')
 const uuidv4 = require('uuid/v4');
 const Image = require('../../../models/Image')
-
+const Profil = require('../../../models/Profil')
+const ratings = require('../../../helpers/ratings')
+const e = require('escape-html')
 
 const {
     checkJWT

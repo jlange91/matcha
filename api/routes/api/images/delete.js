@@ -6,6 +6,8 @@ const e = require('escape-html')
 const fs = require('fs')
 const Image = require('../../../models/Image')
 const User = require('../../../models/User')
+const Profil = require('../../../models/Profil')
+const ratings = require('../../../helpers/ratings')
 
 const {
     checkJWT
