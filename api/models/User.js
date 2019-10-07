@@ -245,16 +245,19 @@ class User {
     static async passwordReset(user) {
         try {
             // check if password reset exist for that user
-            const passwordReset = await User.hasPasswordReset(user.id)
+            const passwordReset = await User.hasPasswordReset(e(user.id))
             // if it exist delete it
+            const u = []
             if (passwordReset)
-                await User.deletePasswordReset(user[0].email)
+                u = await User.deletePasswordReset(user[0].email)
 
             const hash = crypto.randomBytes(16).toString('hex');
 
-            const newPasswordReset = await User.createPasswordReset(user[0].id, user[0].email, hash)
+            const newPasswordReset = null
+            if (u.length)
+                newPasswordReset = await User.createPasswordReset(u[0].id, u[0].email, hash)
 
-            if (!newPasswordReset)
+            if (!u.length || !newPasswordReset)
                 return false
 
             const mail = await User.sendPasswordResetEmail(user[0].email, hash)
@@ -290,7 +293,7 @@ class User {
             const result = await connection.query({
                 sql,
                 timeout: 40000,
-                values: [userId, userEmail, hash]
+                values: [e(userId), e(userEmail), e(hash)]
             })
             if (!result)
                 return false
