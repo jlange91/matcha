@@ -81,7 +81,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-
+import axios from "../../middleware/axios";
 import socket from '../../middleware/socket-instance';
 
 export default {
@@ -99,7 +99,8 @@ export default {
     //     this.$socket.emit('login', true)
     // },
     async logout() {
-      const token = localStorage.getItem("token");
+      axios.post('logout').then(() => {
+const token = localStorage.getItem("token");
       if (token) localStorage.removeItem("token");
       const token_exp = localStorage.getItem("token_exp");
       if (token_exp) localStorage.removeItem("token_exp");
@@ -113,6 +114,8 @@ export default {
       this.setSuccess(true);
       this.setVisibility(true);
       this.$router.push("/");
+      }).catch()
+      
     },
     ...mapActions({
       clearAuth: "session/clearSession",

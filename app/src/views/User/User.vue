@@ -4,11 +4,16 @@
             <img v-if="getUserData.user_info.avatar != null" :src="'/api/v1/images/get/' + getUserData.user_info.avatar" :alt="getUserData.user_info.username" class="rounded-full w-32 h-32">
             <img v-else src="/api/v1/images/get/default.png" class="rounded-full w-32 h-32">
           </div>
+          <div v-if="this.getLogged">
+            <button class="mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+  {{ logged ? "Connected" : logged === undefined ? "Never Connected" : "Last seen at ..."}}
+</button>
+          </div>
            <fame-rating :fame_rating="getUserData.user_info.fame_rating"/>
           <div>
             Username: {{getUserData.user_info.username}}
-            <br>
-            Email: {{getUserData.user_info.email}}
+            <!-- <br>
+            Email: {{getUserData.user_info.email}} -->
             <br>
             First name: {{getUserData.user_info.first_name}}
             <br>
@@ -55,7 +60,8 @@ import axios from "../../middleware/axios";
 export default {
   data() {
     return {
-       likes: []
+       likes: [],
+       logged: false
     }
   },
   mounted() {
@@ -63,11 +69,16 @@ export default {
       if (this.getUserData.user_info.id === this.getSessionUserId)
         this.$router.push('/')
       this.userLikes()
-      if (this.getLogged)
-      this.addViewToUser()
+      if (this.getLogged) {
+        this.isLogged()
+        this.addViewToUser()
+      }
     }, 500)
   },
   methods: {
+    isLogged() {
+      axios.post("logged_user", { user_id: this.getUserData.user_info.id }).then((res) => this.logged = res.data.is_logged.last_seen).catch(e => console.log(e));
+    },
     addViewToUser() {
       axios.post("view", { viewed_id: this.getUserData.user_info.id }).then().catch(e => console.log(e));
     },

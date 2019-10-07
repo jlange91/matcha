@@ -62,6 +62,9 @@ app.use(`/${version}/view`, require('./routes/api/views/create'))
 app.use(`/${version}/messages/create`, require('./routes/api/messages/create'))
 app.use(`/${version}/messages`, require('./routes/api/messages'))
 
+app.use(`/${version}/logged_user`, require('./routes/api/logged/logged_user.js'))
+app.use(`/${version}/logout`, require('./routes/api/logged/logout.js'))
+
 
 app.use(`/${version}/notifications/`, require('./routes/api/notifications/'))
 app.use(`/${version}/notifications/setSeen`, require('./routes/api/notifications/setSeen'))

@@ -89,20 +89,20 @@ const router = new Router({
 
 
 const logout = async () => {
-  const token = localStorage.getItem("token");
-  if (token) localStorage.removeItem("token");
-  const token_exp = localStorage.getItem("token_exp");
-  if (token_exp) localStorage.removeItem("token_exp");
-  socket.disconnect();
-  socket.close();
-  this.unsetSocket();
-  this.clearAuth();
-  this.clearUser();
-  this.clearProfil();
-  this.setMessage("You are logged out");
-  this.setSuccess(true);
-  this.setVisibility(true);
-  this.$router.push("/");
+  // const token = localStorage.getItem("token");
+  // if (token) localStorage.removeItem("token");
+  // const token_exp = localStorage.getItem("token_exp");
+  // if (token_exp) localStorage.removeItem("token_exp");
+  // socket.disconnect();
+  // socket.close();
+  // this.unsetSocket();
+  // this.clearAuth();
+  // this.clearUser();
+  // this.clearProfil();
+  // this.setMessage("You are logged out");
+  // this.setSuccess(true);
+  // this.setVisibility(true);
+  // this.$router.push("/");
 }
 
 async function requirePasswordReset(to, from, next) {
@@ -140,6 +140,7 @@ async function requirePasswordReset(to, from, next) {
     message.state.message = result.data.message
     return next()
   } catch (e) {
+
     next('/')
   }
 }
@@ -167,6 +168,7 @@ async function requireUserHash(to, from, next) {
     message.state.message = result.data.message
     return next('/login')
   } catch (e) {
+
     return next('/')
   }
 }
