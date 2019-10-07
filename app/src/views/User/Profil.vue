@@ -7,6 +7,7 @@
             <img v-if="getUser.avatar != null" :src="'/api/v1/images/get/' + getUser.avatar" :alt="getUser.username" class="rounded-full w-32 h-32">
             <img v-else src="/api/v1/images/get/default.png" class="rounded-full w-32 h-32">
           </div>
+          <fame-rating :fame_rating="getProfil.fame_rating"/>
           <div>
             Username: {{getUser.username}}
             <br>
