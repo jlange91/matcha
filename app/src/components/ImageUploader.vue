@@ -93,6 +93,7 @@ export default {
       setSuccess: "messages/setSuccess"
     }),
     chooseProfilImage(imageName) {
+      let self = this
       axios.post('/user/avatar', {
         image: imageName.substring(19)
       })

@@ -65,9 +65,9 @@ export default {
           .catch(e => console.log("e ", e))
     },
     displayNotifications() {
-      this.is_visible = !this.is_visible
-      if (this.is_visible === true)
-      {
+      if (this.notificationsCount > 0)
+        this.is_visible = !this.is_visible
+      if (this.is_visible === true) {
         axios
           .post("notifications/setSeen", {
             notifications: this.notifications

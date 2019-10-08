@@ -77,7 +77,7 @@ class Image {
                   WHERE images.user_id = ? \
                   AND images.name = ?'
 
-      await connection.query({
+      return await connection.query({
           sql,
           timeout: 40000,
           values: [e(id), e(filename)]

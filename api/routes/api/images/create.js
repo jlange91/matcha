@@ -53,9 +53,10 @@ router.post('/', checkJWT, async (req, res) => {
 
       if(!(await Image.push(check.id, file.name)))
           return res.json({success: false, message: "upload failed"})
-      await Profil.increaseUserFameRating(e(req.body.viewed_id), ratings.UPLOAD)
+      const famePromise = await Profil.increaseUserFameRating(e(check.id), ratings.UPLOAD)
+      if (!famePromise)
+        return res.json({success: false})
       return res.json({success: true})
-
   });
 
   form.on("error", function(error){

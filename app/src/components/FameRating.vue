@@ -1,11 +1,6 @@
 <template>
   <div>
-    <div class="shadow w-full bg-gray-300 my-4">
-      <div
-        class="bg-blue-600 text-xs leading-none py-1 text-center text-white rounded"
-        :style="width"
-      >{{fuckMeImFamous}}%</div>
-    </div>
+    <p class="my-4">{{fuckMeImFamous}} Points</p>
   </div>
 </template>
 
@@ -20,10 +15,7 @@ export default {
   },
   computed: {
     fuckMeImFamous() {
-      return this.fame_rating >= 100 ? 100 :  this.fame_rating >= 0 ? this.fame_rating : 0
-    },
-    width() {
-      return `width: ${this.fuckMeImFamous}%`
+      return this.fame_rating >= 0 ? this.fame_rating : 0
     }
   }
 };

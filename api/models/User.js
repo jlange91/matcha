@@ -486,7 +486,7 @@ class User {
         const sql = 'SELECT DISTINCT  users.id, users.email, users.username, users.first_name, users.last_name, users.avatar, users.confirmed, users.created_at, users.updated_at, location_users.lat, location_users.lng, profils.fame_rating, profils.user_id, profils.birthdate, profils.gender, profils.sexual_orientation, profils.biography, profils.completed  FROM users \
                         INNER JOIN profils ON profils.user_id = users.id \
                         INNER JOIN location_users ON location_users.user_id = users.id \
-                      WHERE users.username = ?'
+                      WHERE users.username = ? AND users.spam = 0'
 
         const user = await connection.query({
             sql,
