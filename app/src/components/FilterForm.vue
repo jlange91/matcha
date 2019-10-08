@@ -32,7 +32,7 @@ import VueSlider from 'vue-slider-component'
 import 'vue-slider-component/theme/default.css'
 
 export default {
-  name: "FiltersForm",
+  name: "FilterForm",
   props: {
     all_users: {
       type: Array,
@@ -82,7 +82,6 @@ export default {
           if (tags.includes(val) === true)
             count++
         })
-          // if (count == tags.length)
         return (count == this.filterTags.length) ? true : false
       }
 
