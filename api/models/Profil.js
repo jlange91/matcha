@@ -46,6 +46,7 @@ class Profil {
           timeout: 40000,
           values: [e(userId)]
       })
+      console.log(fameRating)
       return fameRating;
     } catch (error) {
         throw new Error('SELECT failed in model Profil.getUserFameRating ' + error)

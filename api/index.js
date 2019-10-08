@@ -63,6 +63,7 @@ app.use(`/${version}/messages/create`, require('./routes/api/messages/create'))
 app.use(`/${version}/messages`, require('./routes/api/messages'))
 
 app.use(`/${version}/logged_user`, require('./routes/api/logged/logged_user.js'))
+
 app.use(`/${version}/logout`, require('./routes/api/logged/logout.js'))
 
 
