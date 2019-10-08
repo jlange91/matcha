@@ -114,7 +114,7 @@ const token = localStorage.getItem("token");
       this.setSuccess(true);
       this.setVisibility(true);
       this.$router.push("/");
-      }).catch()
+      }).catch(e => console.log(e))
       
     },
     ...mapActions({
