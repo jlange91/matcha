@@ -118,8 +118,8 @@ export default {
   mounted() {
     setTimeout(() => {
 
-      if (this.user && this.user.user_tags.length) 
-        this.user_tags = this.user.user_tags.split(",");
+      this.user_tags = (typeof(this.user.user_tags) == 'string') ?
+        this.user.user_tags.split(",") : []
     }, 1000)
   }
 };

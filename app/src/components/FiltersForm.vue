@@ -1,13 +1,16 @@
 <template>
   <div>
+    Filter by age range<br/>
     <div class="inline">
-      <input class="float-left" type="checkbox">
-      <vue-slider class="ml-6" v-model="filterAge" :enable-cross="false" :min="0" :max="100"></vue-slider>
+      <input class="float-left" type="checkbox" @click="setActiveFilter(1)">
+      <vue-slider class="ml-6" v-model="filterAge" :enable-cross="false" :min="0" :max="100" :disabled="disabledFilter(1)"></vue-slider>
     </div>
+    Filter by max distance in km<br/>
     <div class="inline">
-      <input class="float-left" type="checkbox">
-      <vue-slider class="ml-6" v-model="filterLocation" :enable-cross="false" :min="0" :max="1000"></vue-slider>
+      <input class="float-left" type="checkbox" @click="setActiveFilter(2)">
+      <vue-slider class="ml-6" v-model="filterLocation" :enable-cross="false" :min="0" :max="1000" :disabled="disabledFilter(2)"></vue-slider>
     </div>
+    <br/>Filter by tags<br/>
     <div class="w-full px-3 mb-6">
       <p class="text-gray-900 text-sm py-2">Select or create some tags</p>
       <v-select
@@ -47,7 +50,8 @@ export default {
       user_location: [],
       filterAge: [0, 100],
       filterLocation: 100,
-      filterTags: []
+      filterTags: [],
+      activeFilter: []
     };
   },
   computed: {
@@ -56,55 +60,7 @@ export default {
       getTags: 'tags/getTags',
     }),
     filteredArray() {
-    //   const tags = ["HTTP overriding", "Syrian Arab Republic a"]
-    //
-    //   const sortByAge = (a, b) => {
-    //     let ageA = moment().diff(a.birthdate, "years"),
-    //         ageB = moment().diff(b.birthdate, "years");
-    //     if (ageA < ageB)
-    //       return -1
-    //     if (ageA > ageB)
-    //       return 1
-    //     return 0
-    //   }
-    //
-    //   const sortByLocation = (a, b) => {
-    //     if (!this.user_location)
-    //       return 0
-    //     let distanceA = Math.sqrt(Math.pow(a.lat - this.user_location.lat, 2) + Math.pow(a.lng - this.user_location.lng, 2)) * 111.32
-    //     let distanceB = Math.sqrt(Math.pow(b.lat - this.user_location.lat, 2) + Math.pow(b.lng - this.user_location.lng, 2)) * 111.32
-    //     if (distanceA < distanceB)
-    //       return -1
-    //     if (distanceA > distanceB)
-    //       return 1
-    //     return 0
-    //   }
-    //
-    //   const sortByTags = (a, b) => {
-    //     if (!this.user_tags)
-    //       return 0
-    //     let matchTagsA = 0,
-    //         matchTagsB = 0
-    //
-    //     this.user_tags.forEach( (tag) => {
-    //       if (a.user_tags && a.user_tags.includes(tag.name))
-    //         matchTagsA++
-    //     })
-    //
-    //     this.user_tags.forEach( (tag) => {
-    //       if (b.user_tags && b.user_tags.includes(tag.name))
-    //         matchTagsB++
-    //     })
-    //     if (matchTagsA < matchTagsB)
-    //       return 1
-    //     if (matchTagsA > matchTagsB)
-    //       return -1
-    //     return 0
-    //   }
-
-      // in progress
-      // function sortByPopularity(a, b) {
-      // }
+      var ret = this.all_users
 
       const filterByAge = (user) => {
         let age = moment().diff(user.birthdate, "years")
@@ -119,22 +75,24 @@ export default {
       }
 
       const filterByTags = (user) => {
-        let count = 0;
-        if (!user.user_tags)
-          user.user_tags = []
-          this.filterTags.forEach((val) => {
-            if (user.user_tags.includes(val))
-              count++
-          })
-          // if (count == tags.length)
-          //   console.log(user.user_tags)
+        var count = 0;
+        var tags = (typeof(user.user_tags) == 'string') ? user.user_tags.split(',') : [];
 
+        this.filterTags.forEach((val) => {
+          if (tags.includes(val) === true)
+            count++
+        })
+          // if (count == tags.length)
         return (count == this.filterTags.length) ? true : false
       }
 
-      return this.all_users.filter(filterByTags)
-      // return this.all_users.sort(sortByAge)
-      // return this.all_users.filter(filterByTags)
+      if (this.filterTags.length)
+        ret = ret.filter(filterByTags)
+      if (this.activeFilter.includes(1))
+        ret = ret.filter(filterByAge)
+      if (this.activeFilter.includes(2))
+        ret = ret.filter(filterByLocation)
+      return ret
     }
   },
   methods: {
@@ -144,6 +102,15 @@ export default {
     },
     updateTags(val) {
       this.filterTags = val;
+    },
+    disabledFilter(id) {
+      return (this.activeFilter.includes(id)) ? false : true
+    },
+    setActiveFilter(id) {
+      if (this.activeFilter.includes(id))
+        this.activeFilter = this.activeFilter.filter((elem) => elem !== id)
+      else
+        this.activeFilter.push(id)
     }
   },
   watch: {

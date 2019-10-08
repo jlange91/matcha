@@ -21,7 +21,7 @@
     "dev:down": "docker-compose -f docker/docker-compose.dev.yml down",
     "dev:uninstall": "docker-compose -f docker/docker-compose.dev.yml down --rmi all",
     "dev:connect:api": "docker exec -it api /bin/sh",
-    "dev:connect:app": "docker exec -it app /bin/sh",
+    "dev:connect:app": "docker exec -it app /bin/bash",
     "dev:connect:server": "docker exec -it server /bin/bash",
     "dev:connect:db": "psql -h localhost -p 5431 -U myappuser -d myappdb",
     "logs:server": "docker logs server",
