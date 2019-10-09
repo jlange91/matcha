@@ -1,14 +1,18 @@
 <template>
   <div class="mt-8 p-4 container mx-auto rounded bg-white shadow">
     <h1 class="text-xl uppercase font-bold mb-8">Possible Matches</h1>
+    <div class=" flex flex-wrap">
+
     <user-card
+      class=""
       v-for="user in filtered_users"
       @like="like"
       @unlike="unlike"
       :key="user.id"
-      :user="user"
+      :user="user" 
       :liked="likes"
     />
+    </div>
   </div>
 </template>
 
