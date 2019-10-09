@@ -4,6 +4,19 @@
   >
     <div class="flex items-center flex-no-shrink text-teal-600 mr-6">
       <router-link to="/" class="font-semibold text-xl tracking-tight">Matcha</router-link>
+          <div  v-if="getLogged && getToken" class="inline-flex items-center ml-4">
+            <span
+              class="no-underline block sm:inline-block sm:mt-0 text-teal-600 mr-3"
+            >{{ getUser.username }}</span>
+            <span
+              :class="getSocket ? 'bg-green-400' : 'bg-red-400'"
+              class="rounded-full h-2 w-2 flex items-center justify-center mr-3"
+            ></span>
+            <notifications />
+            <router-link to="/chat">
+              <messages />
+            </router-link>
+          </div>
     </div>
     <div class="block md:hidden">
       <button
@@ -23,20 +36,7 @@
       <div></div>
 
       <div class="mt-4 md:mt-0 flex w-full items-center justify-between">
-        <div v-if="getLogged && getToken" class="flex flex-wrap justify-between w-full">
-          <div class="inline-flex items-center ">
-            <span
-              class="no-underline block mt-4 sm:inline-block sm:mt-0 text-teal-600 mr-3"
-            >{{ getUser.username }}</span>
-            <span
-              :class="getSocket ? 'bg-green-400' : 'bg-red-400'"
-              class="rounded-full h-2 w-2 flex items-center justify-center mr-3"
-            ></span>
-            <notifications />
-            <router-link to="/chat">
-              <messages />
-            </router-link>
-          </div>
+        <div v-if="getLogged && getToken" class="flex flex-wrap justify-end flex-end w-full">
           <div class="w-full md:w-auto my-4">
             <router-link
               to="/matches"

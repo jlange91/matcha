@@ -2,7 +2,6 @@
   <div class="flex flex-wrap">
 
     <div class="flex flex-wrap items-start content-start w-full lg:w-1/3 border-r border-grey-lighter h-full">
-
       <div class="flex flex-shrink justify-between self-start items-center w-full px-2 py-4">
         <div class="text-center px-2 mr-2">
           <a href="#" class="text-lg text-grey hover:text-grey-dark">
@@ -35,6 +34,7 @@
               </span>
             </div>
             <div class="text-sm text-grey-dark truncate">
+   
               <span> {{ relation.lastMessage }} </span>
             </div>
           </div>
@@ -74,7 +74,11 @@
         <div>
 
           <div class="flex flex-col p-4">
-
+                 <div class="cursor-pointer" >
+                 <span @click="limit > 1 ? limit = limit - 1 : limit = 1, limit > 1 ? updateMessages() : ''">-</span> 
+                 <span @click="limit = limit + 1, updateMessages()" class="ml-2">+</span> 
+                  {{limit}}
+                </div>
             <div v-for="message in messages" :key="message.id" :class="backgroundColor(message.from_id)" class="rounded-lg text-sm p-3 mb-1">
               <p class="float-right">{{ message.body }}</p>
             </div>

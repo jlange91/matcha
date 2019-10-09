@@ -13,7 +13,7 @@
       </ul>
     </div>
     <div class="block md:hidden bg-teal-600 text-white py-2 text-xs uppercase flex-col">
-      <div v-if="!show"@click="show = !show" class="mx-6 text-white cursor-pointer">+</div>
+      <div v-if="!show" @click="show = !show" class="mx-6 text-white cursor-pointer">+</div>
       <div v-else @click="show = !show" class="mx-6 text-white cursor-pointer">-</div>
     <ul v-if="show" class="list-reset flex-col items-center text-xs">
         <li
