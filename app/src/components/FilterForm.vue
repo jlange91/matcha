@@ -5,10 +5,12 @@
       <input class="float-left" type="checkbox" @click="setActiveFilter(1)">
       <vue-slider class="ml-6" v-model="filterAge" :enable-cross="false" :min="0" :max="100" :disabled="disabledFilter(1)"></vue-slider>
     </div>
-    Filter by max distance in km<br/>
-    <div class="inline">
-      <input class="float-left" type="checkbox" @click="setActiveFilter(2)">
-      <vue-slider class="ml-6" v-model="filterLocation" :enable-cross="false" :min="0" :max="1000" :disabled="disabledFilter(2)"></vue-slider>
+    <div v-if="user_location.lat && user_location.lng">
+      Filter by max distance in km<br/>
+      <div class="inline">
+        <input class="float-left" type="checkbox" @click="setActiveFilter(2)">
+        <vue-slider class="ml-6" v-model="filterLocation" :enable-cross="false" :min="0" :max="1000" :disabled="disabledFilter(2)"></vue-slider>
+      </div>
     </div>
     <br/>Filter by tags<br/>
     <div class="w-full px-3 mb-6">

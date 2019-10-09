@@ -3,10 +3,10 @@
     <li class="-mb-px mr-1">
       <button :class="setSortButtonCss(1)" @click="setActiveSort(1)">Age<span v-html="setSvgButton(1)"></span></button>
     </li>
-    <li class="-mb-px mr-1">
+    <li class="-mb-px mr-1" v-if="user_location.lat && user_location.lng">
       <button :class="setSortButtonCss(2)" @click="setActiveSort(2)">Location<span v-html="setSvgButton(2)"></span></button>
     </li>
-    <li class="-mb-px mr-1">
+    <li class="-mb-px mr-1" v-if="user_tags.length">
       <button :class="setSortButtonCss(3)" @click="setActiveSort(3)">Tags<span v-html="setSvgButton(3)"></span></button>
     </li>
     <li class="-mb-px mr-1">
