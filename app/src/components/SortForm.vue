@@ -1,15 +1,18 @@
 <template>
-  <ul class="flex border-b">
-  <li class="-mb-px mr-1">
-    <a :class="activeCss">Active<svg class="fill-current h-5 ml-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M7 10v8h6v-8h5l-8-8-8 8h5z"/></svg></a>
-  </li>
-  <li class="mr-1">
-    <a :class="disableCss">Tab</a>
-  </li>
-  <li class="mr-1">
-    <a class="bg-white inline-block py-2 px-4 text-blue-500 hover:text-blue-800 font-semibold">Tab</a>
-  </li>
-</ul>
+  <ul class="flex border-b justify-center">
+    <li class="-mb-px mr-1">
+      <button :class="setSortButtonCss(1)" @click="setActiveSort(1)">Age<span v-html="setSvgButton(1)"></span></button>
+    </li>
+    <li class="-mb-px mr-1">
+      <button :class="setSortButtonCss(2)" @click="setActiveSort(2)">Location<span v-html="setSvgButton(2)"></span></button>
+    </li>
+    <li class="-mb-px mr-1">
+      <button :class="setSortButtonCss(3)" @click="setActiveSort(3)">Tags<span v-html="setSvgButton(3)"></span></button>
+    </li>
+    <li class="-mb-px mr-1">
+      <button :class="setSortButtonCss(4)" @click="setActiveSort(4)">Popularity<span v-html="setSvgButton(4)"></span></button>
+    </li>
+  </ul>
 </template>
 
 <script>
@@ -36,7 +39,8 @@ export default {
       user_tags: [],
       user_location: [],
       activeSort: 0,
-      sortStates: ['none', 'ascending', 'descending'],
+      sortStates: ['none', 'descending', 'ascending'],
+      currentSortState: 0,
       activeCss: "bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 text-blue-700 font-semibold flex items-center justify-center",
       disableCss: "bg-white inline-block py-2 px-4 text-blue-500 hover:text-blue-800 font-semibold"
     };
@@ -47,7 +51,9 @@ export default {
       getTags: 'tags/getTags',
     }),
     filteredArray() {
-      var ret = this.all_users
+      if (this.currentSortState == 0)
+        return this.all_users.slice(0)
+      var ret = this.all_users.slice(0)
 
       const sortByAge = (a, b) => {
         let ageA = moment().diff(a.birthdate, "years"),
@@ -100,36 +106,47 @@ export default {
 
       switch (this.activeSort) {
         case 1:
-          return ret.sort(sortByAge)
+          ret = ret.sort(sortByAge)
         case 2:
-          return ret.sort(sortByLocation)
+          ret = ret.sort(sortByLocation)
         case 3:
-          return ret.sort(sortByTags)
+          ret = ret.sort(sortByTags)
         case 4:
-          return ret.sort(sortByPopularity)
-        default:
-          return ret
-
+          ret = ret.sort(sortByPopularity)
       }
-      // return this.all_users.filter(filterByTags)
-      // return this.all_users.sort(sortByAge)
-      // return this.all_users.filter(filterByTags)
+      if (this.currentSortState == 2)
+        ret = ret.reverse()
+      return ret
     }
   },
   methods: {
-    updateValue: function () {
-      console.log(this.value)
-      this.$emit('filteredArray', this.age)
+    setActiveSort: function (id) {
+      if (this.activeSort == id) {
+        this.currentSortState = (this.currentSortState == this.sortStates.length - 1) ? 0 : this.currentSortState + 1
+      }
+      else {
+        this.currentSortState = 1
+        this.activeSort = id
+      }
     },
-    updateTags(val) {
-      this.filterTags = val;
+    setSortButtonCss: function (id) {
+      if (this.activeSort == id)
+        return this.activeCss
+      else
+        return this.disableCss
     },
-    disabledFilter(id) {
-      return (id == this.activeSort) ? false : true
+    setSvgButton: function (id) {
+      if (this.activeSort == id) {
+        switch (this.currentSortState) {
+          case 1:
+            return '<svg class="fill-current h-5 ml-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M7 10V2h6v8h5l-8 8-8-8h5z"/></svg>'
+          case 2:
+            return '<svg class="fill-current h-5 ml-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M7 10v8h6v-8h5l-8-8-8 8h5z"/></svg>'
+          default:
+            return ''
+        }
+      }
     },
-    checkedFilter(id) {
-      return (id == this.activeSort) ? true : false
-    }
   },
   watch: {
     getTags(newValue, oldValue) {

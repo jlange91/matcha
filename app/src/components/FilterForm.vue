@@ -19,8 +19,7 @@
         :close-on-select="true"
         :push-tags="true"
         :taggable="true"
-        :multiple="true"
-      ></v-select>
+        :multiple="true" />
     </div>
   </div>
 </template>
@@ -60,7 +59,7 @@ export default {
       getTags: 'tags/getTags',
     }),
     filteredArray() {
-      var ret = this.all_users
+      var ret = this.all_users.slice(0)
 
       const filterByAge = (user) => {
         let age = moment().diff(user.birthdate, "years")
@@ -95,10 +94,6 @@ export default {
     }
   },
   methods: {
-    updateValue: function () {
-      console.log(this.value)
-      this.$emit('filteredArray', this.age)
-    },
     updateTags(val) {
       this.filterTags = val;
     },

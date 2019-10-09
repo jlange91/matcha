@@ -1,10 +1,10 @@
 <template>
   <div class="mt-8 p-4 container mx-auto rounded bg-white shadow">
     <h1 class="text-xl uppercase font-bold mb-8">All Users</h1>
-    <form class="w-full">
+    <form class="w-full" @submit.prevent="">
 
-      <filter-form :all_users="all_users" @filteredArray="updateFinalArray"></filter-form>
-      <sort-form :all_users="all_users" @filteredArray="updateFinalArray"></sort-form>
+      <filter-form :all_users="all_users" @filteredArray="updateFilteredArray"></filter-form>
+      <sort-form :all_users="filteredArray" @filteredArray="updateFinalArray"></sort-form>
 
     </form>
 
@@ -34,6 +34,7 @@ export default {
   data() {
     return {
       all_users: [],
+      filteredArray: [],
       finalArray: [],
       likes: []
     };
@@ -59,6 +60,9 @@ export default {
     },
     updateFinalArray(newValue) {
       this.finalArray = newValue;
+    },
+    updateFilteredArray(newValue) {
+      this.filteredArray = newValue;
     }
   }
 };
