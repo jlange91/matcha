@@ -156,7 +156,7 @@ export default {
       this.user_location = newValue
     },
     filteredArray(newValue, oldValue) {
-      this.$emit('filteredArray', newValue)
+      this.$emit('finalArray', newValue)
     }
   }
 };

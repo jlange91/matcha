@@ -4,7 +4,7 @@
     <form class="w-full" @submit.prevent="">
 
       <filter-form :all_users="all_users" @filteredArray="updateFilteredArray"></filter-form>
-      <sort-form :all_users="filteredArray" @filteredArray="updateFinalArray"></sort-form>
+      <sort-form :all_users="filteredArray" @finalArray="updateFinalArray"></sort-form>
 
     </form>
 
