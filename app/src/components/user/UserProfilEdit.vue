@@ -148,7 +148,7 @@ export default {
       if (
         !this.form.sex_pref === "bisexual" ||
         !this.form.sex_pref === "female" ||
-        !this.form.sex_pref === "men" 
+        !this.form.sex_pref === "men"
       ) {
         this.errors.sex_pref = true;
       }
@@ -209,9 +209,9 @@ export default {
     const bDay = this.getProfil.birthdate.split('T')
       this.form.birthdate = bDay[0]
       }
-  
+
       this.form.tags = this.getTags.map((tag) => tag.name)
-      
+
     } catch (error) {
       this.setMessage(error);
       this.setSuccess(false);
