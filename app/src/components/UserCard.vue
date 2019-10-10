@@ -1,5 +1,5 @@
 <template >
-  <div v-show="this.$route.path === '/matches' ? !isLiked : 'true'" class="max-w-sm rounded overflow-hidden my-8">
+  <div v-show="this.$route.path === '/matches' ? !isLiked : 'true'" class="max-w-sm min-w-1/4 rounded overflow-hidden my-8">
     <img
       v-if="user.avatar != null"
       :src="'/api/v1/images/get/' + user.avatar"
