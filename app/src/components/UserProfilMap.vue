@@ -23,7 +23,6 @@ props: {
         lat: this.lat,
         lng: this.lng
       };
-      console.log(this.id)
       const map = new google.maps.Map(document.getElementById(`google-map-${this.id}`), {
         zoom: 13,
         center: location,
@@ -34,7 +33,7 @@ props: {
         position: location,
         map: map })
   },
-  
+
 }
 </script>
 

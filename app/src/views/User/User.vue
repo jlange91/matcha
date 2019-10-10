@@ -5,11 +5,11 @@
             <img v-else src="/api/v1/images/get/default.png" class="rounded-full w-32 h-32">
           </div>
           <div v-if="this.getLogged">
-            <button class="mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-  {{ logged ? "Connected" : logged === undefined ? "Never Connected" : "Last seen at ..."}}
-</button>
+            <div class="mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+              {{ logged ? "Connected" : logged === undefined ? "Never Connected" : "Last seen at " + l}}
+            </div>
           </div>
-           <fame-rating :fame_rating="getUserData.user_info.fame_rating"/>
+          <fame-rating :fame_rating="getUserData.user_info.fame_rating"/>
           <div>
             Username: {{getUserData.user_info.username}}
             <!-- <br>
@@ -39,7 +39,7 @@
           </div>
           <div class="mt-8">
 
-            <user-profil-map :lat="getUserData.user_info.lat" :lng="getUserData.user_info.lng"/>
+            <user-profil-map :id="getUserData.user_info.id" :lat="getUserData.user_info.lat" :lng="getUserData.user_info.lng"/>
           </div>
           <button
       v-if="getLogged"
@@ -130,11 +130,11 @@ export default {
       });
       this.likes = ret
     },
-       ...mapActions({
+    ...mapActions({
 
-      setVisibility: "messages/setVisibility",
-      setMessage: "messages/setMessage",
-      setSuccess: "messages/setSuccess",
+    setVisibility: "messages/setVisibility",
+    setMessage: "messages/setMessage",
+    setSuccess: "messages/setSuccess",
     }),
   },
   computed: {
@@ -147,17 +147,17 @@ export default {
     buttonText() {
       return this.isLiked ? "Unlike" : "Like";
     },
-  userBirthDate() {
-    const today = new Date();
-    const birthDate = new Date(this.getUserData.user_info.birthdate);
-    const m = today.getMonth() - birthDate.getMonth();
-    let age = today.getFullYear() - birthDate.getFullYear();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
-    }
-    return age;
-  },
-  isLiked() {
+    userBirthDate() {
+      const today = new Date();
+      const birthDate = new Date(this.getUserData.user_info.birthdate);
+      const m = today.getMonth() - birthDate.getMonth();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+      }
+      return age;
+    },
+    isLiked() {
       if (!this.likes) return;
       const self = this;
       const found = this.likes.find(function(element) {
@@ -167,6 +167,21 @@ export default {
       if (found) return true;
       else return false;
     }
+    // lastConnection() {
+    //   console.log(this.getUserData.user_info.id)
+    //   axios
+    //     .post("logged_user", { user_id: this.getUserData.user_info.id })
+    //     .then(res => {
+    //       console.log(res)
+    //       if (res.data.success) {
+    //         console.log(res.data.is_logged)
+    //       }
+    //     })
+    //     .catch(error => {
+    //       console.log(error)
+    //     });
+    //   return 'lol'
+    // }
   }
 }
 </script>

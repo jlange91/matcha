@@ -11,7 +11,7 @@ const {
 router.post('/', checkJWT, async (req, res) => {
 
   try {
-    
+
     const check = jwt.verify(req.token, process.env.APP_KEY, (err, authData) => {
       if (err) return false
       return authData
@@ -33,7 +33,7 @@ router.post('/', checkJWT, async (req, res) => {
       timeout: 40000,
       values: [e(req.body.user_id)]
     })
- 
+
     if (!user.length) {
       sql = "SELECT DISTINCT last_seen FROM profils WHERE profils.user_id = ?"
 
@@ -42,8 +42,6 @@ router.post('/', checkJWT, async (req, res) => {
         timeout: 40000,
         values: [e(req.body.user_id)]
       })
-
-
 
       return res.json({
         success: true,

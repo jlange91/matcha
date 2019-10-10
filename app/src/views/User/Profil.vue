@@ -25,7 +25,7 @@
             <br>
             Sexual preference: {{getProfil.sexual_orientation}}
             <br>
-            <p class="inline-flex w-full">Biography: 
+            <p class="inline-flex w-full">Biography:
               <span v-html="getProfil.biography"></span></p>
           </div>
            <div class="mt-8 flex flex-wrap">
@@ -40,9 +40,9 @@
               @click.prevent="getNavigatorLocation()"
               class="p-2 rounded my-4 bg-teal-600 text-white hover:shadow"
             >Update location</button>
-            <user-profil-map :lat="getLocation.lat" :lng="getLocation.lng"/>
+            <user-profil-map :id="getUser.id" :lat="getLocation.lat" :lng="getLocation.lng"/>
           </div>
-         
+
           <div class="flex flex-row-reverse mt-8">
             <button @click="confirmDelete" class="bg-red-600 rounded text-white p-2">Delete account</button>
           </div>
@@ -104,7 +104,7 @@ export default {
       if (this.getProfil && this.getProfil.birthdate)
       return moment().diff(this.getProfil.birthdate, "years");
       //const isLegal = (age >= 18);
-    },
+    }
     // lat() {
     //     return Number(JSON.parse(this.getLocation.geo).ll[0]);
     // },
