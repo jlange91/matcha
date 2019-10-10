@@ -39,6 +39,7 @@ instance.interceptors.response.use(response => {
     session.state.user.first_name = response.data.user.first_name
     session.state.user.last_name = response.data.user.last_name
     session.state.user.avatar = response.data.user.avatar
+    session.state.user.spam = response.data.user.spam
     profil.state.profil = response.data.profil
     profil.state.location = response.data.location
     tags.state.tags = response.data.tags

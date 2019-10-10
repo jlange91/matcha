@@ -56,6 +56,7 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import axios from "../../middleware/axios";
+import { getUserSpam } from '../../store/modules/session/getters';
 
 export default {
   data() {
@@ -71,7 +72,8 @@ export default {
       this.userLikes()
       if (this.getLogged) {
         this.isLogged()
-        this.addViewToUser()
+        if (this.getUserSpam == 0)
+          this.addViewToUser()
       }
     }, 500)
   },
@@ -139,7 +141,8 @@ export default {
     ...mapGetters({
       getUserData: 'user/getData',
       getLogged: 'session/getLogged',
-      getSessionUserId: 'session/getUserId'
+      getSessionUserId: 'session/getUserId',
+      getUserSpam: 'session/getUserSpam'
     }),
     buttonText() {
       return this.isLiked ? "Unlike" : "Like";

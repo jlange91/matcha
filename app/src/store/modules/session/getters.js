@@ -26,6 +26,10 @@ export const getUserEmail = (state) => {
     return state.user.email
 }
 
+export const getUserSpam = (state) => {
+    return state.user.spam
+}
+
 export const getSocket = (state) => {
   return state.socket
 }

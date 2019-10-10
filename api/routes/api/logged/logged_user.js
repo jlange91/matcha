@@ -44,7 +44,7 @@ router.post('/', checkJWT, async (req, res) => {
       })
 
 
-console.log("last seen", last_seen)
+
       return res.json({
         success: true,
         is_logged: is_logged,

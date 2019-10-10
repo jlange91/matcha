@@ -1,6 +1,6 @@
 <template>
   <div>
-  <div class="flex justify-around -mx-4">
+  <div class="flex justify-center -mx-4">
   <div @click="prevPage" class="px-4 focus:ouline-none cursor-pointer">
     Previous
   </div>
@@ -34,11 +34,12 @@ export default {
     size: {
       type: Number,
       required: false,
-      default: 2
+      default: 5
     },
     userLikes: {
       type: Array,
-      required: true
+      required: false,
+      default: null
     }
   },
   mounted() {

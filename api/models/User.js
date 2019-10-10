@@ -467,7 +467,7 @@ class User {
 
     static async getById(id) {
       try {
-        const sql = 'SELECT DISTINCT  users.id, users.email, users.username, users.first_name, users.last_name, users.avatar, users.confirmed, users.created_at, users.updated_at FROM users \
+        const sql = 'SELECT DISTINCT  users.id, users.email, users.username, users.first_name, users.last_name, users.avatar, users.confirmed, users.spam, users.created_at, users.updated_at FROM users \
                       WHERE users.id = ?'
 
         const user = await connection.query({

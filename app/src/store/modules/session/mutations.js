@@ -32,6 +32,7 @@ export const CLEAR_USER = (state) => {
         email: null,
         last_name: null,
         first_name: null,
-        avatar: null
+        avatar: null,
+        spam: null
     }
 }
