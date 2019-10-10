@@ -1,5 +1,5 @@
 <template >
-  <div v-show="this.$route.path === '/matches' ? !isLiked : 'true'" class="container mx-auto max-w-sm rounded overflow-hidden shadow-lg mx-auto my-8">
+  <div v-show="this.$route.path === '/matches' ? !isLiked : 'true'" class="max-w-sm rounded overflow-hidden my-8">
     <img
       v-if="user.avatar != null"
       :src="'/api/v1/images/get/' + user.avatar"
@@ -7,7 +7,7 @@
       class="rounded-full w-32 h-32 mx-auto"
     />
     <img v-else src="/api/v1/images/get/default.png" class="rounded-full w-32 h-32" />
-    <div class="px-6 py-4">
+    <div class="py-4">
       <div class="font-bold text-xl mb-2 text-center">
         <router-link :to="`/user/${user.username}`">
           {{user.username}}
@@ -26,7 +26,7 @@
     <button
       v-if="getLogged"
       @click="parseLike(user)"
-      class="focus:outline-none hover:bg-teal-700 bg-teal-600 text-white uppercase w-full py-2 font-semibold"
+      class="focus:outline-none hover:bg-teal-700 bg-teal-600 text-white uppercase w-full py-2 font-semibold w-full"
     >{{buttonText}}</button>
 
     <!-- <user-profil-modal :modal-name="user.username" :user="user" /> -->

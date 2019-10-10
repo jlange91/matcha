@@ -1,20 +1,25 @@
 <template>
   <div>
-  <button @click="prevPage">
+  <div class="flex justify-around -mx-4">
+  <div @click="prevPage" class="px-4 focus:ouline-none cursor-pointer">
     Previous
-  </button>
-  <button @click="nextPage">
+  </div>
+  <div @click="nextPage" class="focus:ouline-none cursor-pointer">
     Next
-  </button>
+  </div>
 
+  </div>
+  <div class="flex flex-wrap">
      <user-card
-      @like="like"
+      class="px-2"     
+       @like="like"
       @unlike="unlike"
       v-for="user in paginatedData"
       :key="user.id"
       :user="user"
       :liked="likes"
     />
+  </div>
   </div>
 </template>
 
@@ -29,7 +34,7 @@ export default {
     size: {
       type: Number,
       required: false,
-      default: 1
+      default: 2
     },
     userLikes: {
       type: Array,
