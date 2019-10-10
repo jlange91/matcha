@@ -9,9 +9,9 @@
   </div>
 
   </div>
-  <div class="flex flex-wrap">
+  <div class="flex flex-wrap content-center">
      <user-card
-      class="px-2"     
+      class="px-2 w-full"     
        @like="like"
       @unlike="unlike"
       v-for="user in paginatedData"

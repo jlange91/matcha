@@ -14,6 +14,9 @@
         </router-link>
         <!-- <p @click.prevent="goToUserProfil(user.username)">{{user.username}}</p> -->
       </div>
+      <p>{{age}} ans</p>
+      <p>{{user.fame_rating}} points</p>
+       <user-profil-map :id="user.id" :lat="user.lat" :lng="user.lng"/>
     </div>
     <!-- <fame-rating class="container" :fame_rating="user.fame_rating"/> -->
     <div class="px-6 py-4">
@@ -36,6 +39,7 @@
 <script>
 import axios from "../middleware/axios";
 import { mapGetters, mapActions } from "vuex";
+import moment from "moment";
 
 export default {
   name: "UserCard",
@@ -92,8 +96,29 @@ export default {
         if (res.data.success) this.$emit("like", user_id);
       });
     },
+    userTags() {
+      if (this.user_tags.length) {
+        this.user_tags.forEach((tag, i) => {
+            if (i <= 3)
+              return this.user_tags = this.user_tags.slice(0, 3)
+            else if (i === 3) {
+              this.user_tags = this.user_tags.slice(0, 3)
+              return this.user_tags.push("...")
+            }
+            else {
+              this.user_tags = this.user_tags.slice(0, 3)
+              return this.user_tags.push("...")
+            }
+        })
+      }
+    },
   },
   computed: {
+    age() {
+      if (this.user && this.user.birthdate)
+      return moment().diff(this.user.birthdate, "years");
+      //const isLegal = (age >= 18);
+    },
     ...mapGetters({
       getLogged: 'session/getLogged'
     }),
@@ -116,11 +141,13 @@ export default {
     }
   },
   mounted() {
-    setTimeout(() => {
+
 
       this.user_tags = (typeof(this.user.user_tags) == 'string') ?
         this.user.user_tags.split(",") : []
-    }, 1000)
+    this.userTags()
+        // console.log(this.user_tags)
+
   }
 };
 </script>

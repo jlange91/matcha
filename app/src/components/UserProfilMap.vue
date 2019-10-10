@@ -1,5 +1,5 @@
 <template>
-  <div class="h-48 lg:h-64 shadow" style="overflow: hidden;width: 98%;" id="google-map"></div>
+  <div class="h-48 lg:h-64 shadow" style="overflow: hidden;width: 98%;" :id="`google-map-${id}`"></div>
 </template>
 
 <script>
@@ -12,6 +12,10 @@ props: {
     lng: {
         type: Number,
         required: true
+    },
+    id: {
+      type: Number,
+      required: true
     }
 },
   mounted() {
@@ -19,7 +23,8 @@ props: {
         lat: this.lat,
         lng: this.lng
       };
-      const map = new google.maps.Map(document.getElementById("google-map"), {
+      console.log(this.id)
+      const map = new google.maps.Map(document.getElementById(`google-map-${this.id}`), {
         zoom: 13,
         center: location,
          disableDefaultUI: true,

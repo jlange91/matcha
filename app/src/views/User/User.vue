@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-8 p-4 container mx-auto min-w-sm max-w-lg rounded bg-white shadow">
+  <div class="mt-8 p-4 container mx-auto max-w-sm rounded bg-white shadow">
           <div>
             <img v-if="getUserData.user_info.avatar != null" :src="'/api/v1/images/get/' + getUserData.user_info.avatar" :alt="getUserData.user_info.username" class="rounded-full w-32 h-32">
             <img v-else src="/api/v1/images/get/default.png" class="rounded-full w-32 h-32">
