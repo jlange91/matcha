@@ -16,7 +16,8 @@
       </div>
       <p>{{age}} ans</p>
       <p>{{user.fame_rating}} points</p>
-       <user-profil-map :id="user.id" :lat="user.lat" :lng="user.lng"/>
+      <p v-if="distance">{{distance}} KM</p>
+       <!-- <user-profil-map :id="user.id" :lat="user.lat" :lng="user.lng"/> -->
     </div>
     <!-- <fame-rating class="container" :fame_rating="user.fame_rating"/> -->
     <div class="px-6 py-4">
@@ -114,13 +115,18 @@ export default {
     },
   },
   computed: {
+    distance() {
+      if (this.getLogged)
+        return Math.round(Math.sqrt(Math.pow(this.user.lat - this.getUserLocation.lat, 2) + Math.pow(this.user.lng - this.getUserLocation.lng, 2)) * 111.32)
+    },
     age() {
       if (this.user && this.user.birthdate)
       return moment().diff(this.user.birthdate, "years");
       //const isLegal = (age >= 18);
     },
     ...mapGetters({
-      getLogged: 'session/getLogged'
+      getLogged: 'session/getLogged',
+      getUserLocation: 'profil/getUserLocation'
     }),
     buttonText() {
       return this.isLiked ? "Unlike" : "Like";
