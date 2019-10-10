@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="my-4">{{fuckMeImFamous}} Points</p>
+    <p class="my-4">{{iAmFamous}} Points</p>
   </div>
 </template>
 
@@ -14,7 +14,7 @@ export default {
     }
   },
   computed: {
-    fuckMeImFamous() {
+    iAmFamous() {
       return this.fame_rating >= 0 ? this.fame_rating : 0
     }
   }

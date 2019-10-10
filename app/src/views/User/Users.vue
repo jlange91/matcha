@@ -1,32 +1,32 @@
 <template>
   <div class="mt-8 p-4 container mx-auto rounded bg-white shadow">
     <h1 class="text-xl uppercase font-bold mb-8">All Users</h1>
-    <form class="w-full" @submit.prevent="">
-
       <filter-form :all_users="all_users" @filteredArray="updateFilteredArray"></filter-form>
-      <sort-form :all_users="filteredArray" @filteredArray="updateFinalArray"></sort-form>
-
-    </form>
-
-    <user-card
+    <div class="flex justify-center">
+      <sort-form class="w-full" :all_users="filteredArray" @filteredArray="updateFinalArray"></sort-form>
+    </div>
+    <pagination :list-data="finalArray" :user-likes="likes"/>
+      <!-- <user-card
       @like="like"
       @unlike="unlike"
       v-for="user in finalArray"
       :key="user.id"
       :user="user"
       :liked="likes"
-    />
+    /> -->
   </div>
 </template>
 
 <script>
 import axios from "../../middleware/axios";
+import Pagination from '../../../src/components/Pagination'
 import VueSlider from 'vue-slider-component'
 import 'vue-slider-component/theme/default.css'
 
 export default {
   components: {
-    VueSlider
+    VueSlider,
+    Pagination
   },
   mounted() {
     this.getAllUsers();
@@ -46,18 +46,7 @@ export default {
         this.likes = res.data.likes;
       });
     },
-    like(user_id) {
-      this.likes.push({ liked_id: user_id });
-    },
-    unlike(user_id) {
-      this.arrayRemove(user_id);
-    },
-    arrayRemove(value) {
-      const ret = this.likes.filter(function(ele) {
-        return ele.liked_id != value;
-      });
-      this.likes = ret
-    },
+   
     updateFinalArray(newValue) {
       this.finalArray = newValue;
     },
