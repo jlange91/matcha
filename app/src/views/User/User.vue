@@ -5,8 +5,8 @@
             <img v-else src="/api/v1/images/get/default.png" class="rounded-full w-32 h-32">
           </div>
           <div v-if="this.getLogged">
-            <div class="mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-              {{ logged ? "Connected" : logged === undefined ? "Never Connected" : "Last seen at " + l}}
+            <div class="mt-6 bg-blue-500 text-white font-bold py-2 px-4 rounded-full">
+              {{ this.status }}
             </div>
           </div>
           <fame-rating :fame_rating="getUserData.user_info.fame_rating"/>
@@ -62,7 +62,8 @@ export default {
   data() {
     return {
        likes: [],
-       logged: false
+       logged: false,
+       status: 'Not Connected'
     }
   },
   mounted() {
@@ -70,16 +71,42 @@ export default {
       if (this.getUserData.user_info.id === this.getSessionUserId)
         this.$router.push('/')
       this.userLikes()
+      this.refreshStatus()
       if (this.getLogged) {
-        this.isLogged()
         if (this.getUserSpam == 0)
           this.addViewToUser()
       }
     }, 500)
   },
   methods: {
-    isLogged() {
-      axios.post("logged_user", { user_id: this.getUserData.user_info.id }).then((res) => this.logged = res.data.is_logged.last_seen).catch(e => console.log(e));
+    refreshStatus() {
+      axios
+        .post("logged_user", { user_id: this.getUserData.user_info.id })
+        .then(res => {
+          if (res.data.success) {
+            if (res.data.is_logged.last_seen === true)
+              this.status = 'Connected'
+            else
+            {
+              let date = res.data.is_logged.last_seen
+              let now = new Date();
+              let old = new Date(date);
+
+              if (!date) return ;
+              date =
+                old.getFullYear() < now.getFullYear() ||
+                old.getMonth() < now.getMonth() ||
+                old.getDate() < now.getDate()
+                  ? date.split(" ")[0]
+                  : date.split(" ")[1];
+
+                this.status = 'Last seen at ' + date
+            }
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        });
     },
     addViewToUser() {
       axios.post("view", { viewed_id: this.getUserData.user_info.id }).then().catch(e => console.log(e));
@@ -131,10 +158,9 @@ export default {
       this.likes = ret
     },
     ...mapActions({
-
-    setVisibility: "messages/setVisibility",
-    setMessage: "messages/setMessage",
-    setSuccess: "messages/setSuccess",
+      setVisibility: "messages/setVisibility",
+      setMessage: "messages/setMessage",
+      setSuccess: "messages/setSuccess",
     }),
   },
   computed: {
@@ -167,21 +193,6 @@ export default {
       if (found) return true;
       else return false;
     }
-    // lastConnection() {
-    //   console.log(this.getUserData.user_info.id)
-    //   axios
-    //     .post("logged_user", { user_id: this.getUserData.user_info.id })
-    //     .then(res => {
-    //       console.log(res)
-    //       if (res.data.success) {
-    //         console.log(res.data.is_logged)
-    //       }
-    //     })
-    //     .catch(error => {
-    //       console.log(error)
-    //     });
-    //   return 'lol'
-    // }
   }
 }
 </script>

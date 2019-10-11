@@ -6,7 +6,8 @@ const connection = require('../../../middleware/database')
 const {
   checkJWT
 } = require('../../../middleware/check_token')
-
+const LoggedUser = require('../../../models/LoggedUser.js')
+const Profil = require('../../../models/Profil.js')
 
 router.post('/', checkJWT, async (req, res) => {
 
@@ -25,27 +26,14 @@ router.post('/', checkJWT, async (req, res) => {
       return (false);
     }
 
-    let sql = 'SELECT DISTINCT * FROM logged_users \
-    WHERE logged_users.user_id = ?'
-
-    const user = await connection.query({
-      sql,
-      timeout: 40000,
-      values: [e(req.body.user_id)]
-    })
+    const user = await LoggedUser.get(req.body.user_id)
 
     if (!user.length) {
-      sql = "SELECT DISTINCT last_seen FROM profils WHERE profils.user_id = ?"
-
-      const is_logged = await connection.query({
-        sql,
-        timeout: 40000,
-        values: [e(req.body.user_id)]
-      })
+      const is_logged = await Profil.getLastSeen(req.body.user_id)
 
       return res.json({
         success: true,
-        is_logged: is_logged,
+        is_logged: is_logged[0],
       });
     }
 

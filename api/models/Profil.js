@@ -36,6 +36,23 @@ class Profil {
     }
   }
 
+  static async getLastSeen(userId) {
+    try {
+      let sql = 'SELECT DISTINCT DATE_FORMAT(last_seen, "%d/%m/%Y %H:%i:%s") AS last_seen \
+                  FROM profils \
+                  WHERE profils.user_id = ?'
+
+      const last_seen = await connection.query({
+          sql,
+          timeout: 40000,
+          values: [e(userId)]
+      })
+      return last_seen;
+    } catch (error) {
+        throw new Error('SELECT failed in model Profil.getLastSeen ' + error)
+    }
+  }
+
   static async getUserFameRating(userId) {
     try {
       let sql = 'SELECT profils.fame_rating FROM profils \
