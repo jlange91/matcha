@@ -5,12 +5,12 @@
       <span v-html="setSvgButton(1)"></span>
     </p>
 
-    <p :class="setSortButtonCss(2)" @click="setActiveSort(2)">
+    <p v-if="this.getUserLocation" :class="setSortButtonCss(2)" @click="setActiveSort(2)">
       Location
       <span v-html="setSvgButton(2)"></span>
     </p>
 
-    <p :class="setSortButtonCss(3)" @click="setActiveSort(3)">
+    <p v-if="this.getLogged" :class="setSortButtonCss(3)" @click="setActiveSort(3)">
       Tags
       <span v-html="setSvgButton(3)"></span>
     </p>
@@ -56,18 +56,18 @@ export default {
   computed: {
     ...mapGetters({
       getUserLocation: "profil/getUserLocation",
-      getTags: "tags/getTags"
+      getTags: "tags/getTags",
+      getLogged: "session/getLogged"
     }),
-    filteredArray() {
-      if (this.currentSortState == 0) return this.all_users.slice(0);
-      var ret = this.all_users.slice(0);
+    finalArray() {
+      if (this.currentSortState == 0) return this.all_users
+      var ret = this.all_users
 
       const sortByAge = (a, b) => {
         let ageA = moment().diff(a.birthdate, "years"),
           ageB = moment().diff(b.birthdate, "years");
-        if (ageA < ageB) return -1;
-        if (ageA > ageB) return 1;
-        return 0;
+
+        return ageA - ageB
       };
 
       const sortByLocation = (a, b) => {
@@ -82,9 +82,7 @@ export default {
             Math.pow(b.lat - this.user_location.lat, 2) +
               Math.pow(b.lng - this.user_location.lng, 2)
           ) * 111.32;
-        if (distanceA < distanceB) return -1;
-        if (distanceA > distanceB) return 1;
-        return 0;
+        return distanceA - distanceB
       };
 
       const sortByTags = (a, b) => {
@@ -99,25 +97,26 @@ export default {
         this.user_tags.forEach(tag => {
           if (b.user_tags && b.user_tags.includes(tag.name)) matchTagsB++;
         });
-        if (matchTagsA < matchTagsB) return 1;
-        if (matchTagsA > matchTagsB) return -1;
-        return 0;
+        return (matchTagsA - matchTagsB)
       };
 
-      // in progress
-      function sortByPopularity(a, b) {}
+      function sortByPopularity(a, b) {
+        return a.fame_rating - b.fame_rating
+      }
 
+      console.log(this.activeSort)
       switch (this.activeSort) {
         case 1:
-          ret = ret.sort(sortByAge);
+          ret.sort(sortByAge);
         case 2:
-          ret = ret.sort(sortByLocation);
+          ret.sort(sortByLocation);
         case 3:
-          ret = ret.sort(sortByTags);
+          ret.sort(sortByTags);
         case 4:
-          ret = ret.sort(sortByPopularity);
+          ret.sort(sortByPopularity);
       }
-      if (this.currentSortState == 2) ret = ret.reverse();
+      if (this.currentSortState == 2)
+        ret = ret.reverse();
       return ret;
     }
   },
@@ -157,8 +156,8 @@ export default {
     getUserLocation(newValue, oldValue) {
       this.user_location = newValue;
     },
-    filteredArray(newValue, oldValue) {
-      this.$emit("filteredArray", newValue);
+    finalArray(newValue, oldValue) {
+      console.log(newValue)
       this.$emit('finalArray', newValue)
     }
   }

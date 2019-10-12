@@ -61,7 +61,7 @@ export default {
       getTags: 'tags/getTags',
     }),
     filteredArray() {
-      var ret = this.all_users.slice(0)
+      var ret = this.all_users
 
       const filterByAge = (user) => {
         let age = moment().diff(user.birthdate, "years")

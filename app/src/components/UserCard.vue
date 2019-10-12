@@ -16,7 +16,7 @@
       </div>
       <p>{{age}} ans</p>
       <p>{{user.fame_rating}} points</p>
-      <p v-if="distance">{{distance}} KM</p>
+      <p v-if="distance != null">{{distance}} KM</p>
        <!-- <user-profil-map :id="user.id" :lat="user.lat" :lng="user.lng"/> -->
     </div>
     <!-- <fame-rating class="container" :fame_rating="user.fame_rating"/> -->
@@ -116,8 +116,10 @@ export default {
   },
   computed: {
     distance() {
-      if (this.getLogged)
+      if (this.getLogged && this.getUserLocation)
         return Math.round(Math.sqrt(Math.pow(this.user.lat - this.getUserLocation.lat, 2) + Math.pow(this.user.lng - this.getUserLocation.lng, 2)) * 111.32)
+      else
+        return null
     },
     age() {
       if (this.user && this.user.birthdate)
