@@ -104,7 +104,7 @@ export default {
         return a.fame_rating - b.fame_rating
       }
 
-      console.log(this.activeSort)
+      // console.log(this.activeSort)
       switch (this.activeSort) {
         case 1:
           ret.sort(sortByAge);

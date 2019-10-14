@@ -19,7 +19,10 @@
             <br>
             Last name: {{getUserData.user_info.last_name}}
           </div>
-
+          <button @click="show = true" class="mt-4 bg-teal-600 text-white font-semibold py-2 px-4 rounded focus:outline-none">
+            show images
+          </button>
+          <user-image-modal v-show="show" @close="show = false" :show="show" :user-id="getUserData.user_info.id" />
           <div class="mt-8 flex flex-wrap" v-show="getUserData.user_info.completed">
             Age: {{this.userBirthDate}}
             <br>
@@ -63,7 +66,8 @@ export default {
     return {
        likes: [],
        logged: false,
-       status: 'Not Connected'
+       status: 'Not Connected',
+       show: false
     }
   },
   mounted() {
