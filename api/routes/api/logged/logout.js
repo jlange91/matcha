@@ -11,7 +11,7 @@ const {
 router.post('/', checkJWT, async (req, res) => {
 
   try {
-    
+
     const check = jwt.verify(req.token, process.env.APP_KEY, (err, authData) => {
       if (err) return false
       return authData
@@ -25,17 +25,17 @@ router.post('/', checkJWT, async (req, res) => {
       return (false);
     }
 
-    let sql = 'DELETE FROM logged_users \
-                WHERE logged_users.user_id = ?'
+    // let sql = 'DELETE FROM logged_users \
+    //             WHERE logged_users.user_id = ?'
+    //
+    // await connection.query({
+    //   sql,
+    //   timeout: 40000,
+    //   values: [e(check.id)]
+    // })
 
-    await connection.query({
-      sql,
-      timeout: 40000,
-      values: [e(check.id)]
-    })
- 
-    
-      sql = "UPDATE profils SET last_seen = ? WHERE profils.user_id = ?"
+
+      let sql = "UPDATE profils SET last_seen = ? WHERE profils.user_id = ?"
       let date = new Date()
       date.setHours(date.getHours() + 2)
       date.setMinutes(date.getMinutes() - 8)

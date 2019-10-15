@@ -8,8 +8,6 @@ class LoggedUser {
             const sql = 'SELECT DISTINCT * FROM logged_users WHERE user_id = ?'
 
             const result = await connection.query({sql, timeout: 40000, values: [e(userId)]})
-            if (result && !result.length)
-                return null
             return result
           } catch (error) {
               throw new Error('SELECT failed in model LoggedUser.get ' + error)

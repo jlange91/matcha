@@ -39,8 +39,7 @@ export default {
           };
 
           if (loggedUser.id && loggedUser.name && loggedUser.email) {
-            socket.open();
-            socket.emit('connection', loggedUser);
+            socket.open()
             this.setSocket();
           }
           else {

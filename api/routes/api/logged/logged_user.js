@@ -27,30 +27,20 @@ router.post('/', checkJWT, async (req, res) => {
     }
 
     const user = await LoggedUser.get(req.body.user_id)
-    // console.log(user)
-    // console.log(user.length)
+
     if (!user.length) {
-        return res.json({
-        success: false,
-        is_logged: false,
+      const is_logged = await Profil.getLastSeen(req.body.user_id)
+
+      return res.json({
+        success: true,
+        is_logged: is_logged[0],
       });
     }
 
-    if (user.length) {
-      const is_logged = await Profil.getLastSeen(req.body.user_id)
-
-      if (is_logged)
-        return res.json({
-          success: true,
-          is_logged: is_logged[0],
-        });
-      else
-        return res.json({
-          success: true,
-          is_logged: { last_seen: true}
-        });
-
-    }
+    return res.json({
+      success: true,
+      is_logged: { last_seen: true}
+    });
 
 
   } catch (error) {

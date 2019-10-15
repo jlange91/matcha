@@ -105,7 +105,6 @@ export default {
           const token_exp = localStorage.getItem("token_exp");
           if (token_exp) localStorage.removeItem("token_exp");
           socket.disconnect();
-          socket.close();
           this.unsetSocket();
           this.clearAuth();
           this.clearUser();

@@ -22,7 +22,7 @@ module.exports = function (server) {
     console.log('client connection >', socket.id, socket.decoded)
 
     // Connection now authenticated to receive further events
-     socket.on('logout', function () {
+    socket.on('logout', function () {
       console.log('client logout >', socket.id, socket.decoded)
       socket.disconnect()
     })
@@ -61,7 +61,7 @@ module.exports = function (server) {
     });
 
     socket.on('end', function (){
-      socket.disconnect(0);
+      socket.disconnect();
     });
 
   });
