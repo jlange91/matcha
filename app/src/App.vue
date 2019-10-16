@@ -30,23 +30,26 @@ export default {
 
     // open socket if connected
     updated() {
-      if (this.getSocket == false) {
-        setTimeout(() => {
-          const loggedUser = {
-            'id': this.getUserId,
-            'name': this.getUserName,
-            'email': this.getUserEmail
-          };
+      setTimeout(() => {
 
-          if (loggedUser.id && loggedUser.name && loggedUser.email) {
-            socket.open()
-            this.setSocket();
-          }
-          else {
-            this.unsetSocket();
-          }
-        }, 2000)
-      }
+        if (this.getSocket == false) {
+          setTimeout(() => {
+            const loggedUser = {
+              'id': this.getUserId,
+              'name': this.getUserName,
+              'email': this.getUserEmail
+            };
+  
+            if (loggedUser.id && loggedUser.name && loggedUser.email) {
+              socket.open()
+              this.setSocket();
+            }
+            else {
+              this.unsetSocket();
+            }
+          }, 2000)
+        }
+      }, 2000)
     }
 }
 </script>

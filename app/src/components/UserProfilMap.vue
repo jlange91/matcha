@@ -15,7 +15,8 @@ props: {
     },
     id: {
       type: Number,
-      required: true
+      required: false,
+      default: 0
     }
 },
   mounted() {
