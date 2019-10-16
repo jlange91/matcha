@@ -5,11 +5,16 @@
       <input class="float-left" type="checkbox" @click="setActiveFilter(1)">
       <vue-slider class="ml-6" v-model="filterAge" :enable-cross="false" :min="0" :max="100" :disabled="disabledFilter(1)"></vue-slider>
     </div>
+    Filter by popularity range<br/>
+    <div class="inline">
+      <input class="float-left" type="checkbox" @click="setActiveFilter(2)">
+      <vue-slider class="ml-6" v-model="filterPopularity" :enable-cross="false" :min="0" :max="maxFameRating" :disabled="disabledFilter(2)"></vue-slider>
+    </div>
     <div v-if="user_location.lat && user_location.lng">
       Filter by max distance in km<br/>
       <div class="inline">
-        <input class="float-left" type="checkbox" @click="setActiveFilter(2)">
-        <vue-slider class="ml-6" v-model="filterLocation" :enable-cross="false" :min="0" :max="1000" :disabled="disabledFilter(2)"></vue-slider>
+        <input class="float-left" type="checkbox" @click="setActiveFilter(3)">
+        <vue-slider class="ml-6" v-model="filterLocation" :enable-cross="false" :min="0" :max="1000" :disabled="disabledFilter(3)"></vue-slider>
       </div>
     </div>
     <br/>Filter by tags<br/>
@@ -31,6 +36,7 @@ import moment from "moment";
 import { mapGetters } from "vuex";
 import VueSlider from 'vue-slider-component'
 import 'vue-slider-component/theme/default.css'
+import axios from "../middleware/axios";
 
 export default {
   name: "FilterForm",
@@ -43,17 +49,26 @@ export default {
   components: {
     VueSlider
   },
-  mounted() {
-  },
   data() {
     return {
       user_tags: [],
       user_location: [],
       filterAge: [0, 100],
+      filterPopularity: [0, 1],
+      maxFameRating: 100,
       filterLocation: 100,
       filterTags: [],
       activeFilter: []
     };
+  },
+  mounted() {
+    axios.get("/user/getMaxFameRating").then(res => {
+      if (res.data.success && res.data.maxFameRating) {
+        console.log(res.data.maxFameRating)
+        this.maxFameRating = res.data.maxFameRating
+        this.filterPopularity[1] = res.data.maxFameRating
+      }
+    }).catch(e => console.log(e));
   },
   computed: {
     ...mapGetters({
@@ -86,11 +101,17 @@ export default {
         return (count == this.filterTags.length) ? true : false
       }
 
+      const filterByPopularity = (user) => {
+        return (user.fame_rating >= this.filterPopularity[0] && user.fame_rating <= this.filterPopularity[1]) ? true : false
+      }
+
       if (this.filterTags.length)
         ret = ret.filter(filterByTags)
       if (this.activeFilter.includes(1))
         ret = ret.filter(filterByAge)
       if (this.activeFilter.includes(2))
+        ret = ret.filter(filterByPopularity)
+      if (this.activeFilter.includes(3))
         ret = ret.filter(filterByLocation)
       return ret
     }

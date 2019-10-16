@@ -5,7 +5,7 @@
       <span v-html="setSvgButton(1)"></span>
     </p>
 
-    <p v-if="this.getUserLocation" :class="setSortButtonCss(2)" @click="setActiveSort(2)">
+    <p v-if="this.user_location.lng && this.user_location.lat" :class="setSortButtonCss(2)" @click="setActiveSort(2)">
       Location
       <span v-html="setSvgButton(2)"></span>
     </p>
@@ -82,6 +82,7 @@ export default {
             Math.pow(b.lat - this.user_location.lat, 2) +
               Math.pow(b.lng - this.user_location.lng, 2)
           ) * 111.32;
+
         return distanceA - distanceB
       };
 
@@ -104,16 +105,19 @@ export default {
         return a.fame_rating - b.fame_rating
       }
 
-      // console.log(this.activeSort)
       switch (this.activeSort) {
         case 1:
           ret.sort(sortByAge);
+          break ;
         case 2:
           ret.sort(sortByLocation);
+          break ;
         case 3:
           ret.sort(sortByTags);
+          break ;
         case 4:
           ret.sort(sortByPopularity);
+          break ;
       }
       if (this.currentSortState == 2)
         ret = ret.reverse();
@@ -157,7 +161,6 @@ export default {
       this.user_location = newValue;
     },
     finalArray(newValue, oldValue) {
-      console.log(newValue)
       this.$emit('finalArray', newValue)
     }
   }

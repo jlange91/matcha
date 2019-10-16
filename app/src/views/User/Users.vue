@@ -1,27 +1,20 @@
 <template>
   <div class="mt-8 p-4 container mx-auto rounded bg-white shadow">
     <h1 class="text-xl uppercase font-bold mb-8">All Users</h1>
-    <!-- <filter-form :all_users="all_users" @filteredArray="updateFilteredArray"></filter-form> -->
-    <div>
-      filter by age 
-        <vue-slider class="ml-6"  :enable-cross="false" :min="0" :max="100" ></vue-slider>
-    </div>
-    <br>
-    <div>
-      filter by distance 
-    </div>
+    <filter-form :all_users="all_users" @filteredArray="updateFilteredArray"></filter-form>
+
     <div class="flex justify-center">
-      <!-- <sort-form class="w-full" :all_users="arrayFiltered" @finalArray="updateFinalArray"></sort-form> -->
+      <sort-form class="w-full" :all_users="arrayFiltered" @finalArray="updateFinalArray"></sort-form>
     </div>
-    <!-- <pagination :list-data="finalArray" :user-likes="likes"/> -->
-    <user-card
+    <pagination :list-data="arrayFinal" :user-likes="likes"/>
+    <!-- <user-card
       @like="like"
       @unlike="unlike"
-      v-for="user in all_users"
+      v-for="user in arrayFinal"
       :key="user.id"
       :user="user"
       :liked="likes"
-    />
+    /> -->
   </div>
 </template>
 
@@ -54,12 +47,12 @@ export default {
         this.likes = res.data.likes;
       }).catch(e => console.log(e));
     },
-    // updateFinalArray(newValue) {
-    //   this.arrayFinal = newValue;
-    // },
-    // updateFilteredArray(newValue) {
-    //   this.arrayFiltered = newValue;
-    // },
+    updateFinalArray(newValue) {
+      this.arrayFinal = newValue;
+    },
+    updateFilteredArray(newValue) {
+      this.arrayFiltered = newValue;
+    },
     like(user_id) {
       this.likes.push({ liked_id: user_id });
     },

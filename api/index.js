@@ -35,6 +35,7 @@ app.use(`/${version}/user/update-location`, require('./routes/api/user/update-lo
 app.use(`/${version}/user/profil`, require('./routes/api/user/profil'))
 app.use(`/${version}/user/avatar`, require('./routes/api/user/avatar'))
 app.use(`/${version}/user/profil/edit`, require('./routes/api/user/profil-edit'))
+app.use(`/${version}/user/getMaxFameRating`, require('./routes/api/user/get-max-fame-rating'))
 
 app.use(`/${version}/profil`, require('./routes/api/user/get-user'))
 app.use(`/${version}/spam`, require('./routes/api/user/spam'))

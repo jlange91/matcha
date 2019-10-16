@@ -69,6 +69,23 @@ class Profil {
     }
   }
 
+  static async getMaxFameRating() {
+    try {
+      let sql = 'SELECT fame_rating \
+                  FROM profils \
+                  ORDER BY fame_rating DESC \
+                  LIMIT 1'
+
+      const fameRating = await connection.query({
+          sql,
+          timeout: 40000,
+      })
+      return fameRating[0].fame_rating;
+    } catch (error) {
+        throw new Error('SELECT failed in model Profil.getUserFameRating ' + error)
+    }
+  }
+
   static async increaseUserFameRating(userId, value) {
     try {
       let fameRating = await this.getUserFameRating(userId)
