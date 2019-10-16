@@ -46,12 +46,14 @@
         <div
           v-for="(image, index) in user_images"
           :key="index"
-          class="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 px-2 my-2 text-center cursor-pointer hover:shadow"
+          class="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 px-2 my-2 text-center cursor-pointer"
         >
+
           <img
           @click="chooseProfilImage(image.name)"
           :src="'localhost' + '/' + image.name" :alt="index" />
-
+          <!-- <img
+          :src="'localhost' + '/' + image.name" :alt="index" /> -->
           <button
             @click="eraseImage(image.name)"
             class="bg-red-600 text-white px-4 rounded my-2"

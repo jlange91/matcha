@@ -110,8 +110,11 @@ export default {
             this.setVisibility(true);
             localStorage.setItem("token", res.data.token);
             localStorage.setItem("token_exp", res.data.exp);
+
+
             this.$router.push("/profil");
           } else {
+            // this.$router.push("/login");
             this.setMessage(res.data.message);
             this.setSuccess(false);
             this.setVisibility(true);

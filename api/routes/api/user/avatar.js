@@ -30,16 +30,16 @@ router.post('/', [
 
 
             const image = await Image.getImageByName(req.body.image)
-
+            
             if (!image || image[0].user_id != check.id)
                 return res.json({
                     'success': false,
                     'message': 'Forbidden'
                 })
 
-
-
-            if (!(await User.updateAvatar(check.id, req.body.image)))
+            const newImage = await User.updateAvatar(check.id, req.body.image)
+           
+            if (!newImage)
               return res.json({
                 'success': false,
                 'message': 'Forbidden'

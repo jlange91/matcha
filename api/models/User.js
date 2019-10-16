@@ -398,11 +398,12 @@ class User {
                     SET users.avatar = ? \
                     WHERE users.id = ?'
 
-        await connection.query({
+        const res = await connection.query({
             sql,
             timeout: 40000,
             values: [e(filename), e(id)]
         })
+        return (!res) ? false : true;
       } catch (error) {
           throw new Error('Update failed in model User.updateAvatar ' + error)
       }
