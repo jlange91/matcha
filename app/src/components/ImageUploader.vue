@@ -52,8 +52,7 @@
           <img
           @click="chooseProfilImage(image.name)"
           :src="'localhost' + '/' + image.name" :alt="index" />
-          <!-- <img
-          :src="'localhost' + '/' + image.name" :alt="index" /> -->
+   
           <button
             @click="eraseImage(image.name)"
             class="bg-red-600 text-white px-4 rounded my-2"

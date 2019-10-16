@@ -47,10 +47,12 @@ export default {
         .catch(e => console.log(e));
     },
     like(user_id) {
+      socket.emit("notif", this.getSessionUserId, user_id, "like");
       this.likes.push({ liked_id: user_id });
       this.removeUserFromArray(user_id);
     },
     unlike(user_id) {
+      socket.emit("notif", this.getSessionUserId, user_id, "unlike");
       this.removeLikeFromArray(user_id);
     },
     removeLikeFromArray(value) {
@@ -174,6 +176,7 @@ export default {
     ...mapGetters({
       getToken: "session/getToken",
       getUser: "session/getUser",
+      getSessionUserId: "session/getUserId",
       getProfil: "profil/getUserProfil",
       getLocation: "profil/getUserLocation",
       getTags: "tags/getTags"

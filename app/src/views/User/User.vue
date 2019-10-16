@@ -60,6 +60,7 @@
 import { mapGetters, mapActions } from "vuex";
 import axios from "../../middleware/axios";
 import { getUserSpam } from '../../store/modules/session/getters';
+import socket from "../../middleware/socket-instance";
 
 export default {
   data() {
@@ -113,6 +114,9 @@ export default {
         });
     },
     addViewToUser() {
+      
+      socket.emit("notif", this.getSessionUserId, this.getUserData.user_info.id, "view");
+
       axios.post("view", { viewed_id: this.getUserData.user_info.id }).then().catch(e => console.log(e));
     },
     spam(user) {
@@ -139,11 +143,15 @@ export default {
       }
     },
     unlikeUser(user_id) {
+      
+      socket.emit("notif", this.getSessionUserId, user_id, "unlike");
+      
       axios.post("likes/destroy", { liked_id: user_id }).then(res => {
         if (res.data.success) this.arrayRemove(user_id);
       });
     },
     likeUser(user_id) {
+      socket.emit("notif", this.getSessionUserId, user_id, "like");
       axios.post("likes", { liked_id: user_id }).then(res => {
         if (res.data.success)  this.likes.push({ liked_id: user_id });
       });
