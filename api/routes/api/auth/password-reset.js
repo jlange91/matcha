@@ -7,10 +7,11 @@ const {
     validationResult
 } = require('express-validator/check');
 const e = require('escape-html')
+const passwordValidator = require('password-validator');
 
 router.post('/', [
     check('email', 'Your email is not valid').trim().escape().not().isEmpty().isEmail().normalizeEmail(),
-    check('password').trim().escape().isLength({ min: 6, max: 30 }).withMessage('Name must have more than 5 characters'),
+    check('password').trim().escape().isLength({ min: 6, max: 30 }).withMessage('Password must have more than 5 characters Password must have more than 5 characters and one number'),
     check('hash').not().isEmpty().trim().escape().withMessage('Missing hash') //.isLength({ min: 6, max: 30 }).withMessage('Password must have more than 6 or less than 30 characters'),
 ], async (req, res) => {
     try {
@@ -24,6 +25,19 @@ router.post('/', [
                 'errors': [{'param': 'password', 'msg': 'Please make sure its long enough but not too long'}]
             })
         }
+
+        const schema = new passwordValidator();
+
+        schema
+            .has().uppercase()                              // Must have uppercase letters
+            .has().lowercase()                              // Must have lowercase letters
+            .has().digits()                                 // Must have digits
+
+        if(!schema.validate(req.body.password)) 
+            return res.json({
+                'success': false,
+                'message': 'Password is too weak'
+            })
 
         let {
             email,

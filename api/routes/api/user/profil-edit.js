@@ -102,7 +102,6 @@ router.post('/', [
                 })
             }
             newTags.forEach(async (tag) => {
-                let sql
                 let existingTag = []
                 let newTag = null;
 

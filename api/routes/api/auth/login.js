@@ -5,7 +5,7 @@ const User = require('../../../models/User')
 const bcrypt = require('bcryptjs');
 const geoip = require('geoip-lite');
 const { check, validationResult } = require('express-validator/check');
-
+const passwordValidator = require('password-validator');
 // login
 router.post('/', [
   
@@ -26,6 +26,19 @@ router.post('/', [
             }
             return res.json(error_response)
         }
+
+        const schema = new passwordValidator();
+
+        schema
+            .has().uppercase()                              // Must have uppercase letters
+            .has().lowercase()                              // Must have lowercase letters
+            .has().digits()                                 // Must have digits
+
+        if(!schema.validate(req.body.password)) 
+            return res.json({
+                'success': false,
+                'message': 'Password is too weak'
+            })
 
         const { login, password, ip } = req.body
 

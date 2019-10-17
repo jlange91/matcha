@@ -5,7 +5,9 @@
     <div class="flex justify-center">
       <sort-form class="w-full" :all_users="arrayFiltered" @finalArray="updateFinalArray"></sort-form>
     </div>
+        <div class=" flex flex-wrap items-center justify-center">
     <pagination :list-data="arrayFinal" :user-likes="likes"/>
+  </div>
   </div>
 </template>
 

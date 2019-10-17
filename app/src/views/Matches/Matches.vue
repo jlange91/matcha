@@ -1,8 +1,12 @@
 <template>
   <div class="mt-8 p-4 container mx-auto rounded bg-white shadow">
     <h1 class="text-xl uppercase font-bold mb-8">Possible Matches</h1>
-    <div class=" flex flex-wrap">
-      <pagination :list-data="filtered_users" :user-likes="likes"/>
+      <filter-form :all_users="filtered_users" @filteredArray="updateFilteredArray"></filter-form>
+    <div class="flex justify-center">
+      <sort-form class="w-full" :all_users="arrayFiltered" @finalArray="updateFinalArray"></sort-form>
+    </div>
+    <div class=" flex flex-wrap items-center justify-center">
+      <pagination :list-data="arrayFinal" :user-likes="likes"/>
     <!-- <user-card
       class=""
       v-for="user in filtered_users"
@@ -27,7 +31,9 @@ export default {
     return {
       users: [],
       likes: [],
-      filtered_users: []
+      filtered_users: [],
+          arrayFiltered: [],
+      arrayFinal: [],
     };
   },
   async mounted() {
@@ -45,6 +51,12 @@ export default {
           }
         })
         .catch(e => console.log(e));
+    },
+      updateFinalArray(newValue) {
+      this.arrayFinal = newValue;
+    },
+    updateFilteredArray(newValue) {
+      this.arrayFiltered = newValue;
     },
     like(user_id) {
       socket.emit("notif", this.getSessionUserId, user_id, "like");

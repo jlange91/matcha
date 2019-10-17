@@ -121,6 +121,7 @@ export default {
           empty = true;
         }
       });
+      
       if (!empty) this.submit();
     },
     submit() {

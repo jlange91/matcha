@@ -12,7 +12,7 @@ class UsersFaker {
             "jlange", \
             "Julien", \
             "Lange", \
-            "$2a$10$P/NOnXMHCDA3A3oEzVs5QuNwO8t6NhKlUi.uLRS.vxiT3buoXOQhe", \
+            "$2a$10$GnajkF6y0kO5Kl0oRnGspubuZBMij2g2du6ww78fGPOGIJh6BDH0S", \
             1)'
 
         await connection.query(sql)
@@ -28,7 +28,7 @@ class UsersFaker {
               "dadacruz", \
               "David", \
               "Dacruz", \
-              "$2a$10$P/NOnXMHCDA3A3oEzVs5QuNwO8t6NhKlUi.uLRS.vxiT3buoXOQhe", \
+              "$2a$10$GnajkF6y0kO5Kl0oRnGspubuZBMij2g2du6ww78fGPOGIJh6BDH0S", \
               1)'
 
         await connection.query(sql)
@@ -50,7 +50,7 @@ class UsersFaker {
                  ?, \
                  ?, \
                  ?, \
-                 "$2a$10$P/NOnXMHCDA3A3oEzVs5QuNwO8t6NhKlUi.uLRS.vxiT3buoXOQhe", \
+                 "$2a$10$GnajkF6y0kO5Kl0oRnGspubuZBMij2g2du6ww78fGPOGIJh6BDH0S", \
                  1)'
 
             await connection.query({

@@ -11,12 +11,12 @@ const {
     validationResult
 } = require('express-validator/check');
 const User = require('../../../models/User')
-
+const passwordValidator = require('password-validator');
 
 // profil
 router.post('/', [
         checkJWT,
-    check('password').trim().escape().isLength({ min: 6, max: 30 }).withMessage('Password must have more than 5 characters')
+    check('password').trim().escape().isLength({ min: 6, max: 30 }).withMessage('Password must have more than 5 characters and one number')
     ],
     async (req, res, next) => {
         try {
@@ -42,6 +42,19 @@ router.post('/', [
                     'message': 'Forbidden'
                 })
             }
+
+            const schema = new passwordValidator();
+
+            schema
+                .has().uppercase()                              // Must have uppercase letters
+                .has().lowercase()                              // Must have lowercase letters
+                .has().digits()                                 // Must have digits
+    
+            if(!schema.validate(req.body.password)) 
+                return res.json({
+                    'success': false,
+                    'message': 'Password is too weak'
+                })
 
             const {
                 password
