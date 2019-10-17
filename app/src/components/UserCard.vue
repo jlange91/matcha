@@ -149,13 +149,9 @@ export default {
     }
   },
   mounted() {
-
-
-      this.user_tags = (typeof(this.user.user_tags) == 'string') ?
-        this.user.user_tags.split(",") : []
+    this.user_tags = (typeof(this.user.user_tags) == 'string') ?
+      this.user.user_tags.split(",") : []
     this.userTags()
-        // console.log(this.user_tags)
-
   }
 };
 </script>

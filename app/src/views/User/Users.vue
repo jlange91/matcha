@@ -2,19 +2,10 @@
   <div class="mt-8 p-4 container mx-auto rounded bg-white shadow">
     <h1 class="text-xl uppercase font-bold mb-8">All Users</h1>
     <filter-form :all_users="all_users" @filteredArray="updateFilteredArray"></filter-form>
-
     <div class="flex justify-center">
       <sort-form class="w-full" :all_users="arrayFiltered" @finalArray="updateFinalArray"></sort-form>
     </div>
     <pagination :list-data="arrayFinal" :user-likes="likes"/>
-    <!-- <user-card
-      @like="like"
-      @unlike="unlike"
-      v-for="user in arrayFinal"
-      :key="user.id"
-      :user="user"
-      :liked="likes"
-    /> -->
   </div>
 </template>
 
@@ -66,10 +57,5 @@ export default {
       this.likes = ret
     }
   }
-  // watch: {
-  //   arrayFiltered(newValue, oldValue) {
-  //     console.log("bite")
-  //   }
-  // }
 };
 </script>

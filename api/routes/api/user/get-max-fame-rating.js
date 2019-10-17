@@ -6,7 +6,6 @@ router.get('/',
     async (req, res, next) => {
       const maxFameRating = await Profil.getMaxFameRating();
 
-      console.log("lol")
       return res.json({
           'success': true,
           'maxFameRating': maxFameRating

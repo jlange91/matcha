@@ -55,7 +55,7 @@ export default {
       user_location: [],
       filterAge: [0, 100],
       filterPopularity: [0, 1],
-      maxFameRating: 100,
+      maxFameRating: 1,
       filterLocation: 100,
       filterTags: [],
       activeFilter: []
@@ -64,7 +64,6 @@ export default {
   mounted() {
     axios.get("/user/getMaxFameRating").then(res => {
       if (res.data.success && res.data.maxFameRating) {
-        console.log(res.data.maxFameRating)
         this.maxFameRating = res.data.maxFameRating
         this.filterPopularity[1] = res.data.maxFameRating
       }
