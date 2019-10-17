@@ -131,6 +131,23 @@ class Profil {
         throw new Error('UPDATE failed in model Profil.decreaseUserFameRating ' + error)
     }
   }
+
+  static async getGender(userId) {
+    try {
+      let sql = 'SELECT DISTINCT gender FROM profils \
+                  WHERE profils.user_id = ?'
+
+      const gender = await connection.query({
+          sql,
+          timeout: 40000,
+          values: [e(userId)]
+      })
+      return gender[0].gender;
+    } catch (error) {
+        throw new Error('SELECT failed in model Profil.getGender ' + error)
+    }
+  }
+
 }
 
 module.exports = Profil

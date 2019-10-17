@@ -15,19 +15,19 @@ router.post('/',
             let json_token = null
             if (typeof bearerHeader !== 'undefined')
                 json_token = bearerHeader.split(' ')[1]
-            if (json_token) {       
+            if (json_token) {
                 const check = jwt.verify(json_token, process.env.APP_KEY, (err, authData) => {
                     if (err) return false
                     return authData
                 })
-    
+
                 if (!check) {
-                    res.json({
+                    return res.json({
                         'success': false,
                         'message': 'Forbidden'
                     })
                 }
-            
+
                 const users = await User.getAllUsers(check.id);
 
                 if (!users) {
@@ -44,7 +44,7 @@ router.post('/',
                     'users': users,
                     'likes': likes
                 })
-            
+
             } else {
                 const users = await User.getAllUsers();
 

@@ -15,6 +15,7 @@
         <!-- <p @click.prevent="goToUserProfil(user.username)">{{user.username}}</p> -->
       </div>
       <p>{{age}} ans</p>
+      <p>{{user.gender}}</p>
       <p>{{user.fame_rating}} points</p>
       <p v-if="distance != null">{{distance}} KM</p>
        <!-- <user-profil-map :id="user.id" :lat="user.lat" :lng="user.lng"/> -->
