@@ -12,7 +12,7 @@ class UserProfilFaker {
                   "male", \
                   "female", \
                   "Creator.", \
-                  "999999999",\
+                  "1000",\
                   1)'
 
         await connection.query(sql)
@@ -28,7 +28,7 @@ class UserProfilFaker {
               "male", \
               "female", \
               "Creator.", \
-              "999999999",\
+              "1000",\
               1)'
 
         await connection.query(sql)

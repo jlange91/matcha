@@ -65,7 +65,6 @@ export default {
     axios.get("/user/getMaxFameRating").then(res => {
       if (res.data.success && res.data.maxFameRating) {
         this.maxFameRating = res.data.maxFameRating
-        this.filterPopularity[1] = res.data.maxFameRating
       }
     }).catch(e => console.log(e));
   },
