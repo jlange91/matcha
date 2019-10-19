@@ -60,8 +60,8 @@ export default {
       getLogged: "session/getLogged"
     }),
     finalArray() {
-      if (this.currentSortState == 0) return this.all_users
-      var ret = this.all_users
+      if (this.currentSortState == 0) return this.all_users.slice(0)
+      var ret = this.all_users.slice(0)
 
       const sortByAge = (a, b) => {
         let ageA = moment().diff(a.birthdate, "years"),
