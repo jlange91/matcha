@@ -169,6 +169,7 @@ class User {
         try {
             const salt = bcrypt.genSaltSync(10);
             const hash = bcrypt.hashSync(newUser.password, salt);
+
             const sql = 'INSERT INTO users (email, username, first_name, last_name, password) \
                          VALUES (?, ?, ?, ?, ?)'
 
@@ -263,7 +264,7 @@ class User {
 
     static async passwordReset(user) {
         try {
-  
+
             const passwordReset = await User.hasPasswordReset(user[0].id)
             // if it exist delete it
             let u = []
@@ -275,7 +276,7 @@ class User {
             if (u.length)
                 newPasswordReset = await User.createPasswordReset(user[0].id, user[0].email, hash)
 
-                
+
             if (!newPasswordReset)
                 return false
 

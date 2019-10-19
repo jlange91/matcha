@@ -5,13 +5,14 @@ class UserProfilFaker {
     static async setAdmins() {
       try {
        var sql = 'INSERT IGNORE INTO profils \
-                  (user_id, birthdate, gender, sexual_orientation, biography, completed)\
+                  (user_id, birthdate, gender, sexual_orientation, biography, fame_rating, completed)\
                   VALUES ( \
                   (SELECT id from users WHERE username = "jlange"), \
                   "1997/06/10", \
                   "male", \
                   "female", \
                   "Creator.", \
+                  "999999999",\
                   1)'
 
         await connection.query(sql)
@@ -20,13 +21,14 @@ class UserProfilFaker {
       }
       try {
         sql = 'INSERT IGNORE INTO profils \
-              (user_id, birthdate, gender, sexual_orientation, biography, completed)\
+              (user_id, birthdate, gender, sexual_orientation, biography, fame_rating, completed)\
               VALUES ( \
               (SELECT id from users WHERE username = "dadacruz"), \
               "1988/04/22", \
               "male", \
               "female", \
               "Creator.", \
+              "999999999",\
               1)'
 
         await connection.query(sql)

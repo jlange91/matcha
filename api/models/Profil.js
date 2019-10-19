@@ -148,6 +148,22 @@ class Profil {
     }
   }
 
+  static async getSexualPreference(userId) {
+    try {
+      let sql = 'SELECT DISTINCT sexual_orientation FROM profils \
+                  WHERE profils.user_id = ?'
+
+      const sp = await connection.query({
+          sql,
+          timeout: 40000,
+          values: [e(userId)]
+      })
+      return sp[0].sexual_orientation;
+    } catch (error) {
+        throw new Error('SELECT failed in model Profil.getSexualPreference ' + error)
+    }
+  }
+
 }
 
 module.exports = Profil
