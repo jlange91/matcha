@@ -25,7 +25,7 @@ router.post('/', checkJWT, async (req, res) => {
       return (false);
     }
 
-    // did the user already like this person ?
+    // did the user already view this person ?
     let sql = 'SELECT * FROM views WHERE user_id = ? AND viewed_id = ?'
 
     const user_views = await connection.query({
@@ -49,7 +49,7 @@ router.post('/', checkJWT, async (req, res) => {
       });
     }
 
-    // if he doesnt already like the person save like into database
+    // if he doesnt already view the person save view into database
     sql = 'INSERT INTO views (user_id, viewed_id, count) VALUES (? ,?, ?)'
 
     const view = await connection.query({

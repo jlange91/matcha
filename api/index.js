@@ -71,6 +71,7 @@ app.use(`/${version}/logout`, require('./routes/api/logged/logout.js'))
 
 app.use(`/${version}/notifications/`, require('./routes/api/notifications/'))
 app.use(`/${version}/notifications/setSeen`, require('./routes/api/notifications/setSeen'))
+app.use(`/${version}/notifications/remove`, require('./routes/api/notifications/remove'))
 
 // app.use(`/${version}/messages/`, require('./routes/api/messages/'))
 // app.use(`/${version}/messages/create`, require('./routes/api/messages/create'))

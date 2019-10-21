@@ -45,14 +45,14 @@ module.exports = function (server) {
     });
 
     socket.on('notif', async (userId, focusId, type) => {
-      let users = await LoggedUser.get(userId);
-      if (!users)
+      if (!Notification.push(userId, focusId, type))
         return ;
-       if (Notification.push(userId, focusId, type))
-       {
-         for (let i = 0; i < users.length; i++)
+      let users = await LoggedUser.get(userId);
+      if (users)
+      {
+        for (let i = 0; i < users.length; i++)
           socket.broadcast.to(users[i].socket_id).emit('notif');
-       }
+      }
     });
 
     socket.on('disconnect', () => {

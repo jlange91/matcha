@@ -19,9 +19,9 @@
       <div
         v-for="notification in notifications"
         :key="notification.id"
-        :class="backGroundStyle(notification.type)"
+        class="border-b-2 border-gray-100 bg-green-200"
       >
-        <p class="p-4">{{ notification.username1 + types[notification.type] }}</p>
+        <p @click="removeNotification(notification.id)" class="p-4">{{ notification.username1 + types[notification.type] }}</p>
       </div>
     </div>
   </div>
@@ -65,7 +65,7 @@ export default {
           .catch(e => console.log("e ", e))
     },
     displayNotifications() {
-      if (this.notificationsCount > 0)
+      if (this.notificationsCount > 0 || this.is_visible)
         this.is_visible = !this.is_visible
       if (this.is_visible === true) {
         axios
@@ -75,11 +75,15 @@ export default {
           .catch(e => console.log("e ", e));
       }
     },
-    backGroundStyle(type) {
-      if (type === "message") return "bg-green-300";
-      if (type === "match") return "bg-red-300";
-      if (type === "like") return "bg-teal-300";
-      if (type === "view") return "bg-blue-300";
+    removeNotification(id) {
+      axios
+        .post("notifications/remove", {
+          notificationId: id
+        })
+        .then(this.notifications = this.notifications.filter((notif) => {
+          return notif.id !== id
+        }))
+        .catch(e => console.log("e ", e));
     }
   },
   computed: {
