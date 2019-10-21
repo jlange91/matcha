@@ -23,13 +23,16 @@ class Like {
 
   static async getMyLikes(id) {
     try {
+      var ret = []
       const sql = 'SELECT likes.liked_id FROM likes WHERE likes.user_id = ?'
       const likes = await connection.query({
           sql,
           timeout: 40000,
           values: [e(id)]
       })
-      return likes;
+
+      likes.forEach(like => ret.push(like.liked_id))
+      return ret;
     } catch (error) {
         throw new Error('SELECT failed in model Like.getMyLikes ' + error)
     }

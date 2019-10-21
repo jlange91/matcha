@@ -19,16 +19,18 @@
       <ul class="flex flex-col w-full select-none">
         <li
           v-for="relation in relations"
-          @click="select(relation.id)"
           :key="relation.id"
           class="flex flex-no-wrap items-center hover:bg-grey-300 text-black cursor-pointer p-3"
         >
-          <div
-            class="flex-shrink-0 w-12 h-12 bg-no-repeat bg-center bg-contain rounded-full mr-3"
-            v-bind:style="{ backgroundImage: 'url(/api/v1/images/get/' + relation.avatar + ')' }"
-          ></div>
-          <div class="flex-1 min-w-0">
-            <div class="flex justify-between mb-1">
+          <router-link
+            :to="'user/' + relation.username">
+            <div
+              class="flex-shrink-0 w-12 h-12 bg-no-repeat bg-center bg-contain rounded-full mr-3"
+              v-bind:style="{ backgroundImage: 'url(/api/v1/images/get/' + relation.avatar + ')' }"
+            ></div>
+          </router-link>
+          <div class="flex-1 min-w-0" @click="select(relation.id)">
+            <div class="flex justify-between mb-1" >
               <h2 class="font-semibold text-sm">{{ relation.username }}</h2>
               <span class="text-sm text-grey-dark">
                 <i class="fas fa-check text-green"></i>

@@ -1,17 +1,17 @@
 <template>
   <div>
   <div class="flex justify-center -mx-4">
-  <div @click="prevPage" class="px-4 focus:ouline-none cursor-pointer">
+  <div v-if="pageNumber > 0" @click="prevPage" class="px-4 focus:ouline-none cursor-pointer">
     Previous
   </div>
-  <div @click="nextPage" class="focus:ouline-none cursor-pointer">
+  <div v-if="pageNumber < pageCount - 1" @click="nextPage" class="focus:ouline-none cursor-pointer">
     Next
   </div>
 
   </div>
   <div class="flex flex-wrap content-center">
      <user-card
-      class="px-2 w-full"     
+      class="px-2 w-full"
        @like="like"
       @unlike="unlike"
       v-for="user in paginatedData"
@@ -62,6 +62,7 @@ export default {
     },
     like(user_id) {
       this.likes.push({ liked_id: user_id });
+      this.$emit('refreshMatchs')
     },
     unlike(user_id) {
       this.arrayRemove(user_id);

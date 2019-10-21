@@ -6,18 +6,7 @@
       <sort-form class="w-full" :all_users="arrayFiltered" @finalArray="updateFinalArray"></sort-form>
     </div>
     <div class=" flex flex-wrap items-center justify-center">
-      <pagination :list-data="arrayFinal" :user-likes="likes"/>
-    <!-- <user-card
-      class=""
-      v-for="user in filtered_users"
-      @like="like"
-      @unlike="unlike"
-      :key="user.id"
-      :user="user"
-      :liked="likes"
-    /> -->
-
-
+      <pagination :list-data="arrayFinal" :user-likes="likes" @refreshMatchs="refreshMatchs" />
     </div>
   </div>
 </template>
@@ -44,7 +33,6 @@ export default {
         .post("/matches")
         .then(res => {
           if (res.data.success) {
-            this.likes = res.data.user_likes;
             this.users = res.data.possible_matches;
           }
         })
@@ -57,28 +45,11 @@ export default {
       this.arrayFiltered = newValue;
     },
     like(user_id) {
-      this.getAllPossibleMatches()
       socket.emit("notif", this.getSessionUserId, user_id, "like");
-      // this.likes.push({ liked_id: user_id });
-      // this.removeUserFromArray(user_id);
     },
-    // unlike(user_id) {
-    //   socket.emit("notif", this.getSessionUserId, user_id, "unlike");
-    //   this.removeLikeFromArray(user_id);
-    // },
-    // removeLikeFromArray(value) {
-    //   const ret = this.likes.filter(function(ele) {
-    //     return ele.liked_id != value;
-    //   });
-    //   this.likes = ret;
-    // },
-    // removeUserFromArray(value) {
-    //   const ret = this.users.filter(function(ele) {
-    //     return ele.id != value;
-    //   });
-    //   this.users = ret;
-    // },
-
+    refreshMatchs() {
+      this.getAllPossibleMatches()
+    }
   },
   computed: {
     ...mapGetters({
