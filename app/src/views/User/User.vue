@@ -114,7 +114,7 @@ export default {
         });
     },
     addViewToUser() {
-      
+
       socket.emit("notif", this.getSessionUserId, this.getUserData.user_info.id, "view");
 
       axios.post("view", { viewed_id: this.getUserData.user_info.id }).then().catch(e => console.log(e));
@@ -143,9 +143,9 @@ export default {
       }
     },
     unlikeUser(user_id) {
-      
+
       socket.emit("notif", this.getSessionUserId, user_id, "unlike");
-      
+
       axios.post("likes/destroy", { liked_id: user_id }).then(res => {
         if (res.data.success) this.arrayRemove(user_id);
       });

@@ -24,11 +24,14 @@ class Match {
     const userP = (await Profil.getByUserId(userId))[0]
     const userT = await UserTag.getByUserId(userId)
     const userLikes = await Like.getMyLikes(userId)
+    const userLikesId = []
+    
+    userLikes.forEach(like => userLikesId.push(like.liked_id))
 
     var relevantPts = []
 
     const filterMatch = (match) => {
-      const iLike = (userLikes.includes(match.id)) ? true : false
+      const iLike = (userLikesId.includes(match.id)) ? true : false
 
       if (iLike === true)
         return false
